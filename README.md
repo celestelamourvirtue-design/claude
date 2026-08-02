@@ -1,3 +1,77 @@
+# iPhone pricing datasets
+
+Two snapshots of iPhone pricing from different sides of the market — wholesale
+liquidation lots, and retail refurbished listings.
+
+| Dataset | Source | Files |
+| --- | --- | --- |
+| [Superior Wireless auction lots](#superior-wireless-auctions--iphone-lot-pricing) | B-Stock liquidation auctions | `iPhone_Lot_Pricing.xlsx`, `iPhone_Lot_Pricing.csv` |
+| [Amazon Renewed iPhones](#amazon-renewed-iphones--search-page-1) | Amazon search page 1 | `iphone-page1.csv` |
+
+---
+
+# Superior Wireless Auctions — iPhone Lot Pricing
+
+Priced breakdown of the iPhone lots listed on the Superior Wireless Auctions
+(B-Stock) smartphone liquidation marketplace.
+
+| File | What it is |
+|---|---|
+| `iPhone_Lot_Pricing.xlsx` | The spreadsheet — 96 lots, live formulas, 3 rollup tabs |
+| `iPhone_Lot_Pricing.csv` | Same rows, flat, for import elsewhere |
+| `scripts/parse_bstock_page.py` | Regenerates both from saved listing pages |
+| `scripts/recalc.py` | Caches formula values via LibreOffice before sharing |
+
+## The pricing math
+
+```
+Fee @ 2%             = Bulk Price × 2%
+Total Excl. Shipping = Bulk Price + Fee
+Cost Per Unit        = Total Excl. Shipping ÷ Units
+```
+
+"Bulk Price" is the lot's **Current bid** on the auction page. The 2% rate lives in
+`Assumptions!B4` — change that one cell and every figure in the workbook recalculates.
+
+The standalone 2% amount also gets its own column, in case the intent was the fee
+alone rather than a fee added on top.
+
+## Tabs
+
+- **Assumptions** — the editable rate, plus the full caveat list and source
+- **Auction Inventory** — one row per lot: model, storage, grade, units, carrier,
+  bulk price, fee, total, cost per unit, bids, closing time, link
+- **Summary by Model / Grade / Storage** — lots, units, spend and blended cost per unit
+
+## Caveats
+
+1. The source page covers lots **1–96 of 208** (page 1 of 3). Pages 2 and 3 are not included.
+2. These are **live auctions** — the current bid rises with each new bid, so every
+   price is a snapshot, not a settled cost.
+3. Shipping, tax and any other charges are excluded. Lots ship from Dallas, TX.
+4. Grade is verbatim from the lot title (`New`, `A`, `A/B`, `B`, `B/C`, `C`).
+5. Lots titled "Mixed Carrier", or with no storage in the title, show
+   `Mixed / Not specified` — open the auction link for the manifest.
+
+## Regenerating
+
+Save the listing page from a browser (**Save as → Webpage, Complete**), then:
+
+```bash
+python3 scripts/parse_bstock_page.py page1.html page2.html page3.html -o iPhone_Lot_Pricing
+python3 scripts/recalc.py iPhone_Lot_Pricing.xlsx 300
+```
+
+Passing several pages at once de-duplicates by auction ID, so overlapping saves are safe.
+The parser warns on stderr if a lot's unit count, carrier, or per-unit price fails its
+cross-check rather than silently writing a bad row.
+
+`recalc.py` needs LibreOffice Calc (`apt-get install -y libreoffice-calc`). Without it
+the formulas are still correct, but cells read as blank in previewers that show cached
+values instead of recalculating.
+
+---
+
 # Amazon Renewed iPhones — Search Page 1
 
 Extracted from the Amazon search listing for **Renewed Smartphones → Apple**
