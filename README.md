@@ -5,7 +5,7 @@ liquidation lots, and retail refurbished listings.
 
 | Dataset | Source | Files |
 | --- | --- | --- |
-| [Superior Wireless auction lots](#superior-wireless-auctions--iphone-lot-pricing) | B-Stock liquidation auctions | `iPhone_Lot_Pricing.xlsx`, `iPhone_Lot_Pricing.csv` |
+| [Superior Wireless auction lots + resale profit](#superior-wireless-auctions--iphone-lot-pricing) | B-Stock auctions, eBay sold listings, SellCell | `iPhone_Lot_Pricing.xlsx`, `iPhone_Lot_Pricing.csv`, `iPhone_Lot_Pricing_Profit.csv` |
 | [Amazon Renewed iPhones](#amazon-renewed-iphones--search-page-1) | Amazon search page 1 | `iphone-page1.csv` |
 
 ---
@@ -17,9 +17,11 @@ Priced breakdown of the iPhone lots listed on the Superior Wireless Auctions
 
 | File | What it is |
 |---|---|
-| `iPhone_Lot_Pricing.xlsx` | The spreadsheet — 96 lots, live formulas, 3 rollup tabs |
-| `iPhone_Lot_Pricing.csv` | Same rows, flat, for import elsewhere |
-| `scripts/parse_bstock_page.py` | Regenerates both from saved listing pages |
+| `iPhone_Lot_Pricing.xlsx` | The spreadsheet — 96 lots, live formulas, 8 tabs |
+| `iPhone_Lot_Pricing.csv` | Flat auction table |
+| `iPhone_Lot_Pricing_Profit.csv` | Flat profit table |
+| `scripts/parse_bstock_page.py` | Builds the auction tabs from saved listing pages |
+| `scripts/build_profit_model.py` | Adds the eBay / cashout profit tabs |
 | `scripts/recalc.py` | Caches formula values via LibreOffice before sharing |
 
 ## The pricing math
@@ -38,10 +40,53 @@ alone rather than a fee added on top.
 
 ## Tabs
 
-- **Assumptions** — the editable rate, plus the full caveat list and source
+- **Assumptions** — the editable rates, plus the full caveat list and source
 - **Auction Inventory** — one row per lot: model, storage, grade, units, carrier,
   bulk price, fee, total, cost per unit, bids, closing time, link
+- **Profit Potential** — resale value per lot and the profit that falls out of it
 - **Summary by Model / Grade / Storage** — lots, units, spend and blended cost per unit
+- **eBay Comps** — every sold listing that classified cleanly
+- **SellCell Cashout** — the iPhone 17 Pro Max buyback grid
+
+## Resale profit
+
+Four scenarios per lot, each one `resale price − cost per unit`, then `× units`:
+
+| Scenario | Source |
+| --- | --- |
+| eBay Min / Max | Lowest and highest matching **sold** listing on eBay |
+| Cashout Min / Max | Lowest and highest vendor offer on SellCell |
+
+`Assumptions!B5` holds an eBay selling fee, defaulted to **0%** so the four figures are
+gross resale. Set it to ~13% to model real eBay fees; every eBay profit column follows.
+
+### How comps are matched
+
+A comp is used only when its **model and storage match the lot exactly** and its
+condition is a fair stand-in for the lot's grade:
+
+| Lot grade | eBay conditions accepted | SellCell condition |
+| --- | --- | --- |
+| New | Brand New, Open Box | MINT |
+| A | Excellent - Refurbished, Pre-Owned | GOOD |
+| B | Very Good - Refurbished, Pre-Owned | GOOD |
+| C | Good - Refurbished, Pre-Owned | POOR |
+
+eBay's "Pre-Owned" carries no grade signal, so it counts for any used grade but never
+for Grade New. Listings that can't be pinned to one configuration — multi-variant
+listings quoted as a price range — are **dropped**, not averaged in. Each row shows the
+comp count, the conditions and lock statuses behind it, and a warning when the lot is
+carrier-locked but the comps are mostly unlocked.
+
+### Coverage
+
+- **79 of 96 lots** (7,799 of 8,732 units) have at least one condition-matched eBay comp.
+  The other 17 are SE-family and mixed-storage lots the eBay pages don't cover.
+- **2 of 96 lots** have instant-cashout data. Every SellCell capture is an iPhone 17
+  Pro Max, so only the two 17 Pro Max lots can be quoted; the rest are blank rather
+  than extrapolated.
+- All 12 SellCell captures had **NETWORK = Unlocked**. What varies across them is
+  capacity and device condition, not the carrier lock.
 
 ## Caveats
 
@@ -55,10 +100,15 @@ alone rather than a fee added on top.
 
 ## Regenerating
 
-Save the listing page from a browser (**Save as → Webpage, Complete**), then:
+Save the pages from a browser (**Save as → Webpage, Complete**), then:
 
 ```bash
+# auction tabs only
 python3 scripts/parse_bstock_page.py page1.html page2.html page3.html -o iPhone_Lot_Pricing
+
+# auction tabs + profit tabs
+python3 scripts/build_profit_model.py auction.html --ebay ebay1.html ebay2.html -o iPhone_Lot_Pricing
+
 python3 scripts/recalc.py iPhone_Lot_Pricing.xlsx 300
 ```
 
