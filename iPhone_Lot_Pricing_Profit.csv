@@ -1,0 +1,97 @@
+Auction ID,iPhone Model,Storage,Grade,Carrier,Units,Cost Per Unit,eBay Comps (n),eBay Min,eBay Median,eBay Max,Cashout Cond,Cashout Vendors (n),Cashout Min,Cashout Max,Profit/Unit @ Cashout Min,Profit/Unit @ Cashout Max,Profit/Unit @ eBay Min,Profit/Unit @ eBay Max,Total @ Cashout Min,Total @ Cashout Max,Total @ eBay Min,Total @ eBay Max,Comp Conditions Used,Comp Lock Mix,Match Warning
+50370,iPhone 17 Pro Max,512GB,New,T-Mobile,20,1081.2,3,1199.0,1442.49,1479.0,MINT,14,876,1039,-205.2,-42.2,117.8,397.8,-4104.0,-844.0,2356.0,7956.0,"2 Open Box, 1 Brand New",3 Unlocked,"Lot is T-Mobile-locked, comps mostly Unlocked - expect a discount"
+50424,iPhone 17 Pro Max,256GB,A,Generic,20,818.55,9,730.0,1000.0,1124.99,GOOD,14,700,885,-118.55,66.45,-88.55,306.44,-2371.0,1329.0,-1771.0,6128.8,"8 Pre-Owned, 1 Excellent - Refurbished","6 Unlocked, 2 Verizon, 1 AT&T",
+50429,iPhone 17 Pro,256GB,B,Generic,20,665.55,1,900.0,900.0,900.0,,,,,,,234.45,234.45,,,4689.0,4689.0,1 Pre-Owned,1 Unlocked,Thin: 1 comp(s)
+50423,iPhone 17,512GB,A,T-Mobile,20,563.55,,,,,,,,,,,,,,,,,,,No comp on this page set for this model + storage
+50427,iPhone 17,256GB,A,AT&T,20,433.5,10,450.0,576.5,784.45,,,,,,,16.5,350.95,,,330.0,7019.0,"6 Pre-Owned, 4 Excellent - Refurbished","7 Unlocked, 1 T-Mobile, 1 Not stated","Lot is AT&T-locked, comps mostly Unlocked - expect a discount"
+50422,iPhone 17,256GB,B,AT&T,20,408.0,6,450.0,515.0,700.0,,,,,,,42.0,292.0,,,840.0,5840.0,6 Pre-Owned,"4 Unlocked, 1 T-Mobile, 1 Not stated","Lot is AT&T-locked, comps mostly Unlocked - expect a discount"
+50428,iPhone 17,256GB,C,AT&T,20,397.8,6,450.0,515.0,700.0,,,,,,,52.2,302.2,,,1044.0,6044.0,6 Pre-Owned,"4 Unlocked, 1 T-Mobile, 1 Not stated","Lot is AT&T-locked, comps mostly Unlocked - expect a discount"
+50412,iPhone 16 Pro Max,1TB,C,AT&T,20,612.0,3,839.99,850.0,924.99,,,,,,,227.99,312.99,,,4559.8,6259.8,"2 Pre-Owned, 1 Good - Refurbished","2 Unlocked, 1 Xfinity","Lot is AT&T-locked, comps mostly Unlocked - expect a discount"
+50416,iPhone 16 Pro Max,512GB,A,AT&T,20,612.0,2,420.0,635.0,850.0,,,,,,,-192.0,238.0,,,-3840.0,4760.0,2 Pre-Owned,"1 AT&T, 1 Unlocked",Thin: 2 comp(s)
+50411,iPhone 16 Pro Max,256GB,A,Generic,20,568.65,5,709.99,720.0,850.0,,,,,,,141.34,281.35,,,2826.8,5627.0,5 Pre-Owned,5 Unlocked,
+50417,iPhone 16 Pro Max,256GB,B,Generic,20,520.2,7,709.99,775.0,850.0,,,,,,,189.79,329.8,,,3795.8,6596.0,"5 Pre-Owned, 2 Very Good - Refurbished",7 Unlocked,
+50410,iPhone 16 Pro,512GB,B,T-Mobile,20,455.84,1,800.0,800.0,800.0,,,,,,,344.16,344.16,,,6883.24,6883.24,1 Very Good - Refurbished,1 Unlocked,"Lot is T-Mobile-locked, comps mostly Unlocked - expect a discount | Thin: 1 comp(s)"
+50415,iPhone 16 Plus,256GB,B,T-Mobile,20,378.68,3,450.0,559.99,637.99,,,,,,,71.32,259.31,,,1426.5,5186.3,"2 Pre-Owned, 1 Very Good - Refurbished",3 Unlocked,"Lot is T-Mobile-locked, comps mostly Unlocked - expect a discount"
+50420,iPhone 16 Plus,256GB,B,AT&T,20,313.65,3,450.0,559.99,637.99,,,,,,,136.35,324.34,,,2727.0,6486.8,"2 Pre-Owned, 1 Very Good - Refurbished",3 Unlocked,"Lot is AT&T-locked, comps mostly Unlocked - expect a discount"
+50414,iPhone 16 Plus,128GB,A,AT&T,20,410.55,3,389.95,400.0,499.95,,,,,,,-20.6,89.4,,,-412.0,1788.0,3 Pre-Owned,"2 Unlocked, 1 Verizon","Lot is AT&T-locked, comps mostly Unlocked - expect a discount"
+50409,iPhone 16 Plus,128GB,C,Generic,20,281.77,3,389.95,400.0,499.95,,,,,,,108.18,218.18,,,2163.5,4363.5,3 Pre-Owned,"2 Unlocked, 1 Verizon",
+50419,iPhone 16,256GB,B,T-Mobile,20,291.98,2,519.0,534.5,549.99,,,,,,,227.02,258.01,,,4540.5,5160.3,2 Pre-Owned,2 Unlocked,"Lot is T-Mobile-locked, comps mostly Unlocked - expect a discount | Thin: 2 comp(s)"
+50348,iPhone 16,128GB,C,T-Mobile,246,265.2,,,,,,,,,,,,,,,,,,,No comp on this page set for this model + storage
+50426,iPhone 16e,256GB,B,T-Mobile,20,269.13,2,299.98,364.15,428.33,,,,,,,30.85,159.2,,,617.06,3184.06,"1 Very Good - Refurbished, 1 Pre-Owned","1 Unlocked, 1 T-Mobile",Thin: 2 comp(s)
+50421,iPhone 16e,256GB,C,T-Mobile,20,194.0,1,299.98,299.98,299.98,,,,,,,105.98,105.98,,,2119.52,2119.52,1 Pre-Owned,1 T-Mobile,Thin: 1 comp(s)
+50369,iPhone 16e,128GB,New,T-Mobile,20,309.82,1,419.55,419.55,419.55,,,,,,,109.73,109.73,,,2194.5,2194.5,1 Open Box,1 Unlocked,"Lot is T-Mobile-locked, comps mostly Unlocked - expect a discount | Thin: 1 comp(s)"
+50408,iPhone 15 Pro Max,512GB,B,T-Mobile,20,518.67,5,500.0,550.0,600.0,,,,,,,-18.67,81.33,,,-373.4,1626.6,5 Pre-Owned,"2 Not stated, 1 Spectrum, 1 AT&T","Lot is T-Mobile-locked, comps mostly Unlocked - expect a discount"
+50407,iPhone 15 Pro Max,512GB,C,AT&T,20,346.8,5,500.0,550.0,600.0,,,,,,,153.2,253.2,,,3064.0,5064.0,5 Pre-Owned,"2 Not stated, 1 Spectrum, 1 AT&T",
+50406,iPhone 15 Pro Max,256GB,A,Generic,20,367.2,9,495.0,549.0,580.0,,,,,,,127.8,212.8,,,2556.0,4256.0,9 Pre-Owned,9 Unlocked,
+50400,iPhone 15 Pro Max,256GB,B,Generic,20,436.05,11,495.0,549.99,671.51,,,,,,,58.95,235.46,,,1179.0,4709.2,"9 Pre-Owned, 2 Very Good - Refurbished",11 Unlocked,
+50343,iPhone 15 Pro Max,256GB,C,T-Mobile,250,346.8,10,495.0,549.5,599.99,,,,,,,148.2,253.19,,,37050.0,63297.5,"9 Pre-Owned, 1 Good - Refurbished",10 Unlocked,"Lot is T-Mobile-locked, comps mostly Unlocked - expect a discount"
+50347,iPhone 15 Pro Max,256GB,C,T-Mobile,180,346.8,10,495.0,549.5,599.99,,,,,,,148.2,253.19,,,26676.0,45574.2,"9 Pre-Owned, 1 Good - Refurbished",10 Unlocked,"Lot is T-Mobile-locked, comps mostly Unlocked - expect a discount"
+50413,iPhone 15 Pro,1TB,C,T-Mobile,20,255.0,,,,,,,,,,,,,,,,,,,No comp on this page set for this model + storage
+50399,iPhone 15 Pro,256GB,A,AT&T,20,307.27,3,450.0,504.99,549.0,,,,,,,142.73,241.73,,,2854.5,4834.5,3 Pre-Owned,"2 Unlocked, 1 AT&T","Lot is AT&T-locked, comps mostly Unlocked - expect a discount"
+50405,iPhone 15 Pro,128GB,A,AT&T,20,306.0,4,349.99,462.5,544.99,,,,,,,43.99,238.99,,,879.8,4779.8,4 Pre-Owned,"3 Unlocked, 1 AT&T","Lot is AT&T-locked, comps mostly Unlocked - expect a discount"
+50345,iPhone 15 Pro,128GB,C,T-Mobile,240,255.0,4,349.99,462.5,544.99,,,,,,,94.99,289.99,,,22797.6,69597.6,4 Pre-Owned,"3 Unlocked, 1 AT&T","Lot is T-Mobile-locked, comps mostly Unlocked - expect a discount"
+50354,iPhone 15 Pro,128GB,C,T-Mobile,118,255.0,4,349.99,462.5,544.99,,,,,,,94.99,289.99,,,11208.82,34218.82,4 Pre-Owned,"3 Unlocked, 1 AT&T","Lot is T-Mobile-locked, comps mostly Unlocked - expect a discount"
+50404,iPhone 15 Plus,256GB,B,AT&T,20,219.3,1,471.45,471.45,471.45,,,,,,,252.15,252.15,,,5043.0,5043.0,1 Very Good - Refurbished,1 Unlocked,"Lot is AT&T-locked, comps mostly Unlocked - expect a discount | Thin: 1 comp(s)"
+50397,iPhone 15 Plus,128GB,A,AT&T,20,229.5,3,360.69,399.0,426.99,,,,,,,131.19,197.49,,,2623.8,3949.8,"2 Pre-Owned, 1 Excellent - Refurbished",3 Unlocked,"Lot is AT&T-locked, comps mostly Unlocked - expect a discount"
+50349,iPhone 15 Plus,128GB,C,T-Mobile,240,219.3,3,360.69,390.99,399.0,,,,,,,141.39,179.7,,,33933.6,43128.0,"2 Pre-Owned, 1 Good - Refurbished",3 Unlocked,"Lot is T-Mobile-locked, comps mostly Unlocked - expect a discount"
+50360,iPhone 15 Plus,128GB,C,T-Mobile,71,219.3,3,360.69,390.99,399.0,,,,,,,141.39,179.7,,,10038.69,12758.7,"2 Pre-Owned, 1 Good - Refurbished",3 Unlocked,"Lot is T-Mobile-locked, comps mostly Unlocked - expect a discount"
+50398,iPhone 15 Plus,128GB,C,Generic,20,235.88,3,360.69,390.99,399.0,,,,,,,124.81,163.12,,,2496.3,3262.5,"2 Pre-Owned, 1 Good - Refurbished",3 Unlocked,
+50418,iPhone 15,512GB,C,T-Mobile,20,266.48,1,399.0,399.0,399.0,,,,,,,132.52,132.52,,,2650.5,2650.5,1 Pre-Owned,1 Unlocked,"Lot is T-Mobile-locked, comps mostly Unlocked - expect a discount | Thin: 1 comp(s)"
+50403,iPhone 15,256GB,C,AT&T,20,214.2,2,233.99,357.0,480.0,,,,,,,19.79,265.8,,,395.8,5316.0,2 Pre-Owned,"1 AT&T, 1 Unlocked",Thin: 2 comp(s)
+50396,iPhone 15,128GB,A,Generic,20,229.5,16,250.0,339.38,425.0,,,,,,,20.5,195.5,,,410.0,3910.0,"14 Pre-Owned, 2 Excellent - Refurbished","15 Unlocked, 1 Not stated",
+50337,iPhone 15,128GB,B,T-Mobile,284,224.4,16,250.0,339.38,425.0,,,,,,,25.6,200.6,,,7270.4,56970.4,"14 Pre-Owned, 2 Very Good - Refurbished","15 Unlocked, 1 Not stated","Lot is T-Mobile-locked, comps mostly Unlocked - expect a discount"
+50331,iPhone 15,128GB,C,T-Mobile,394,214.2,17,250.0,339.99,425.0,,,,,,,35.8,210.8,,,14105.2,83055.2,"14 Pre-Owned, 3 Good - Refurbished","16 Unlocked, 1 Not stated","Lot is T-Mobile-locked, comps mostly Unlocked - expect a discount"
+50353,iPhone 15,128GB,C,T-Mobile,120,214.2,17,250.0,339.99,425.0,,,,,,,35.8,210.8,,,4296.0,25296.0,"14 Pre-Owned, 3 Good - Refurbished","16 Unlocked, 1 Not stated","Lot is T-Mobile-locked, comps mostly Unlocked - expect a discount"
+50395,iPhone 14 Pro Max,512GB,B,T-Mobile,20,418.2,4,540.0,555.0,580.0,,,,,,,121.8,161.8,,,2436.0,3236.0,"3 Pre-Owned, 1 Very Good - Refurbished",4 Unlocked,"Lot is T-Mobile-locked, comps mostly Unlocked - expect a discount"
+50402,iPhone 14 Pro Max,256GB,C,AT&T,20,307.07,4,350.0,420.0,453.59,,,,,,,42.93,146.52,,,858.58,2930.38,4 Pre-Owned,"3 Unlocked, 1 T-Mobile","Lot is AT&T-locked, comps mostly Unlocked - expect a discount"
+50335,iPhone 14 Pro Max,128GB,C,T-Mobile,342,224.4,6,300.0,427.0,462.29,,,,,,,75.6,237.89,,,25855.2,81358.38,"5 Pre-Owned, 1 Good - Refurbished","3 Unlocked, 2 Not stated, 1 AT&T","Lot is T-Mobile-locked, comps mostly Unlocked - expect a discount"
+50355,iPhone 14 Pro Max,128GB,C,T-Mobile,142,224.4,6,300.0,427.0,462.29,,,,,,,75.6,237.89,,,10735.2,33780.38,"5 Pre-Owned, 1 Good - Refurbished","3 Unlocked, 2 Not stated, 1 AT&T","Lot is T-Mobile-locked, comps mostly Unlocked - expect a discount"
+50401,iPhone 14 Pro,512GB,B,T-Mobile,20,332.77,3,480.0,500.0,500.0,,,,,,,147.23,167.23,,,2944.5,3344.5,"2 Very Good - Refurbished, 1 Pre-Owned",3 Unlocked,"Lot is T-Mobile-locked, comps mostly Unlocked - expect a discount"
+50394,iPhone 14 Pro,256GB,C,AT&T,20,209.1,4,400.0,405.0,425.0,,,,,,,190.9,215.9,,,3818.0,4318.0,4 Pre-Owned,"3 Unlocked, 1 AT&T, Verizon, T-Mobile, Sprint","Lot is AT&T-locked, comps mostly Unlocked - expect a discount"
+50332,iPhone 14 Pro,128GB,C,T-Mobile,366,209.1,4,300.0,345.0,390.0,,,,,,,90.9,180.9,,,33269.4,66209.4,4 Pre-Owned,4 Unlocked,"Lot is T-Mobile-locked, comps mostly Unlocked - expect a discount"
+50357,iPhone 14 Pro,128GB,C,T-Mobile,96,209.1,4,300.0,345.0,390.0,,,,,,,90.9,180.9,,,8726.4,17366.4,4 Pre-Owned,4 Unlocked,"Lot is T-Mobile-locked, comps mostly Unlocked - expect a discount"
+50393,iPhone 14 Plus,512GB,C,T-Mobile,20,153.0,,,,,,,,,,,,,,,,,,,No comp on this page set for this model + storage
+50368,iPhone 14 Plus,128GB,A,T-Mobile,22,279.34,8,244.79,287.5,321.59,,,,,,,-34.55,42.25,,,-760.12,929.48,"7 Pre-Owned, 1 Excellent - Refurbished",8 Unlocked,"Lot is T-Mobile-locked, comps mostly Unlocked - expect a discount"
+50344,iPhone 14 Plus,128GB,C,T-Mobile,240,153.0,7,244.79,275.0,306.0,,,,,,,91.79,153.0,,,22029.6,36720.0,7 Pre-Owned,7 Unlocked,"Lot is T-Mobile-locked, comps mostly Unlocked - expect a discount"
+50358,iPhone 14 Plus,128GB,C,T-Mobile,95,153.0,7,244.79,275.0,306.0,,,,,,,91.79,153.0,,,8720.05,14535.0,7 Pre-Owned,7 Unlocked,"Lot is T-Mobile-locked, comps mostly Unlocked - expect a discount"
+50387,iPhone 14 Plus,128GB,C,AT&T,20,153.0,7,244.79,275.0,306.0,,,,,,,91.79,153.0,,,1835.8,3060.0,7 Pre-Owned,7 Unlocked,"Lot is AT&T-locked, comps mostly Unlocked - expect a discount"
+50392,iPhone 14,128GB,A,AT&T,20,163.2,19,117.5,242.5,339.99,,,,,,,-45.7,176.79,,,-914.0,3535.8,"15 Pre-Owned, 4 Excellent - Refurbished","16 Unlocked, 2 AT&T, 1 T-Mobile","Lot is AT&T-locked, comps mostly Unlocked - expect a discount"
+50346,iPhone 14,128GB,B,T-Mobile,213,153.0,19,117.5,242.5,296.99,,,,,,,-35.5,143.99,,,-7561.5,30669.87,"15 Pre-Owned, 4 Very Good - Refurbished","14 Unlocked, 2 U.S. Cellular, 2 AT&T","Lot is T-Mobile-locked, comps mostly Unlocked - expect a discount"
+50359,iPhone 14,128GB,B,T-Mobile,72,157.25,19,117.5,242.5,296.99,,,,,,,-39.75,139.74,,,-2862.0,10061.28,"15 Pre-Owned, 4 Very Good - Refurbished","14 Unlocked, 2 U.S. Cellular, 2 AT&T","Lot is T-Mobile-locked, comps mostly Unlocked - expect a discount"
+50350,iPhone 14,128GB,C,T-Mobile,236,147.9,18,117.5,241.5,267.46,,,,,,,-30.4,119.56,,,-7174.4,28216.16,"15 Pre-Owned, 3 Good - Refurbished","15 Unlocked, 2 AT&T, 1 T-Mobile","Lot is T-Mobile-locked, comps mostly Unlocked - expect a discount"
+50334,iPhone 13 Pro Max,128GB,C,T-Mobile,377,214.2,4,299.95,332.5,379.99,,,,,,,85.75,165.79,,,32327.75,62502.83,4 Pre-Owned,"2 Unlocked, 1 Verizon, 1 AT&T","Lot is T-Mobile-locked, comps mostly Unlocked - expect a discount"
+50356,iPhone 13 Pro Max,128GB,C,T-Mobile,120,255.85,4,299.95,332.5,379.99,,,,,,,44.1,124.14,,,5292.0,14896.8,4 Pre-Owned,"2 Unlocked, 1 Verizon, 1 AT&T","Lot is T-Mobile-locked, comps mostly Unlocked - expect a discount"
+50386,iPhone 13 Pro Max,128GB,C,Generic,20,214.2,4,299.95,332.5,379.99,,,,,,,85.75,165.79,,,1715.0,3315.8,4 Pre-Owned,"2 Unlocked, 1 Verizon, 1 AT&T",
+50391,iPhone 13 Pro,512GB,B,T-Mobile,20,306.0,,,,,,,,,,,,,,,,,,,No comp on this page set for this model + storage
+50341,iPhone 13 Pro,128GB,C,T-Mobile,288,178.5,5,178.3,299.99,342.99,,,,,,,-0.2,164.49,,,-57.6,47373.12,"4 Pre-Owned, 1 Good - Refurbished",5 Unlocked,"Lot is T-Mobile-locked, comps mostly Unlocked - expect a discount"
+50352,iPhone 13 Pro,128GB,C,T-Mobile,166,178.5,5,178.3,299.99,342.99,,,,,,,-0.2,164.49,,,-33.2,27305.34,"4 Pre-Owned, 1 Good - Refurbished",5 Unlocked,"Lot is T-Mobile-locked, comps mostly Unlocked - expect a discount"
+50385,iPhone 13,512GB,B,T-Mobile,20,159.38,1,275.0,275.0,275.0,,,,,,,115.62,115.62,,,2312.5,2312.5,1 Pre-Owned,1 Unlocked,"Lot is T-Mobile-locked, comps mostly Unlocked - expect a discount | Thin: 1 comp(s)"
+50383,iPhone 13,128GB,A,AT&T,20,184.88,23,119.0,205.0,599.99,,,,,,,-65.88,415.12,,,-1317.5,8302.3,"21 Pre-Owned, 2 Excellent - Refurbished","17 Unlocked, 2 AT&T, 2 SIMPLE Mobile","Lot is AT&T-locked, comps mostly Unlocked - expect a discount"
+50390,iPhone 13,128GB,A,Generic,20,187.43,23,119.0,205.0,599.99,,,,,,,-68.43,412.56,,,-1368.5,8251.3,"21 Pre-Owned, 2 Excellent - Refurbished","17 Unlocked, 2 AT&T, 2 SIMPLE Mobile",
+50338,iPhone 13,128GB,B,T-Mobile,279,153.0,23,119.0,205.0,599.99,,,,,,,-34.0,446.99,,,-9486.0,124710.21,"21 Pre-Owned, 2 Very Good - Refurbished","17 Unlocked, 2 AT&T, 2 SIMPLE Mobile","Lot is T-Mobile-locked, comps mostly Unlocked - expect a discount"
+50330,iPhone 13,128GB,C,T-Mobile,457,142.8,22,119.0,202.5,599.99,,,,,,,-23.8,457.19,,,-10876.6,208935.83,"21 Pre-Owned, 1 Good - Refurbished","16 Unlocked, 2 AT&T, 2 SIMPLE Mobile","Lot is T-Mobile-locked, comps mostly Unlocked - expect a discount"
+50388,iPhone 13 Mini,512GB,B,T-Mobile,20,107.1,2,400.0,400.0,400.0,,,,,,,292.9,292.9,,,5858.0,5858.0,2 Very Good - Refurbished,2 Unlocked,"Lot is T-Mobile-locked, comps mostly Unlocked - expect a discount | Thin: 2 comp(s)"
+50384,iPhone 13 Mini,128GB,A,T-Mobile,20,127.5,7,123.0,169.99,228.99,,,,,,,-4.5,101.49,,,-90.0,2029.8,7 Pre-Owned,"6 Unlocked, 1 Verizon","Lot is T-Mobile-locked, comps mostly Unlocked - expect a discount"
+50342,iPhone 13 Mini,128GB,C,T-Mobile,265,102.0,7,123.0,169.99,228.99,,,,,,,21.0,126.99,,,5565.0,33652.35,7 Pre-Owned,"6 Unlocked, 1 Verizon","Lot is T-Mobile-locked, comps mostly Unlocked - expect a discount"
+50382,iPhone 12 Pro Max,256GB,B,T-Mobile,20,240.97,3,200.0,250.0,295.0,,,,,,,-40.97,54.03,,,-819.5,1080.5,3 Pre-Owned,3 Unlocked,"Lot is T-Mobile-locked, comps mostly Unlocked - expect a discount"
+50336,iPhone 12 Pro Max,128GB,C,T-Mobile,308,186.28,6,157.5,250.0,350.0,,,,,,,-28.78,163.72,,,-8865.0,50425.0,6 Pre-Owned,"4 Unlocked, 1 T-Mobile, 1 Spectrum","Lot is T-Mobile-locked, comps mostly Unlocked - expect a discount"
+50389,iPhone 12,64GB,A,T-Mobile,20,154.28,25,84.99,144.99,196.99,,,,,,,-69.29,42.72,,,-1385.7,854.3,"21 Pre-Owned, 4 Excellent - Refurbished","19 Unlocked, 3 Not stated, 1 Xfinity","Lot is T-Mobile-locked, comps mostly Unlocked - expect a discount"
+50333,iPhone 12,64GB,C,T-Mobile,418,86.7,21,84.99,140.3,159.99,,,,,,,-1.71,73.29,,,-714.78,30635.22,21 Pre-Owned,"16 Unlocked, 3 Not stated, 1 T-Mobile","Lot is T-Mobile-locked, comps mostly Unlocked - expect a discount"
+50378,iPhone 12 Mini,128GB,B,T-Mobile,20,66.3,1,160.64,160.64,160.64,,,,,,,94.34,94.34,,,1886.8,1886.8,1 Pre-Owned,1 Unlocked,"Lot is T-Mobile-locked, comps mostly Unlocked - expect a discount | Thin: 1 comp(s)"
+50381,iPhone 11 Pro Max,512GB,C,T-Mobile,20,117.3,,,,,,,,,,,,,,,,,,,No comp on this page set for this model + storage
+50377,iPhone 11 Pro Max,256GB,B,T-Mobile,20,128.78,3,193.99,199.95,229.99,,,,,,,65.22,101.22,,,1304.3,2024.3,3 Pre-Owned,3 Unlocked,"Lot is T-Mobile-locked, comps mostly Unlocked - expect a discount"
+50376,iPhone 11 Pro,64GB,B,T-Mobile,20,113.47,,,,,,,,,,,,,,,,,,,No comp on this page set for this model + storage
+50380,iPhone 11 Pro,Mixed / Not specified,C,Mixed Carrier,20,91.8,,,,,,,,,,,,,,,,,,,No comp on this page set for this model + storage
+50372,iPhone 11,128GB,B,T-Mobile,20,142.8,5,110.0,127.5,139.99,,,,,,,-32.8,-2.81,,,-656.0,-56.2,5 Pre-Owned,"3 Unlocked, 1 Verizon, 1 Not stated","Lot is T-Mobile-locked, comps mostly Unlocked - expect a discount"
+50371,iPhone 11,64GB,B,Generic,20,81.6,12,45.0,118.44,150.0,,,,,,,-36.6,68.4,,,-732.0,1368.0,12 Pre-Owned,"11 Unlocked, 1 Not stated",
+50340,iPhone 11,64GB,C,T-Mobile,250,76.5,12,45.0,118.44,150.0,,,,,,,-31.5,73.5,,,-7875.0,18375.0,12 Pre-Owned,"11 Unlocked, 1 Not stated","Lot is T-Mobile-locked, comps mostly Unlocked - expect a discount"
+50351,iPhone 11,64GB,C,T-Mobile,170,76.5,12,45.0,118.44,150.0,,,,,,,-31.5,73.5,,,-5355.0,12495.0,12 Pre-Owned,"11 Unlocked, 1 Not stated","Lot is T-Mobile-locked, comps mostly Unlocked - expect a discount"
+50365,iPhone 11,Mixed / Not specified,A/B,Mixed Carrier,30,86.7,,,,,,,,,,,,,,,,,,,No comp on this page set for this model + storage
+50425,iPhone SE (2022),256GB,C,T-Mobile,20,40.8,,,,,,,,,,,,,,,,,,,No comp on this page set for this model + storage
+50362,iPhone SE (2022),64GB,B/C,Mixed Carrier,40,40.8,,,,,,,,,,,,,,,,,,,No comp on this page set for this model + storage
+50339,iPhone SE (2022),64GB,C,T-Mobile,272,45.19,,,,,,,,,,,,,,,,,,,No comp on this page set for this model + storage
+50366,iPhone SE (2020),Mixed / Not specified,A,T-Mobile,30,43.35,,,,,,,,,,,,,,,,,,,No comp on this page set for this model + storage
+50363,iPhone SE (2020),Mixed / Not specified,C,Mixed Carrier,40,20.4,,,,,,,,,,,,,,,,,,,No comp on this page set for this model + storage
+50367,iPhone SE (2022) & iPhone XR,Mixed / Not specified,A,T-Mobile,30,90.78,,,,,,,,,,,,,,,,,,,No comp on this page set for this model + storage
+50364,iPhone SE (2020) & iPhone SE (2022),Mixed / Not specified,B,Mixed Carrier,35,35.7,,,,,,,,,,,,,,,,,,,No comp on this page set for this model + storage
+50361,"iPhone XR, iPhone SE (2020), iPhone SE (2022) & More",Mixed / Not specified,B/C,Mixed Carrier,50,12.44,,,,,,,,,,,,,,,,,,,No comp on this page set for this model + storage
