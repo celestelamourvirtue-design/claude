@@ -1,0 +1,42 @@
+{
+  "title": "Morning Routine — 9:16 short",
+  "aspect": "9:16",
+  "fps": 30,
+  "transition": 0.5,
+  "audio": null,
+  "scenes": [
+    {
+      "query": "sunrise over misty mountains",
+      "media": "video",
+      "duration": 3.5,
+      "text": "Start before the world does"
+    },
+    {
+      "query": "pouring coffee slow motion",
+      "media": "video",
+      "duration": 3.0,
+      "clip_start": 1.0,
+      "text": "One quiet cup"
+    },
+    {
+      "query": "open notebook on wooden desk",
+      "media": "photo",
+      "duration": 3.0,
+      "motion": "zoom_in",
+      "text": "Three lines, no more"
+    },
+    {
+      "query": "person running on empty road at dawn",
+      "media": "video",
+      "duration": 3.5,
+      "text": "Move, then think"
+    },
+    {
+      "query": "sunlight through window on linen bed",
+      "media": "photo",
+      "duration": 3.0,
+      "motion": "pan_right",
+      "text": "The day is yours"
+    }
+  ]
+}

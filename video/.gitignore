@@ -1,0 +1,13 @@
+# Downloaded Pexels assets and per-scene intermediates
+.cache/
+
+# Rendered output and its generated credits
+out/
+*.mp4
+
+# Never commit the API key
+.env
+
+# Python bytecode
+__pycache__/
+*.pyc
