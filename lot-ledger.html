@@ -1,0 +1,320 @@
+<title>iPhone Lot Ledger — Auction Cost vs Amazon Renewed</title>
+<style>
+:root{
+  --paper:#F7F5F1; --card:#FFFFFF; --ink:#1A1815; --ink-2:#57524A; --ink-3:#8A8378;
+  --rule:#E2DDD3; --rule-2:#CFC8BB;
+  --brass:#9A6B18; --brass-soft:#F0E4CB;
+  --go:#1B6B4F; --go-bg:#E4F0EA;
+  --thin:#8A5A12; --thin-bg:#F6EAD4;
+  --stop:#A33222; --stop-bg:#F8E3DE;
+  --lockbg:#EDE8F2; --lockfg:#5B4A72;
+  --shadow:0 1px 2px rgba(26,24,21,.06),0 8px 24px -16px rgba(26,24,21,.28);
+  --serif:Georgia,"Iowan Old Style","Times New Roman",serif;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root{
+  --paper:#141310; --card:#1D1B17; --ink:#F2EEE6; --ink-2:#B3ABA0; --ink-3:#807A70;
+  --rule:#302C26; --rule-2:#443E36;
+  --brass:#D9A945; --brass-soft:#3A2E17;
+  --go:#5FC79C; --go-bg:#12312A; --thin:#DCA23F; --thin-bg:#33260F;
+  --stop:#EF8A74; --stop-bg:#3A1E19;
+  --lockbg:#2B2436; --lockfg:#BFAEDA;
+  --shadow:0 1px 2px rgba(0,0,0,.5),0 8px 24px -16px rgba(0,0,0,.8);
+}}
+:root[data-theme="dark"]{
+  --paper:#141310; --card:#1D1B17; --ink:#F2EEE6; --ink-2:#B3ABA0; --ink-3:#807A70;
+  --rule:#302C26; --rule-2:#443E36;
+  --brass:#D9A945; --brass-soft:#3A2E17;
+  --go:#5FC79C; --go-bg:#12312A; --thin:#DCA23F; --thin-bg:#33260F;
+  --stop:#EF8A74; --stop-bg:#3A1E19;
+  --lockbg:#2B2436; --lockfg:#BFAEDA;
+  --shadow:0 1px 2px rgba(0,0,0,.5),0 8px 24px -16px rgba(0,0,0,.8);
+}
+:root[data-theme="light"]{
+  --paper:#F7F5F1; --card:#FFFFFF; --ink:#1A1815; --ink-2:#57524A; --ink-3:#8A8378;
+  --rule:#E2DDD3; --rule-2:#CFC8BB;
+  --brass:#9A6B18; --brass-soft:#F0E4CB;
+  --go:#1B6B4F; --go-bg:#E4F0EA; --thin:#8A5A12; --thin-bg:#F6EAD4;
+  --stop:#A33222; --stop-bg:#F8E3DE;
+  --lockbg:#EDE8F2; --lockfg:#5B4A72;
+  --shadow:0 1px 2px rgba(26,24,21,.06),0 8px 24px -16px rgba(26,24,21,.28);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);
+     font-size:16px;line-height:1.5;-webkit-text-size-adjust:100%}
+.wrap{max-width:1180px;margin:0 auto;padding:28px 18px 72px;
+      display:flex;flex-direction:column;gap:26px}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+/* masthead */
+.mast{display:flex;flex-direction:column;gap:9px;
+      border-bottom:2px solid var(--ink);padding-bottom:14px}
+.kicker{font-family:var(--mono);font-size:11px;letter-spacing:.16em;
+        text-transform:uppercase;color:var(--brass)}
+h1{font-family:var(--serif);font-weight:400;font-size:clamp(28px,5.4vw,42px);
+   line-height:1.08;margin:0;text-wrap:balance;letter-spacing:-.01em}
+.dek{color:var(--ink-2);font-size:15px;margin:0;max-width:64ch}
+
+/* the warning — this is the headline finding */
+.alarm{background:var(--card);border:1px solid var(--rule);
+       border-left:4px solid var(--stop);border-radius:3px;
+       padding:16px 18px;display:flex;flex-direction:column;gap:8px;box-shadow:var(--shadow)}
+.alarm h2{font-family:var(--sans);font-size:14px;font-weight:650;margin:0;
+          letter-spacing:.01em;color:var(--stop)}
+.alarm p{margin:0;font-size:14.5px;color:var(--ink-2)}
+.alarm strong{color:var(--ink);font-weight:620}
+
+/* tallies */
+.tally{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:1px;
+       background:var(--rule);border:1px solid var(--rule);border-radius:3px;overflow:hidden}
+.t{background:var(--card);padding:13px 15px;display:flex;flex-direction:column;gap:3px}
+.t dt{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);
+      font-family:var(--mono)}
+.t dd{margin:0;font-family:var(--mono);font-size:23px;font-weight:600;letter-spacing:-.02em}
+.t small{font-size:12px;color:var(--ink-3);font-family:var(--sans);letter-spacing:0}
+
+/* controls */
+.controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;
+          padding:12px;background:var(--card);border:1px solid var(--rule);border-radius:3px}
+.ctl-label{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;
+           text-transform:uppercase;color:var(--ink-3);margin-right:2px}
+button.chip{font:inherit;font-size:13px;padding:6px 12px;border-radius:2px;cursor:pointer;
+      background:transparent;color:var(--ink-2);border:1px solid var(--rule-2);
+      transition:background .12s,color .12s,border-color .12s}
+button.chip:hover{border-color:var(--brass);color:var(--ink)}
+button.chip[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+button.chip:focus-visible,select:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+select{font:inherit;font-size:13px;padding:6px 8px;border-radius:2px;
+       background:var(--card);color:var(--ink);border:1px solid var(--rule-2)}
+.spacer{flex:1 1 auto}
+.count{font-family:var(--mono);font-size:12px;color:var(--ink-3)}
+
+/* ledger */
+.ledger{display:flex;flex-direction:column;gap:7px}
+.lot{background:var(--card);border:1px solid var(--rule);border-radius:3px;
+     border-left:4px solid var(--rule-2);padding:13px 15px;box-shadow:var(--shadow);
+     display:grid;gap:11px;grid-template-columns:1fr}
+.lot.v-go{border-left-color:var(--go)}
+.lot.v-thin{border-left-color:var(--thin)}
+.lot.v-stop{border-left-color:var(--stop)}
+.lot.v-none{border-left-color:var(--rule-2);opacity:.72}
+.lot-head{display:flex;flex-wrap:wrap;gap:8px;align-items:baseline}
+.lot-name{font-family:var(--serif);font-size:18.5px;letter-spacing:-.01em}
+.lot-spec{font-family:var(--mono);font-size:12.5px;color:var(--ink-2)}
+.tags{display:flex;flex-wrap:wrap;gap:5px;margin-left:auto}
+.tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;
+     padding:3px 7px;border-radius:2px;background:var(--brass-soft);color:var(--brass);
+     white-space:nowrap}
+.tag.lock{background:var(--lockbg);color:var(--lockfg)}
+.tag.go{background:var(--go-bg);color:var(--go)}
+.tag.thin{background:var(--thin-bg);color:var(--thin)}
+.tag.stop{background:var(--stop-bg);color:var(--stop)}
+
+.figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(96px,1fr));gap:10px 14px}
+.fig{display:flex;flex-direction:column;gap:1px;min-width:0}
+.fig dt{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;
+        color:var(--ink-3)}
+.fig dd{margin:0;font-family:var(--mono);font-variant-numeric:tabular-nums;
+        font-size:15px;font-weight:550}
+.fig.hero dd{font-size:19px}
+.pos{color:var(--go)} .neg{color:var(--stop)} .mut{color:var(--ink-3);font-weight:450}
+.nocomp{font-size:13.5px;color:var(--ink-3);font-style:italic}
+
+/* the locked sensitivity gets its own visual lane */
+.lane{border-top:1px dashed var(--rule-2);padding-top:9px;
+      display:flex;flex-wrap:wrap;gap:6px 16px;align-items:baseline}
+.lane-tag{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;
+          color:var(--ink-3)}
+.lane-val{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:14px;font-weight:550}
+
+@media (min-width:860px){
+  .lot{grid-template-columns:minmax(210px,1.15fr) 2.6fr;align-items:start;gap:11px 22px}
+  .lot-head{flex-direction:column;align-items:flex-start;gap:5px}
+  .tags{margin-left:0}
+  .right{display:flex;flex-direction:column;gap:9px;min-width:0}
+}
+
+footer{border-top:1px solid var(--rule);padding-top:16px;
+       display:flex;flex-direction:column;gap:9px}
+footer h3{font-family:var(--sans);font-size:13px;font-weight:650;margin:0;
+          letter-spacing:.02em;text-transform:uppercase;color:var(--ink-3)}
+footer p,footer li{font-size:13.5px;color:var(--ink-2);margin:0}
+footer ul{margin:0;padding-left:19px;display:flex;flex-direction:column;gap:5px}
+footer code{font-family:var(--mono);font-size:12.5px;background:var(--brass-soft);
+            color:var(--brass);padding:1px 5px;border-radius:2px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div class="wrap">
+  <header class="mast">
+    <div class="kicker">Superior Wireless Auctions · 93 iPhone lots · closing in ~1d 8–10h</div>
+    <h1>What the lots cost, what Amazon actually pays</h1>
+    <p class="dek">Every auction lot on both pages, priced against the matching Amazon Renewed
+    listing <em>at the same condition grade</em>. Sorted so the ones worth bidding on sit at the top.</p>
+  </header>
+
+  <section class="alarm">
+    <h2>Read this before you bid on anything</h2>
+    <p>All 23 Amazon comps are <strong>carrier-unlocked</strong>. <strong>27 of the 34</strong>
+    lots that look profitable are <strong>T-Mobile or AT&amp;T locked</strong> — they cannot fetch
+    an unlocked price until they're unlocked, and carrier liquidation stock is often not
+    unlock-eligible. Every locked row below also shows what it earns if you have to sell it
+    locked at a 20% discount. <strong>Six lots flip from profit to loss</strong> on that one assumption.</p>
+  </section>
+
+  <dl class="tally" id="tally"></dl>
+
+  <div class="controls">
+    <span class="ctl-label">Show</span>
+    <button class="chip" id="f-comp" aria-pressed="true">Has Amazon comp</button>
+    <button class="chip" id="f-prof" aria-pressed="false">Profitable only</button>
+    <button class="chip" id="f-unlock" aria-pressed="false">Hide locked</button>
+    <button class="chip" id="f-bulk" aria-pressed="false">Bulk (100+)</button>
+    <span class="spacer"></span>
+    <span class="ctl-label">Sort</span>
+    <select id="sort">
+      <option value="net">Profit per unit</option>
+      <option value="netlot">Profit per lot</option>
+      <option value="mgn">Margin %</option>
+      <option value="lnetlot">Profit per lot if locked</option>
+      <option value="lot">Capital required</option>
+      <option value="u">Units</option>
+    </select>
+    <span class="count" id="count"></span>
+  </div>
+
+  <main class="ledger" id="ledger"></main>
+
+  <footer>
+    <h3>How these numbers were built</h3>
+    <ul>
+      <li><strong>Selling price</strong> is the live Amazon Renewed price for the same model and
+      capacity at the <em>matching</em> grade — Grade A→Excellent, B→Good, C→Acceptable — not the
+      headline Excellent price. Grade discounts ran 4–21%, so this matters.</li>
+      <li><strong>Cost per unit</strong> is the current bid ÷ units. Auctions are still open, so
+      every one of these is a floor, not a price. Lots at 0–2 bids will move.</li>
+      <li><strong>Modelled costs</strong>, all adjustable in <code>auction-vs-amazon.csv</code>:
+      8% Amazon referral, $6 fulfilment, $12 test/wipe/accessories/packaging, $6 inbound freight,
+      8% returns-and-defect allowance. <strong>Not modelled:</strong> buyer's premium, carrier
+      unlock cost, storage, or capital held while inventory sells.</li>
+      <li><strong>56 of 93 lots have no comp</strong> — iPhone 17s, 13 Pro Max, 11 Pro/Pro Max,
+      and every 512GB/1TB capacity aren't on the Amazon page-1 set you pulled. They're listed
+      but unpriced, not judged unprofitable.</li>
+      <li><strong>Velocity isn't modelled.</strong> A 457-unit lot means listing 457 units of one
+      model into a market where you're the new seller. Profit per lot assumes they all sell near
+      the current price; they won't if you dump them at once.</li>
+    </ul>
+  </footer>
+</div>
+
+<script>
+const LOTS = [{"m":"iPhone 15 Pro Max","mem":"256GB","g":"Grade A","u":20,"c":"(blank)","lock":"unspecified","bids":1,"cost":360.0,"lot":7200.0,"amz":679.0,"ag":"Excellent","net":186.36,"mgn":27.4,"netlot":3727.2,"lprice":543.2,"lnet":72.29,"lnetlot":1445.76,"note":"","asin":"B0CMZDBVWT"},{"m":"iPhone 15 Pro","mem":"256GB","g":"Grade A","u":20,"c":"AT&T","lock":"LOCKED","bids":6,"cost":301.25,"lot":6025.0,"amz":609.0,"ag":"Excellent","net":186.31,"mgn":30.6,"netlot":3726.2,"lprice":487.2,"lnet":84.0,"lnetlot":1679.96,"note":"","asin":"B0CMZ5LT14"},{"m":"iPhone 14 Pro Max","mem":"128GB","g":"Grade C","u":342,"c":"T-Mobile","lock":"LOCKED","bids":1,"cost":220.0,"lot":75240.0,"amz":489.75,"ag":"Acceptable","net":167.39,"mgn":34.2,"netlot":57247.38,"lprice":391.8,"lnet":85.11,"lnetlot":29108.3,"note":"","asin":"B0BN9P1GXC"},{"m":"iPhone 14 Pro Max","mem":"128GB","g":"Grade C","u":142,"c":"T-Mobile","lock":"LOCKED","bids":0,"cost":220.0,"lot":31240.0,"amz":489.75,"ag":"Acceptable","net":167.39,"mgn":34.2,"netlot":23769.38,"lprice":391.8,"lnet":85.11,"lnetlot":12085.9,"note":"","asin":"B0BN9P1GXC"},{"m":"iPhone 16","mem":"128GB","g":"Grade C","u":246,"c":"T-Mobile","lock":"LOCKED","bids":1,"cost":260.0,"lot":63960.0,"amz":533.0,"ag":"Acceptable","net":163.72,"mgn":30.7,"netlot":40275.12,"lprice":426.4,"lnet":74.18,"lnetlot":18247.3,"note":"","asin":"B0DHJH2GZL"},{"m":"iPhone 15 Pro Max","mem":"256GB","g":"Grade C","u":250,"c":"T-Mobile","lock":"LOCKED","bids":0,"cost":340.0,"lot":85000.0,"amz":619.95,"ag":"Acceptable","net":156.76,"mgn":25.3,"netlot":39189.5,"lprice":495.96,"lnet":52.61,"lnetlot":13151.6,"note":"","asin":"B0CMZDBVWT"},{"m":"iPhone 15 Pro Max","mem":"256GB","g":"Grade C","u":180,"c":"T-Mobile","lock":"LOCKED","bids":0,"cost":340.0,"lot":61200.0,"amz":619.95,"ag":"Acceptable","net":156.76,"mgn":25.3,"netlot":28216.44,"lprice":495.96,"lnet":52.61,"lnetlot":9469.15,"note":"","asin":"B0CMZDBVWT"},{"m":"iPhone 16 Plus","mem":"128GB","g":"Grade C","u":20,"c":"(blank)","lock":"unspecified","bids":2,"cost":276.25,"lot":5525.0,"amz":543.09,"ag":"Acceptable","net":155.95,"mgn":28.7,"netlot":3118.91,"lprice":434.47,"lnet":64.71,"lnetlot":1294.13,"note":"","asin":"B0DHJCTZ4D"},{"m":"iPhone 15 Plus","mem":"128GB","g":"Grade A","u":20,"c":"AT&T","lock":"LOCKED","bids":0,"cost":225.0,"lot":4500.0,"amz":435.07,"ag":"Excellent","net":116.46,"mgn":26.8,"netlot":2329.18,"lprice":348.06,"lnet":43.37,"lnetlot":867.34,"note":"","asin":"B0CMT4XDSC"},{"m":"iPhone 16 Pro Max","mem":"256GB","g":"Grade A","u":20,"c":"(blank)","lock":"unspecified","bids":8,"cost":557.5,"lot":11150.0,"amz":814.92,"ag":"Excellent","net":103.03,"mgn":12.6,"netlot":2060.66,"lprice":651.94,"lnet":-33.87,"lnetlot":-677.48,"note":"","asin":"B0DHJ896RY"},{"m":"iPhone 15","mem":"128GB","g":"Grade A","u":20,"c":"(blank)","lock":"unspecified","bids":1,"cost":225.0,"lot":4500.0,"amz":409.89,"ag":"Excellent","net":95.31,"mgn":23.3,"netlot":1906.15,"lprice":327.91,"lnet":26.45,"lnetlot":528.92,"note":"","asin":"B0CMPMY9ZZ"},{"m":"iPhone 15 Pro Max","mem":"256GB","g":"Grade B","u":20,"c":"(blank)","lock":"unspecified","bids":8,"cost":427.5,"lot":8550.0,"amz":633.97,"ag":"Good","net":81.03,"mgn":12.8,"netlot":1620.7,"lprice":507.18,"lnet":-25.47,"lnetlot":-509.44,"note":"","asin":"B0CMZDBVWT"},{"m":"iPhone 15","mem":"128GB","g":"Grade B","u":284,"c":"T-Mobile","lock":"LOCKED","bids":0,"cost":220.0,"lot":62480.0,"amz":379.0,"ag":"Good","net":74.36,"mgn":19.6,"netlot":21118.24,"lprice":303.2,"lnet":10.69,"lnetlot":3035.39,"note":"","asin":"B0CMPMY9ZZ"},{"m":"iPhone 16 Plus","mem":"128GB","g":"Grade A","u":20,"c":"AT&T","lock":"LOCKED","bids":10,"cost":402.5,"lot":8050.0,"amz":595.95,"ag":"Excellent","net":74.1,"mgn":12.4,"netlot":1481.96,"lprice":476.76,"lnet":-26.02,"lnetlot":-520.43,"note":"","asin":"B0DHJCTZ4D"},{"m":"iPhone 14 Plus","mem":"128GB","g":"Grade C","u":240,"c":"T-Mobile","lock":"LOCKED","bids":0,"cost":150.0,"lot":36000.0,"amz":290.52,"ag":"Acceptable","net":70.04,"mgn":24.1,"netlot":16808.83,"lprice":232.42,"lnet":21.23,"lnetlot":5095.07,"note":"","asin":"B0BN9426PP"},{"m":"iPhone 14 Plus","mem":"128GB","g":"Grade C","u":95,"c":"T-Mobile","lock":"LOCKED","bids":1,"cost":150.0,"lot":14250.0,"amz":290.52,"ag":"Acceptable","net":70.04,"mgn":24.1,"netlot":6653.5,"lprice":232.42,"lnet":21.23,"lnetlot":2016.8,"note":"","asin":"B0BN9426PP"},{"m":"iPhone 14 Plus","mem":"128GB","g":"Grade C","u":20,"c":"AT&T","lock":"LOCKED","bids":1,"cost":150.0,"lot":3000.0,"amz":290.52,"ag":"Acceptable","net":70.04,"mgn":24.1,"netlot":1400.74,"lprice":232.42,"lnet":21.23,"lnetlot":424.59,"note":"","asin":"B0BN9426PP"},{"m":"iPhone 12 Pro Max","mem":"128GB","g":"Grade C","u":308,"c":"T-Mobile","lock":"LOCKED","bids":24,"cost":182.63,"lot":56250.04,"amz":320.95,"ag":"Acceptable","net":62.97,"mgn":19.6,"netlot":19394.14,"lprice":256.76,"lnet":9.05,"lnetlot":2786.91,"note":"","asin":"B08PMP778K"},{"m":"iPhone 14","mem":"128GB","g":"Grade B","u":213,"c":"T-Mobile","lock":"LOCKED","bids":1,"cost":150.0,"lot":31950.0,"amz":280.0,"ag":"Good","net":61.2,"mgn":21.9,"netlot":13035.6,"lprice":224.0,"lnet":14.16,"lnetlot":3016.08,"note":"","asin":"B0BN72FYFG"},{"m":"iPhone 14","mem":"128GB","g":"Grade C","u":236,"c":"T-Mobile","lock":"LOCKED","bids":0,"cost":145.0,"lot":34220.0,"amz":272.97,"ag":"Acceptable","net":60.29,"mgn":22.1,"netlot":14229.57,"lprice":218.38,"lnet":14.44,"lnetlot":3406.86,"note":"","asin":"B0BN72FYFG"},{"m":"iPhone 15","mem":"128GB","g":"Grade C","u":394,"c":"T-Mobile","lock":"LOCKED","bids":1,"cost":210.0,"lot":82740.0,"amz":348.99,"ag":"Acceptable","net":59.15,"mgn":16.9,"netlot":23305.73,"lprice":279.19,"lnet":0.52,"lnetlot":205.38,"note":"","asin":"B0CMPMY9ZZ"},{"m":"iPhone 15","mem":"128GB","g":"Grade C","u":120,"c":"T-Mobile","lock":"LOCKED","bids":1,"cost":210.0,"lot":25200.0,"amz":348.99,"ag":"Acceptable","net":59.15,"mgn":16.9,"netlot":7098.19,"lprice":279.19,"lnet":0.52,"lnetlot":62.55,"note":"","asin":"B0CMPMY9ZZ"},{"m":"iPhone 14","mem":"128GB","g":"Grade B","u":72,"c":"T-Mobile","lock":"LOCKED","bids":5,"cost":154.17,"lot":11100.24,"amz":280.0,"ag":"Good","net":57.03,"mgn":20.4,"netlot":4106.16,"lprice":224.0,"lnet":9.99,"lnetlot":719.28,"note":"","asin":"B0BN72FYFG"},{"m":"iPhone 12 Mini","mem":"128GB","g":"Grade B","u":20,"c":"T-Mobile","lock":"LOCKED","bids":1,"cost":65.0,"lot":1300.0,"amz":167.75,"ag":"Good","net":51.91,"mgn":30.9,"netlot":1038.2,"lprice":134.2,"lnet":23.73,"lnetlot":474.56,"note":"","asin":"B08PNKN4J7"},{"m":"iPhone 13 Mini","mem":"128GB","g":"Grade C","u":265,"c":"T-Mobile","lock":"LOCKED","bids":0,"cost":100.0,"lot":26500.0,"amz":200.4,"ag":"Acceptable","net":44.34,"mgn":22.1,"netlot":11749.04,"lprice":160.32,"lnet":10.67,"lnetlot":2827.23,"note":"","asin":"B09LKTXKXQ"},{"m":"iPhone 13","mem":"128GB","g":"Grade A","u":20,"c":"AT&T","lock":"LOCKED","bids":2,"cost":181.25,"lot":3625.0,"amz":277.38,"ag":"Excellent","net":27.75,"mgn":10.0,"netlot":554.98,"lprice":221.9,"lnet":-18.85,"lnetlot":-377.01,"note":"","asin":"B09LNW3CY2"},{"m":"iPhone 12","mem":"64GB","g":"Grade C","u":418,"c":"T-Mobile","lock":"LOCKED","bids":1,"cost":85.0,"lot":35530.0,"amz":162.0,"ag":"Acceptable","net":27.08,"mgn":16.7,"netlot":11319.44,"lprice":129.6,"lnet":-0.14,"lnetlot":-56.85,"note":"","asin":"B08PP5MSVB"},{"m":"iPhone 11","mem":"64GB","g":"Grade B","u":20,"c":"(blank)","lock":"unspecified","bids":1,"cost":80.0,"lot":1600.0,"amz":155.95,"ag":"Good","net":27.0,"mgn":17.3,"netlot":539.96,"lprice":124.76,"lnet":0.8,"lnetlot":15.97,"note":"","asin":"B07ZPKN6YR"},{"m":"iPhone 11","mem":"64GB","g":"Grade C","u":250,"c":"T-Mobile","lock":"LOCKED","bids":0,"cost":75.0,"lot":18750.0,"amz":148.0,"ag":"Acceptable","net":25.32,"mgn":17.1,"netlot":6330.0,"lprice":118.4,"lnet":0.46,"lnetlot":114.0,"note":"","asin":"B07ZPKN6YR"},{"m":"iPhone 11","mem":"64GB","g":"Grade C","u":170,"c":"T-Mobile","lock":"LOCKED","bids":1,"cost":75.0,"lot":12750.0,"amz":148.0,"ag":"Acceptable","net":25.32,"mgn":17.1,"netlot":4304.4,"lprice":118.4,"lnet":0.46,"lnetlot":77.52,"note":"","asin":"B07ZPKN6YR"},{"m":"iPhone 13","mem":"128GB","g":"Grade A","u":20,"c":"(blank)","lock":"unspecified","bids":6,"cost":183.75,"lot":3675.0,"amz":277.38,"ag":"Excellent","net":25.25,"mgn":9.1,"netlot":504.98,"lprice":221.9,"lnet":-21.35,"lnetlot":-427.01,"note":"","asin":"B09LNW3CY2"},{"m":"iPhone 13","mem":"128GB","g":"Grade B","u":279,"c":"T-Mobile","lock":"LOCKED","bids":1,"cost":150.0,"lot":41850.0,"amz":235.0,"ag":"Good","net":23.4,"mgn":10.0,"netlot":6528.6,"lprice":188.0,"lnet":-16.08,"lnetlot":-4486.32,"note":"","asin":"B09LNW3CY2"},{"m":"iPhone 13","mem":"128GB","g":"Grade C","u":457,"c":"T-Mobile","lock":"LOCKED","bids":0,"cost":140.0,"lot":63980.0,"amz":219.84,"ag":"Acceptable","net":20.67,"mgn":9.4,"netlot":9444.18,"lprice":175.87,"lnet":-16.27,"lnetlot":-7434.26,"note":"","asin":"B09LNW3CY2"},{"m":"iPhone 13 Mini","mem":"128GB","g":"Grade C","u":20,"c":"T-Mobile","lock":"LOCKED","bids":1,"cost":125.0,"lot":2500.0,"amz":200.4,"ag":"Acceptable","net":19.34,"mgn":9.6,"netlot":386.72,"lprice":160.32,"lnet":-14.33,"lnetlot":-286.62,"note":"","asin":"B09LKTXKXQ"},{"m":"iPhone 16e","mem":"128GB","g":"New - Handset Only","u":20,"c":"T-Mobile","lock":"LOCKED","bids":3,"cost":303.75,"lot":6075.0,"amz":378.65,"ag":"Excellent","net":-9.68,"mgn":-2.6,"netlot":-193.68,"lprice":302.92,"lnet":-73.3,"lnetlot":-1465.94,"note":"","asin":"B0F4RM7Y2L"},{"m":"iPhone 12","mem":"64GB","g":"Grade A","u":20,"c":"T-Mobile","lock":"LOCKED","bids":18,"cost":151.25,"lot":3025.0,"amz":189.0,"ag":"Excellent","net":-16.49,"mgn":-8.7,"netlot":-329.8,"lprice":151.2,"lnet":-48.24,"lnetlot":-964.84,"note":"","asin":"B08PP5MSVB"},{"m":"iPhone 14 Plus","mem":"128GB","g":"Grade A","u":22,"c":"T-Mobile","lock":"LOCKED","bids":24,"cost":273.86,"lot":6024.92,"amz":324.9,"ag":"Excellent","net":-24.94,"mgn":-7.7,"netlot":-548.77,"lprice":259.92,"lnet":-79.53,"lnetlot":-1749.6,"note":"","asin":"B0BN9426PP"},{"m":"iPhone 17 Pro Max","mem":"512GB","g":"New - Handset Only","u":20,"c":"T-Mobile","lock":"LOCKED","bids":24,"cost":1060.0,"lot":21200.0,"amz":null,"ag":"Excellent","net":null,"mgn":null,"netlot":null,"lprice":null,"lnet":null,"lnetlot":null,"note":"no comp on Amazon p1 (model/capacity not listed)","asin":""},{"m":"iPhone 17 Pro Max","mem":"256GB","g":"Grade A","u":20,"c":"(blank)","lock":"unspecified","bids":4,"cost":802.5,"lot":16050.0,"amz":null,"ag":"Excellent","net":null,"mgn":null,"netlot":null,"lprice":null,"lnet":null,"lnetlot":null,"note":"no comp on Amazon p1 (model/capacity not listed)","asin":""},{"m":"iPhone 17 Pro","mem":"256GB","g":"Grade B","u":20,"c":"(blank)","lock":"unspecified","bids":7,"cost":652.5,"lot":13050.0,"amz":null,"ag":"Good","net":null,"mgn":null,"netlot":null,"lprice":null,"lnet":null,"lnetlot":null,"note":"no comp on Amazon p1 (model/capacity not listed)","asin":""},{"m":"iPhone 17","mem":"256GB","g":"Grade B","u":20,"c":"AT&T","lock":"LOCKED","bids":1,"cost":400.0,"lot":8000.0,"amz":null,"ag":"Good","net":null,"mgn":null,"netlot":null,"lprice":null,"lnet":null,"lnetlot":null,"note":"no comp on Amazon p1 (model/capacity not listed)","asin":""},{"m":"iPhone 17","mem":"512GB","g":"Grade A","u":20,"c":"T-Mobile","lock":"LOCKED","bids":4,"cost":552.5,"lot":11050.0,"amz":null,"ag":"Excellent","net":null,"mgn":null,"netlot":null,"lprice":null,"lnet":null,"lnetlot":null,"note":"no comp on Amazon p1 (model/capacity not listed)","asin":""},{"m":"iPhone 17","mem":"256GB","g":"Grade A","u":20,"c":"AT&T","lock":"LOCKED","bids":0,"cost":425.0,"lot":8500.0,"amz":null,"ag":"Excellent","net":null,"mgn":null,"netlot":null,"lprice":null,"lnet":null,"lnetlot":null,"note":"no comp on Amazon p1 (model/capacity not listed)","asin":""},{"m":"iPhone 17","mem":"256GB","g":"Grade C","u":20,"c":"AT&T","lock":"LOCKED","bids":0,"cost":390.0,"lot":7800.0,"amz":null,"ag":"Acceptable","net":null,"mgn":null,"netlot":null,"lprice":null,"lnet":null,"lnetlot":null,"note":"no comp on Amazon p1 (model/capacity not listed)","asin":""},{"m":"iPhone 16 Pro Max","mem":"1TB","g":"Grade C","u":20,"c":"AT&T","lock":"LOCKED","bids":2,"cost":600.0,"lot":12000.0,"amz":null,"ag":"Acceptable","net":null,"mgn":null,"netlot":null,"lprice":null,"lnet":null,"lnetlot":null,"note":"no comp on Amazon p1 (model/capacity not listed)","asin":""},{"m":"iPhone 16 Pro Max","mem":"512GB","g":"Grade A","u":20,"c":"AT&T","lock":"LOCKED","bids":5,"cost":600.0,"lot":12000.0,"amz":null,"ag":"Excellent","net":null,"mgn":null,"netlot":null,"lprice":null,"lnet":null,"lnetlot":null,"note":"no comp on Amazon p1 (model/capacity not listed)","asin":""},{"m":"iPhone 16 Pro","mem":"512GB","g":"Grade B","u":20,"c":"(blank)","lock":"unspecified","bids":3,"cost":446.9,"lot":8938.0,"amz":null,"ag":"Good","net":null,"mgn":null,"netlot":null,"lprice":null,"lnet":null,"lnetlot":null,"note":"no comp on Amazon p1 (model/capacity not listed)","asin":""},{"m":"iPhone 16 Plus","mem":"256GB","g":"Grade B","u":20,"c":"T-Mobile","lock":"LOCKED","bids":18,"cost":371.25,"lot":7425.0,"amz":null,"ag":"Good","net":null,"mgn":null,"netlot":null,"lprice":null,"lnet":null,"lnetlot":null,"note":"no comp on Amazon p1 (model/capacity not listed)","asin":""},{"m":"iPhone 16 Plus","mem":"256GB","g":"Grade B","u":20,"c":"AT&T","lock":"LOCKED","bids":2,"cost":307.5,"lot":6150.0,"amz":null,"ag":"Good","net":null,"mgn":null,"netlot":null,"lprice":null,"lnet":null,"lnetlot":null,"note":"no comp on Amazon p1 (model/capacity not listed)","asin":""},{"m":"iPhone 16e","mem":"256GB","g":"Grade C","u":20,"c":"T-Mobile","lock":"LOCKED","bids":5,"cost":190.2,"lot":3804.0,"amz":null,"ag":"Acceptable","net":null,"mgn":null,"netlot":null,"lprice":null,"lnet":null,"lnetlot":null,"note":"no comp on Amazon p1 (model/capacity not listed)","asin":""},{"m":"iPhone 16e","mem":"256GB","g":"Grade B","u":20,"c":"T-Mobile","lock":"LOCKED","bids":7,"cost":263.85,"lot":5277.0,"amz":null,"ag":"Good","net":null,"mgn":null,"netlot":null,"lprice":null,"lnet":null,"lnetlot":null,"note":"no comp on Amazon p1 (model/capacity not listed)","asin":""},{"m":"iPhone 16","mem":"256GB","g":"Grade B","u":20,"c":"T-Mobile","lock":"LOCKED","bids":6,"cost":286.25,"lot":5725.0,"amz":null,"ag":"Good","net":null,"mgn":null,"netlot":null,"lprice":null,"lnet":null,"lnetlot":null,"note":"no comp on Amazon p1 (model/capacity not listed)","asin":""},{"m":"iPhone 15 Pro Max","mem":"512GB","g":"Grade C","u":20,"c":"AT&T","lock":"LOCKED","bids":1,"cost":340.0,"lot":6800.0,"amz":null,"ag":"Acceptable","net":null,"mgn":null,"netlot":null,"lprice":null,"lnet":null,"lnetlot":null,"note":"no comp on Amazon p1 (model/capacity not listed)","asin":""},{"m":"iPhone 15 Pro Max","mem":"512GB","g":"Grade B","u":20,"c":"T-Mobile","lock":"LOCKED","bids":12,"cost":508.5,"lot":10170.0,"amz":null,"ag":"Good","net":null,"mgn":null,"netlot":null,"lprice":null,"lnet":null,"lnetlot":null,"note":"no comp on Amazon p1 (model/capacity not listed)","asin":""},{"m":"iPhone 15 Pro","mem":"128GB","g":"Grade C","u":240,"c":"T-Mobile","lock":"LOCKED","bids":0,"cost":250.0,"lot":60000.0,"amz":null,"ag":"Acceptable","net":null,"mgn":null,"netlot":null,"lprice":null,"lnet":null,"lnetlot":null,"note":"no comp on Amazon p1 (model/capacity not listed)","asin":""},{"m":"iPhone 15 Pro","mem":"128GB","g":"Grade C","u":118,"c":"T-Mobile","lock":"LOCKED","bids":0,"cost":250.0,"lot":29500.0,"amz":null,"ag":"Acceptable","net":null,"mgn":null,"netlot":null,"lprice":null,"lnet":null,"lnetlot":null,"note":"no comp on Amazon p1 (model/capacity not listed)","asin":""},{"m":"iPhone 15 Pro","mem":"128GB","g":"Grade A","u":20,"c":"AT&T","lock":"LOCKED","bids":2,"cost":300.0,"lot":6000.0,"amz":null,"ag":"Excellent","net":null,"mgn":null,"netlot":null,"lprice":null,"lnet":null,"lnetlot":null,"note":"no comp on Amazon p1 (model/capacity not listed)","asin":""},{"m":"iPhone 15 Pro","mem":"1TB","g":"Grade C","u":20,"c":"T-Mobile","lock":"LOCKED","bids":1,"cost":250.0,"lot":5000.0,"amz":null,"ag":"Acceptable","net":null,"mgn":null,"netlot":null,"lprice":null,"lnet":null,"lnetlot":null,"note":"no comp on Amazon p1 (model/capacity not listed)","asin":""},{"m":"iPhone 15 Plus","mem":"128GB","g":"Grade C","u":240,"c":"T-Mobile","lock":"LOCKED","bids":0,"cost":215.0,"lot":51600.0,"amz":null,"ag":"Acceptable","net":null,"mgn":null,"netlot":null,"lprice":null,"lnet":null,"lnetlot":null,"note":"Amazon has no Acceptable offer","asin":"B0CMT4XDSC"},{"m":"iPhone 15 Plus","mem":"128GB","g":"Grade C","u":71,"c":"T-Mobile","lock":"LOCKED","bids":0,"cost":215.0,"lot":15265.0,"amz":null,"ag":"Acceptable","net":null,"mgn":null,"netlot":null,"lprice":null,"lnet":null,"lnetlot":null,"note":"Amazon has no Acceptable offer","asin":"B0CMT4XDSC"},{"m":"iPhone 15 Plus","mem":"128GB","g":"Grade C","u":20,"c":"(blank)","lock":"unspecified","bids":2,"cost":231.25,"lot":4625.0,"amz":null,"ag":"Acceptable","net":null,"mgn":null,"netlot":null,"lprice":null,"lnet":null,"lnetlot":null,"note":"Amazon has no Acceptable offer","asin":"B0CMT4XDSC"},{"m":"iPhone 15 Plus","mem":"256GB","g":"Grade B","u":20,"c":"AT&T","lock":"LOCKED","bids":1,"cost":215.0,"lot":4300.0,"amz":null,"ag":"Good","net":null,"mgn":null,"netlot":null,"lprice":null,"lnet":null,"lnetlot":null,"note":"no comp on Amazon p1 (model/capacity not listed)","asin":""},{"m":"iPhone 15","mem":"256GB","g":"Grade C","u":20,"c":"AT&T","lock":"LOCKED","bids":1,"cost":210.0,"lot":4200.0,"amz":null,"ag":"Acceptable","net":null,"mgn":null,"netlot":null,"lprice":null,"lnet":null,"lnetlot":null,"note":"no comp on Amazon p1 (model/capacity not listed)","asin":""},{"m":"iPhone 15","mem":"512GB","g":"Grade C","u":20,"c":"AT&T","lock":"LOCKED","bids":7,"cost":261.25,"lot":5225.0,"amz":null,"ag":"Acceptable","net":null,"mgn":null,"netlot":null,"lprice":null,"lnet":null,"lnetlot":null,"note":"no comp on Amazon p1 (model/capacity not listed)","asin":""},{"m":"iPhone 14 Pro Max","mem":"512GB","g":"Grade B","u":20,"c":"T-Mobile","lock":"LOCKED","bids":40,"cost":410.0,"lot":8200.0,"amz":null,"ag":"Good","net":null,"mgn":null,"netlot":null,"lprice":null,"lnet":null,"lnetlot":null,"note":"no comp on Amazon p1 (model/capacity not listed)","asin":""},{"m":"iPhone 14 Pro Max","mem":"256GB","g":"Grade C","u":20,"c":"AT&T","lock":"LOCKED","bids":5,"cost":301.05,"lot":6021.0,"amz":null,"ag":"Acceptable","net":null,"mgn":null,"netlot":null,"lprice":null,"lnet":null,"lnetlot":null,"note":"no comp on Amazon p1 (model/capacity not listed)","asin":""},{"m":"iPhone 14 Pro","mem":"128GB","g":"Grade C","u":366,"c":"T-Mobile","lock":"LOCKED","bids":1,"cost":205.0,"lot":75030.0,"amz":null,"ag":"Acceptable","net":null,"mgn":null,"netlot":null,"lprice":null,"lnet":null,"lnetlot":null,"note":"no comp on Amazon p1 (model/capacity not listed)","asin":""},{"m":"iPhone 14 Pro","mem":"128GB","g":"Grade C","u":96,"c":"T-Mobile","lock":"LOCKED","bids":0,"cost":205.0,"lot":19680.0,"amz":null,"ag":"Acceptable","net":null,"mgn":null,"netlot":null,"lprice":null,"lnet":null,"lnetlot":null,"note":"no comp on Amazon p1 (model/capacity not listed)","asin":""},{"m":"iPhone 14 Pro","mem":"256GB","g":"Grade C","u":20,"c":"AT&T","lock":"LOCKED","bids":0,"cost":205.0,"lot":4100.0,"amz":null,"ag":"Acceptable","net":null,"mgn":null,"netlot":null,"lprice":null,"lnet":null,"lnetlot":null,"note":"Amazon has no Acceptable offer","asin":"B0BN96CCM6"},{"m":"iPhone 14 Pro","mem":"512GB","g":"Grade B","u":20,"c":"T-Mobile","lock":"LOCKED","bids":5,"cost":326.25,"lot":6525.0,"amz":null,"ag":"Good","net":null,"mgn":null,"netlot":null,"lprice":null,"lnet":null,"lnetlot":null,"note":"no comp on Amazon p1 (model/capacity not listed)","asin":""},{"m":"iPhone 14 Plus","mem":"512GB","g":"Grade C","u":20,"c":"T-Mobile","lock":"LOCKED","bids":1,"cost":150.0,"lot":3000.0,"amz":null,"ag":"Acceptable","net":null,"mgn":null,"netlot":null,"lprice":null,"lnet":null,"lnetlot":null,"note":"no comp on Amazon p1 (model/capacity not listed)","asin":""},{"m":"Mixed","mem":"Mixed","g":"Mixed","u":50,"c":"Mixed","lock":"MIXED","bids":4,"cost":12.2,"lot":610.0,"amz":null,"ag":"","net":null,"mgn":null,"netlot":null,"lprice":null,"lnet":null,"lnetlot":null,"note":"no comp on Amazon p1 (model/capacity not listed)","asin":""},{"m":"iPhone SE (2022)","mem":"64GB","g":"Mixed","u":40,"c":"Mixed","lock":"MIXED","bids":0,"cost":40.0,"lot":1600.0,"amz":null,"ag":"","net":null,"mgn":null,"netlot":null,"lprice":null,"lnet":null,"lnetlot":null,"note":"mixed grade - no clean comp","asin":"B0BDY71GRG"},{"m":"Mixed","mem":"Mixed","g":"Grade B","u":35,"c":"Mixed","lock":"MIXED","bids":1,"cost":35.0,"lot":1225.0,"amz":null,"ag":"Good","net":null,"mgn":null,"netlot":null,"lprice":null,"lnet":null,"lnetlot":null,"note":"no comp on Amazon p1 (model/capacity not listed)","asin":""},{"m":"Mixed","mem":"Mixed","g":"Grade A","u":30,"c":"T-Mobile","lock":"LOCKED","bids":7,"cost":89.0,"lot":2670.0,"amz":null,"ag":"Excellent","net":null,"mgn":null,"netlot":null,"lprice":null,"lnet":null,"lnetlot":null,"note":"no comp on Amazon p1 (model/capacity not listed)","asin":""},{"m":"iPhone SE (2022)","mem":"256GB","g":"Grade C","u":20,"c":"T-Mobile","lock":"LOCKED","bids":1,"cost":40.0,"lot":800.0,"amz":null,"ag":"Acceptable","net":null,"mgn":null,"netlot":null,"lprice":null,"lnet":null,"lnetlot":null,"note":"no comp on Amazon p1 (model/capacity not listed)","asin":""},{"m":"iPhone 13 Pro Max","mem":"128GB","g":"Grade C","u":377,"c":"T-Mobile","lock":"LOCKED","bids":1,"cost":210.0,"lot":79170.0,"amz":null,"ag":"Acceptable","net":null,"mgn":null,"netlot":null,"lprice":null,"lnet":null,"lnetlot":null,"note":"no comp on Amazon p1 (model/capacity not listed)","asin":""},{"m":"iPhone 13 Pro Max","mem":"128GB","g":"Grade C","u":120,"c":"T-Mobile","lock":"LOCKED","bids":3,"cost":250.83,"lot":30099.6,"amz":null,"ag":"Acceptable","net":null,"mgn":null,"netlot":null,"lprice":null,"lnet":null,"lnetlot":null,"note":"no comp on Amazon p1 (model/capacity not listed)","asin":""},{"m":"iPhone 13 Pro Max","mem":"128GB","g":"Grade C","u":20,"c":"(blank)","lock":"unspecified","bids":1,"cost":210.0,"lot":4200.0,"amz":null,"ag":"Acceptable","net":null,"mgn":null,"netlot":null,"lprice":null,"lnet":null,"lnetlot":null,"note":"no comp on Amazon p1 (model/capacity not listed)","asin":""},{"m":"iPhone 13 Pro","mem":"128GB","g":"Grade C","u":288,"c":"T-Mobile","lock":"LOCKED","bids":0,"cost":175.0,"lot":50400.0,"amz":null,"ag":"Acceptable","net":null,"mgn":null,"netlot":null,"lprice":null,"lnet":null,"lnetlot":null,"note":"Amazon has no Acceptable offer","asin":"B09LP77GDL"},{"m":"iPhone 13 Pro","mem":"128GB","g":"Grade C","u":166,"c":"T-Mobile","lock":"LOCKED","bids":0,"cost":175.0,"lot":29050.0,"amz":null,"ag":"Acceptable","net":null,"mgn":null,"netlot":null,"lprice":null,"lnet":null,"lnetlot":null,"note":"Amazon has no Acceptable offer","asin":"B09LP77GDL"},{"m":"iPhone 13 Pro","mem":"512GB","g":"Grade B","u":20,"c":"T-Mobile","lock":"LOCKED","bids":11,"cost":300.0,"lot":6000.0,"amz":null,"ag":"Good","net":null,"mgn":null,"netlot":null,"lprice":null,"lnet":null,"lnetlot":null,"note":"no comp on Amazon p1 (model/capacity not listed)","asin":""},{"m":"iPhone 13 Mini","mem":"512GB","g":"Grade B","u":20,"c":"T-Mobile","lock":"LOCKED","bids":1,"cost":105.0,"lot":2100.0,"amz":null,"ag":"Good","net":null,"mgn":null,"netlot":null,"lprice":null,"lnet":null,"lnetlot":null,"note":"no comp on Amazon p1 (model/capacity not listed)","asin":""},{"m":"iPhone 13","mem":"512GB","g":"Grade B","u":20,"c":"T-Mobile","lock":"LOCKED","bids":4,"cost":156.25,"lot":3125.0,"amz":null,"ag":"Good","net":null,"mgn":null,"netlot":null,"lprice":null,"lnet":null,"lnetlot":null,"note":"no comp on Amazon p1 (model/capacity not listed)","asin":""},{"m":"iPhone 12 Pro Max","mem":"256GB","g":"Grade B","u":20,"c":"T-Mobile","lock":"LOCKED","bids":10,"cost":236.25,"lot":4725.0,"amz":null,"ag":"Good","net":null,"mgn":null,"netlot":null,"lprice":null,"lnet":null,"lnetlot":null,"note":"no comp on Amazon p1 (model/capacity not listed)","asin":""},{"m":"iPhone SE (2020)","mem":"Mixed","g":"Grade C","u":40,"c":"Mixed","lock":"MIXED","bids":0,"cost":20.0,"lot":800.0,"amz":null,"ag":"Acceptable","net":null,"mgn":null,"netlot":null,"lprice":null,"lnet":null,"lnetlot":null,"note":"no comp on Amazon p1 (model/capacity not listed)","asin":""},{"m":"iPhone SE (2020)","mem":"Mixed","g":"Grade A","u":30,"c":"T-Mobile","lock":"LOCKED","bids":7,"cost":42.5,"lot":1275.0,"amz":null,"ag":"Excellent","net":null,"mgn":null,"netlot":null,"lprice":null,"lnet":null,"lnetlot":null,"note":"no comp on Amazon p1 (model/capacity not listed)","asin":""},{"m":"iPhone 11 Pro Max","mem":"256GB","g":"Grade B","u":20,"c":"T-Mobile","lock":"LOCKED","bids":2,"cost":126.25,"lot":2525.0,"amz":null,"ag":"Good","net":null,"mgn":null,"netlot":null,"lprice":null,"lnet":null,"lnetlot":null,"note":"no comp on Amazon p1 (model/capacity not listed)","asin":""},{"m":"iPhone 11 Pro Max","mem":"512GB","g":"Grade C","u":20,"c":"T-Mobile","lock":"LOCKED","bids":1,"cost":115.0,"lot":2300.0,"amz":null,"ag":"Acceptable","net":null,"mgn":null,"netlot":null,"lprice":null,"lnet":null,"lnetlot":null,"note":"no comp on Amazon p1 (model/capacity not listed)","asin":""},{"m":"iPhone 11 Pro","mem":"64GB","g":"Grade B","u":20,"c":"T-Mobile","lock":"LOCKED","bids":3,"cost":111.25,"lot":2225.0,"amz":null,"ag":"Good","net":null,"mgn":null,"netlot":null,"lprice":null,"lnet":null,"lnetlot":null,"note":"no comp on Amazon p1 (model/capacity not listed)","asin":""},{"m":"iPhone 11 Pro","mem":"Mixed","g":"Grade C","u":20,"c":"Mixed","lock":"MIXED","bids":1,"cost":90.0,"lot":1800.0,"amz":null,"ag":"Acceptable","net":null,"mgn":null,"netlot":null,"lprice":null,"lnet":null,"lnetlot":null,"note":"no comp on Amazon p1 (model/capacity not listed)","asin":""},{"m":"iPhone 11","mem":"Mixed","g":"Mixed","u":30,"c":"Mixed","lock":"MIXED","bids":1,"cost":85.0,"lot":2550.0,"amz":null,"ag":"","net":null,"mgn":null,"netlot":null,"lprice":null,"lnet":null,"lnetlot":null,"note":"no comp on Amazon p1 (model/capacity not listed)","asin":""},{"m":"iPhone 11","mem":"128GB","g":"Grade B","u":20,"c":"T-Mobile","lock":"LOCKED","bids":24,"cost":140.0,"lot":2800.0,"amz":null,"ag":"Good","net":null,"mgn":null,"netlot":null,"lprice":null,"lnet":null,"lnetlot":null,"note":"no comp on Amazon p1 (model/capacity not listed)","asin":""}];
+const $ = s => document.querySelector(s);
+const money = n => (n<0?"-$":"$") + Math.abs(n).toLocaleString("en-US",{maximumFractionDigits:0});
+const money2 = n => (n<0?"-$":"$") + Math.abs(n).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});
+
+const state = {comp:true, prof:false, unlock:false, bulk:false, sort:"net"};
+
+function verdict(l){
+  if(l.net===null) return "none";
+  if(l.net<=0) return "stop";
+  if(l.lock==="LOCKED" && l.lnet<=0) return "thin";
+  if(l.mgn<12) return "thin";
+  return "go";
+}
+const VLABEL={go:"Worth a bid",thin:"Thin / conditional",stop:"Loss at current bid",none:"No comp"};
+
+function tally(){
+  const c = LOTS.filter(l=>l.net!==null);
+  const prof = c.filter(l=>l.net>0);
+  const lk = prof.filter(l=>l.lock==="LOCKED");
+  const flip = lk.filter(l=>l.lnet<=0);
+  const best = prof.filter(l=>l.lock!=="LOCKED");
+  const rows=[
+    ["Lots priced", c.length, "of 93 have an exact comp"],
+    ["Profitable", prof.length, "if sold unlocked"],
+    ["Carrier locked", lk.length, "of those profitable lots"],
+    ["Flip to a loss", flip.length, "at a 20% locked haircut"],
+    ["Clean of lock risk", best.length, "carrier unspecified"],
+  ];
+  $("#tally").innerHTML = rows.map(([k,v,s])=>
+    `<div class="t"><dt>${k}</dt><dd>${v}</dd><small>${s}</small></div>`).join("");
+}
+
+function card(l){
+  const v = verdict(l);
+  const locked = l.lock==="LOCKED";
+  const tags = [
+    `<span class="tag">${l.g}</span>`,
+    locked ? `<span class="tag lock">${l.c} locked</span>`
+           : (l.c==="Mixed" ? `<span class="tag lock">mixed carrier</span>`
+                            : `<span class="tag">carrier n/s</span>`),
+    `<span class="tag ${v==="go"?"go":v==="thin"?"thin":v==="stop"?"stop":""}">${VLABEL[v]}</span>`
+  ].join("");
+
+  const head = `<div class="lot-head">
+      <span class="lot-name">${l.m}</span>
+      <span class="lot-spec">${l.mem} · ${l.u} units · ${l.bids} bid${l.bids===1?"":"s"}</span>
+      <span class="tags">${tags}</span>
+    </div>`;
+
+  if(l.net===null){
+    return `<article class="lot v-none">${head}
+      <div class="right"><p class="nocomp">${l.note}. Lot cost ${money(l.lot)}
+      (${money2(l.cost)}/unit).</p></div></article>`;
+  }
+
+  const lane = locked ? `<div class="lane">
+      <span class="lane-tag">If sold locked (−20%)</span>
+      <span class="lane-val ${l.lnet>0?"pos":"neg"}">${money2(l.lnet)}/unit</span>
+      <span class="lane-val ${l.lnetlot>0?"pos":"neg"}">${money(l.lnetlot)} lot</span>
+      <span class="lane-tag">at ${money2(l.lprice)} sale price</span>
+    </div>` : "";
+
+  return `<article class="lot v-${v}">${head}
+    <div class="right">
+      <dl class="figs">
+        <div class="fig"><dt>Cost / unit</dt><dd>${money2(l.cost)}</dd></div>
+        <div class="fig"><dt>Amazon ${l.ag}</dt><dd>${money2(l.amz)}</dd></div>
+        <div class="fig hero"><dt>Net / unit</dt><dd class="${l.net>0?"pos":"neg"}">${money2(l.net)}</dd></div>
+        <div class="fig"><dt>Margin</dt><dd class="${l.mgn>0?"pos":"neg"}">${l.mgn.toFixed(1)}%</dd></div>
+        <div class="fig hero"><dt>Net / lot</dt><dd class="${l.netlot>0?"pos":"neg"}">${money(l.netlot)}</dd></div>
+        <div class="fig"><dt>Capital</dt><dd class="mut">${money(l.lot)}</dd></div>
+      </dl>
+      ${lane}
+    </div></article>`;
+}
+
+function render(){
+  let rows = LOTS.slice();
+  if(state.comp)   rows = rows.filter(l=>l.net!==null);
+  if(state.prof)   rows = rows.filter(l=>l.net!==null && l.net>0);
+  if(state.unlock) rows = rows.filter(l=>l.lock!=="LOCKED");
+  if(state.bulk)   rows = rows.filter(l=>l.u>=100);
+  const k = state.sort;
+  rows.sort((a,b)=>{
+    const av=a[k], bv=b[k];
+    if(av===null&&bv===null) return 0;
+    if(av===null) return 1; if(bv===null) return -1;
+    return bv-av;
+  });
+  $("#ledger").innerHTML = rows.map(card).join("") ||
+    `<p class="nocomp">No lots match those filters.</p>`;
+  $("#count").textContent = rows.length + " lot" + (rows.length===1?"":"s");
+}
+
+function toggle(id,key){
+  const b=$(id);
+  b.addEventListener("click",()=>{
+    state[key]=!state[key];
+    b.setAttribute("aria-pressed",String(state[key]));
+    render();
+  });
+}
+toggle("#f-comp","comp"); toggle("#f-prof","prof");
+toggle("#f-unlock","unlock"); toggle("#f-bulk","bulk");
+$("#sort").addEventListener("change",e=>{state.sort=e.target.value;render();});
+
+tally(); render();
+</script>

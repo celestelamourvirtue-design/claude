@@ -1,0 +1,94 @@
+model,memory,grade,units,carrier,locked,bids,unit_cost,lot_cost,asin,amz_grade,amz_price,gross_spread,net_per_unit,net_margin_pct,net_lot,locked_price,net_if_locked,net_lot_if_locked,note
+iPhone 15 Pro Max,256GB,Grade A,20,(blank),unspecified,1,360.0,7200.0,B0CMZDBVWT,Excellent,679.0,319.0,186.36,27.4,3727.2,543.2,72.29,1445.76,
+iPhone 15 Pro,256GB,Grade A,20,AT&T,LOCKED,6,301.25,6025.0,B0CMZ5LT14,Excellent,609.0,307.75,186.31,30.6,3726.2,487.2,84.0,1679.96,
+iPhone 14 Pro Max,128GB,Grade C,342,T-Mobile,LOCKED,1,220.0,75240.0,B0BN9P1GXC,Acceptable,489.75,269.75,167.39,34.2,57247.38,391.8,85.11,29108.3,
+iPhone 14 Pro Max,128GB,Grade C,142,T-Mobile,LOCKED,0,220.0,31240.0,B0BN9P1GXC,Acceptable,489.75,269.75,167.39,34.2,23769.38,391.8,85.11,12085.9,
+iPhone 16,128GB,Grade C,246,T-Mobile,LOCKED,1,260.0,63960.0,B0DHJH2GZL,Acceptable,533.0,273.0,163.72,30.7,40275.12,426.4,74.18,18247.3,
+iPhone 15 Pro Max,256GB,Grade C,250,T-Mobile,LOCKED,0,340.0,85000.0,B0CMZDBVWT,Acceptable,619.95,279.95,156.76,25.3,39189.5,495.96,52.61,13151.6,
+iPhone 15 Pro Max,256GB,Grade C,180,T-Mobile,LOCKED,0,340.0,61200.0,B0CMZDBVWT,Acceptable,619.95,279.95,156.76,25.3,28216.44,495.96,52.61,9469.15,
+iPhone 16 Plus,128GB,Grade C,20,(blank),unspecified,2,276.25,5525.0,B0DHJCTZ4D,Acceptable,543.09,266.84,155.95,28.7,3118.91,434.47,64.71,1294.13,
+iPhone 15 Plus,128GB,Grade A,20,AT&T,LOCKED,0,225.0,4500.0,B0CMT4XDSC,Excellent,435.07,210.07,116.46,26.8,2329.18,348.06,43.37,867.34,
+iPhone 16 Pro Max,256GB,Grade A,20,(blank),unspecified,8,557.5,11150.0,B0DHJ896RY,Excellent,814.92,257.42,103.03,12.6,2060.66,651.94,-33.87,-677.48,
+iPhone 15,128GB,Grade A,20,(blank),unspecified,1,225.0,4500.0,B0CMPMY9ZZ,Excellent,409.89,184.89,95.31,23.3,1906.15,327.91,26.45,528.92,
+iPhone 15 Pro Max,256GB,Grade B,20,(blank),unspecified,8,427.5,8550.0,B0CMZDBVWT,Good,633.97,206.47,81.03,12.8,1620.7,507.18,-25.47,-509.44,
+iPhone 15,128GB,Grade B,284,T-Mobile,LOCKED,0,220.0,62480.0,B0CMPMY9ZZ,Good,379.0,159.0,74.36,19.6,21118.24,303.2,10.69,3035.39,
+iPhone 16 Plus,128GB,Grade A,20,AT&T,LOCKED,10,402.5,8050.0,B0DHJCTZ4D,Excellent,595.95,193.45,74.1,12.4,1481.96,476.76,-26.02,-520.43,
+iPhone 14 Plus,128GB,Grade C,240,T-Mobile,LOCKED,0,150.0,36000.0,B0BN9426PP,Acceptable,290.52,140.52,70.04,24.1,16808.83,232.42,21.23,5095.07,
+iPhone 14 Plus,128GB,Grade C,95,T-Mobile,LOCKED,1,150.0,14250.0,B0BN9426PP,Acceptable,290.52,140.52,70.04,24.1,6653.5,232.42,21.23,2016.8,
+iPhone 14 Plus,128GB,Grade C,20,AT&T,LOCKED,1,150.0,3000.0,B0BN9426PP,Acceptable,290.52,140.52,70.04,24.1,1400.74,232.42,21.23,424.59,
+iPhone 12 Pro Max,128GB,Grade C,308,T-Mobile,LOCKED,24,182.63,56250.04,B08PMP778K,Acceptable,320.95,138.32,62.97,19.6,19394.14,256.76,9.05,2786.91,
+iPhone 14,128GB,Grade B,213,T-Mobile,LOCKED,1,150.0,31950.0,B0BN72FYFG,Good,280.0,130.0,61.2,21.9,13035.6,224.0,14.16,3016.08,
+iPhone 14,128GB,Grade C,236,T-Mobile,LOCKED,0,145.0,34220.0,B0BN72FYFG,Acceptable,272.97,127.97,60.29,22.1,14229.57,218.38,14.44,3406.86,
+iPhone 15,128GB,Grade C,394,T-Mobile,LOCKED,1,210.0,82740.0,B0CMPMY9ZZ,Acceptable,348.99,138.99,59.15,16.9,23305.73,279.19,0.52,205.38,
+iPhone 15,128GB,Grade C,120,T-Mobile,LOCKED,1,210.0,25200.0,B0CMPMY9ZZ,Acceptable,348.99,138.99,59.15,16.9,7098.19,279.19,0.52,62.55,
+iPhone 14,128GB,Grade B,72,T-Mobile,LOCKED,5,154.17,11100.24,B0BN72FYFG,Good,280.0,125.83,57.03,20.4,4106.16,224.0,9.99,719.28,
+iPhone 12 Mini,128GB,Grade B,20,T-Mobile,LOCKED,1,65.0,1300.0,B08PNKN4J7,Good,167.75,102.75,51.91,30.9,1038.2,134.2,23.73,474.56,
+iPhone 13 Mini,128GB,Grade C,265,T-Mobile,LOCKED,0,100.0,26500.0,B09LKTXKXQ,Acceptable,200.4,100.4,44.34,22.1,11749.04,160.32,10.67,2827.23,
+iPhone 13,128GB,Grade A,20,AT&T,LOCKED,2,181.25,3625.0,B09LNW3CY2,Excellent,277.38,96.13,27.75,10.0,554.98,221.9,-18.85,-377.01,
+iPhone 12,64GB,Grade C,418,T-Mobile,LOCKED,1,85.0,35530.0,B08PP5MSVB,Acceptable,162.0,77.0,27.08,16.7,11319.44,129.6,-0.14,-56.85,
+iPhone 11,64GB,Grade B,20,(blank),unspecified,1,80.0,1600.0,B07ZPKN6YR,Good,155.95,75.95,27.0,17.3,539.96,124.76,0.8,15.97,
+iPhone 11,64GB,Grade C,250,T-Mobile,LOCKED,0,75.0,18750.0,B07ZPKN6YR,Acceptable,148.0,73.0,25.32,17.1,6330.0,118.4,0.46,114.0,
+iPhone 11,64GB,Grade C,170,T-Mobile,LOCKED,1,75.0,12750.0,B07ZPKN6YR,Acceptable,148.0,73.0,25.32,17.1,4304.4,118.4,0.46,77.52,
+iPhone 13,128GB,Grade A,20,(blank),unspecified,6,183.75,3675.0,B09LNW3CY2,Excellent,277.38,93.63,25.25,9.1,504.98,221.9,-21.35,-427.01,
+iPhone 13,128GB,Grade B,279,T-Mobile,LOCKED,1,150.0,41850.0,B09LNW3CY2,Good,235.0,85.0,23.4,10.0,6528.6,188.0,-16.08,-4486.32,
+iPhone 13,128GB,Grade C,457,T-Mobile,LOCKED,0,140.0,63980.0,B09LNW3CY2,Acceptable,219.84,79.84,20.67,9.4,9444.18,175.87,-16.27,-7434.26,
+iPhone 13 Mini,128GB,Grade C,20,T-Mobile,LOCKED,1,125.0,2500.0,B09LKTXKXQ,Acceptable,200.4,75.4,19.34,9.6,386.72,160.32,-14.33,-286.62,
+iPhone 16e,128GB,New - Handset Only,20,T-Mobile,LOCKED,3,303.75,6075.0,B0F4RM7Y2L,Excellent,378.65,74.9,-9.68,-2.6,-193.68,302.92,-73.3,-1465.94,
+iPhone 12,64GB,Grade A,20,T-Mobile,LOCKED,18,151.25,3025.0,B08PP5MSVB,Excellent,189.0,37.75,-16.49,-8.7,-329.8,151.2,-48.24,-964.84,
+iPhone 14 Plus,128GB,Grade A,22,T-Mobile,LOCKED,24,273.86,6024.92,B0BN9426PP,Excellent,324.9,51.04,-24.94,-7.7,-548.77,259.92,-79.53,-1749.6,
+iPhone 17 Pro Max,512GB,New - Handset Only,20,T-Mobile,LOCKED,24,1060.0,21200.0,,Excellent,,,,,,,,,no comp on Amazon p1 (model/capacity not listed)
+iPhone 17 Pro Max,256GB,Grade A,20,(blank),unspecified,4,802.5,16050.0,,Excellent,,,,,,,,,no comp on Amazon p1 (model/capacity not listed)
+iPhone 17 Pro,256GB,Grade B,20,(blank),unspecified,7,652.5,13050.0,,Good,,,,,,,,,no comp on Amazon p1 (model/capacity not listed)
+iPhone 17,256GB,Grade B,20,AT&T,LOCKED,1,400.0,8000.0,,Good,,,,,,,,,no comp on Amazon p1 (model/capacity not listed)
+iPhone 17,512GB,Grade A,20,T-Mobile,LOCKED,4,552.5,11050.0,,Excellent,,,,,,,,,no comp on Amazon p1 (model/capacity not listed)
+iPhone 17,256GB,Grade A,20,AT&T,LOCKED,0,425.0,8500.0,,Excellent,,,,,,,,,no comp on Amazon p1 (model/capacity not listed)
+iPhone 17,256GB,Grade C,20,AT&T,LOCKED,0,390.0,7800.0,,Acceptable,,,,,,,,,no comp on Amazon p1 (model/capacity not listed)
+iPhone 16 Pro Max,1TB,Grade C,20,AT&T,LOCKED,2,600.0,12000.0,,Acceptable,,,,,,,,,no comp on Amazon p1 (model/capacity not listed)
+iPhone 16 Pro Max,512GB,Grade A,20,AT&T,LOCKED,5,600.0,12000.0,,Excellent,,,,,,,,,no comp on Amazon p1 (model/capacity not listed)
+iPhone 16 Pro,512GB,Grade B,20,(blank),unspecified,3,446.9,8938.0,,Good,,,,,,,,,no comp on Amazon p1 (model/capacity not listed)
+iPhone 16 Plus,256GB,Grade B,20,T-Mobile,LOCKED,18,371.25,7425.0,,Good,,,,,,,,,no comp on Amazon p1 (model/capacity not listed)
+iPhone 16 Plus,256GB,Grade B,20,AT&T,LOCKED,2,307.5,6150.0,,Good,,,,,,,,,no comp on Amazon p1 (model/capacity not listed)
+iPhone 16e,256GB,Grade C,20,T-Mobile,LOCKED,5,190.2,3804.0,,Acceptable,,,,,,,,,no comp on Amazon p1 (model/capacity not listed)
+iPhone 16e,256GB,Grade B,20,T-Mobile,LOCKED,7,263.85,5277.0,,Good,,,,,,,,,no comp on Amazon p1 (model/capacity not listed)
+iPhone 16,256GB,Grade B,20,T-Mobile,LOCKED,6,286.25,5725.0,,Good,,,,,,,,,no comp on Amazon p1 (model/capacity not listed)
+iPhone 15 Pro Max,512GB,Grade C,20,AT&T,LOCKED,1,340.0,6800.0,,Acceptable,,,,,,,,,no comp on Amazon p1 (model/capacity not listed)
+iPhone 15 Pro Max,512GB,Grade B,20,T-Mobile,LOCKED,12,508.5,10170.0,,Good,,,,,,,,,no comp on Amazon p1 (model/capacity not listed)
+iPhone 15 Pro,128GB,Grade C,240,T-Mobile,LOCKED,0,250.0,60000.0,,Acceptable,,,,,,,,,no comp on Amazon p1 (model/capacity not listed)
+iPhone 15 Pro,128GB,Grade C,118,T-Mobile,LOCKED,0,250.0,29500.0,,Acceptable,,,,,,,,,no comp on Amazon p1 (model/capacity not listed)
+iPhone 15 Pro,128GB,Grade A,20,AT&T,LOCKED,2,300.0,6000.0,,Excellent,,,,,,,,,no comp on Amazon p1 (model/capacity not listed)
+iPhone 15 Pro,1TB,Grade C,20,T-Mobile,LOCKED,1,250.0,5000.0,,Acceptable,,,,,,,,,no comp on Amazon p1 (model/capacity not listed)
+iPhone 15 Plus,128GB,Grade C,240,T-Mobile,LOCKED,0,215.0,51600.0,B0CMT4XDSC,Acceptable,,,,,,,,,Amazon has no Acceptable offer
+iPhone 15 Plus,128GB,Grade C,71,T-Mobile,LOCKED,0,215.0,15265.0,B0CMT4XDSC,Acceptable,,,,,,,,,Amazon has no Acceptable offer
+iPhone 15 Plus,128GB,Grade C,20,(blank),unspecified,2,231.25,4625.0,B0CMT4XDSC,Acceptable,,,,,,,,,Amazon has no Acceptable offer
+iPhone 15 Plus,256GB,Grade B,20,AT&T,LOCKED,1,215.0,4300.0,,Good,,,,,,,,,no comp on Amazon p1 (model/capacity not listed)
+iPhone 15,256GB,Grade C,20,AT&T,LOCKED,1,210.0,4200.0,,Acceptable,,,,,,,,,no comp on Amazon p1 (model/capacity not listed)
+iPhone 15,512GB,Grade C,20,AT&T,LOCKED,7,261.25,5225.0,,Acceptable,,,,,,,,,no comp on Amazon p1 (model/capacity not listed)
+iPhone 14 Pro Max,512GB,Grade B,20,T-Mobile,LOCKED,40,410.0,8200.0,,Good,,,,,,,,,no comp on Amazon p1 (model/capacity not listed)
+iPhone 14 Pro Max,256GB,Grade C,20,AT&T,LOCKED,5,301.05,6021.0,,Acceptable,,,,,,,,,no comp on Amazon p1 (model/capacity not listed)
+iPhone 14 Pro,128GB,Grade C,366,T-Mobile,LOCKED,1,205.0,75030.0,,Acceptable,,,,,,,,,no comp on Amazon p1 (model/capacity not listed)
+iPhone 14 Pro,128GB,Grade C,96,T-Mobile,LOCKED,0,205.0,19680.0,,Acceptable,,,,,,,,,no comp on Amazon p1 (model/capacity not listed)
+iPhone 14 Pro,256GB,Grade C,20,AT&T,LOCKED,0,205.0,4100.0,B0BN96CCM6,Acceptable,,,,,,,,,Amazon has no Acceptable offer
+iPhone 14 Pro,512GB,Grade B,20,T-Mobile,LOCKED,5,326.25,6525.0,,Good,,,,,,,,,no comp on Amazon p1 (model/capacity not listed)
+iPhone 14 Plus,512GB,Grade C,20,T-Mobile,LOCKED,1,150.0,3000.0,,Acceptable,,,,,,,,,no comp on Amazon p1 (model/capacity not listed)
+Mixed,Mixed,Mixed,50,Mixed,MIXED,4,12.2,610.0,,,,,,,,,,,no comp on Amazon p1 (model/capacity not listed)
+iPhone SE (2022),64GB,Mixed,40,Mixed,MIXED,0,40.0,1600.0,B0BDY71GRG,,,,,,,,,,mixed grade - no clean comp
+Mixed,Mixed,Grade B,35,Mixed,MIXED,1,35.0,1225.0,,Good,,,,,,,,,no comp on Amazon p1 (model/capacity not listed)
+Mixed,Mixed,Grade A,30,T-Mobile,LOCKED,7,89.0,2670.0,,Excellent,,,,,,,,,no comp on Amazon p1 (model/capacity not listed)
+iPhone SE (2022),256GB,Grade C,20,T-Mobile,LOCKED,1,40.0,800.0,,Acceptable,,,,,,,,,no comp on Amazon p1 (model/capacity not listed)
+iPhone 13 Pro Max,128GB,Grade C,377,T-Mobile,LOCKED,1,210.0,79170.0,,Acceptable,,,,,,,,,no comp on Amazon p1 (model/capacity not listed)
+iPhone 13 Pro Max,128GB,Grade C,120,T-Mobile,LOCKED,3,250.83,30099.6,,Acceptable,,,,,,,,,no comp on Amazon p1 (model/capacity not listed)
+iPhone 13 Pro Max,128GB,Grade C,20,(blank),unspecified,1,210.0,4200.0,,Acceptable,,,,,,,,,no comp on Amazon p1 (model/capacity not listed)
+iPhone 13 Pro,128GB,Grade C,288,T-Mobile,LOCKED,0,175.0,50400.0,B09LP77GDL,Acceptable,,,,,,,,,Amazon has no Acceptable offer
+iPhone 13 Pro,128GB,Grade C,166,T-Mobile,LOCKED,0,175.0,29050.0,B09LP77GDL,Acceptable,,,,,,,,,Amazon has no Acceptable offer
+iPhone 13 Pro,512GB,Grade B,20,T-Mobile,LOCKED,11,300.0,6000.0,,Good,,,,,,,,,no comp on Amazon p1 (model/capacity not listed)
+iPhone 13 Mini,512GB,Grade B,20,T-Mobile,LOCKED,1,105.0,2100.0,,Good,,,,,,,,,no comp on Amazon p1 (model/capacity not listed)
+iPhone 13,512GB,Grade B,20,T-Mobile,LOCKED,4,156.25,3125.0,,Good,,,,,,,,,no comp on Amazon p1 (model/capacity not listed)
+iPhone 12 Pro Max,256GB,Grade B,20,T-Mobile,LOCKED,10,236.25,4725.0,,Good,,,,,,,,,no comp on Amazon p1 (model/capacity not listed)
+iPhone SE (2020),Mixed,Grade C,40,Mixed,MIXED,0,20.0,800.0,,Acceptable,,,,,,,,,no comp on Amazon p1 (model/capacity not listed)
+iPhone SE (2020),Mixed,Grade A,30,T-Mobile,LOCKED,7,42.5,1275.0,,Excellent,,,,,,,,,no comp on Amazon p1 (model/capacity not listed)
+iPhone 11 Pro Max,256GB,Grade B,20,T-Mobile,LOCKED,2,126.25,2525.0,,Good,,,,,,,,,no comp on Amazon p1 (model/capacity not listed)
+iPhone 11 Pro Max,512GB,Grade C,20,T-Mobile,LOCKED,1,115.0,2300.0,,Acceptable,,,,,,,,,no comp on Amazon p1 (model/capacity not listed)
+iPhone 11 Pro,64GB,Grade B,20,T-Mobile,LOCKED,3,111.25,2225.0,,Good,,,,,,,,,no comp on Amazon p1 (model/capacity not listed)
+iPhone 11 Pro,Mixed,Grade C,20,Mixed,MIXED,1,90.0,1800.0,,Acceptable,,,,,,,,,no comp on Amazon p1 (model/capacity not listed)
+iPhone 11,Mixed,Mixed,30,Mixed,MIXED,1,85.0,2550.0,,,,,,,,,,,no comp on Amazon p1 (model/capacity not listed)
+iPhone 11,128GB,Grade B,20,T-Mobile,LOCKED,24,140.0,2800.0,,Good,,,,,,,,,no comp on Amazon p1 (model/capacity not listed)
