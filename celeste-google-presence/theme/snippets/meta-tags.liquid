@@ -1,0 +1,448 @@
+{%- comment -%}
+  meta-tags.liquid  —  REVISED
+  ---------------------------------------------------------------------------
+  Drop-in replacement for the live theme's snippets/meta-tags.liquid
+  (theme "Copy of GS-style PDP build - Used Sep 17 - 20th",
+   gid://shopify/OnlineStoreTheme/145734172723, 9336 bytes as pulled 2026-09-24).
+
+  WHAT CHANGED, AND WHY — read this before diffing.
+
+  1. HOMEPAGE ENTITY MARKUP MOVED OUT.
+     The inline Organization and WebSite blocks are gone; this now renders
+     `brand-organization`. The old Organization block carried four properties
+     (name, url, logo, sameAs) which is not enough for Google to resolve a
+     brand entity, and its sameAs array emitted every one of the six social
+     theme settings unconditionally — so any unset setting arrived at Google
+     as an empty string inside the array. The replacement filters blanks and
+     adds legalName, address, contactPoint, description, foundingDate,
+     alternateName and a return policy.
+
+  2. PRODUCT SCHEMA: OFFERS NO LONGER TRUNCATE.
+     The old block emitted one Offer per variant with `limit: 50`. Products in
+     this catalogue carry up to 168 variants, so offers were being silently cut
+     off. This version emits a single Offer when every variant shares one price
+     (the common case here) and an AggregateOffer with a real offerCount when
+     they differ. Nothing is dropped either way.
+
+  3. PRODUCT SCHEMA: BRAND IS NOW A REFERENCE, NOT A RAW STRING.
+     Was `"brand": {"@type":"Brand","name": product.vendor}`. The vendor field
+     is fragmented across the catalogue — `Celeste L’Amour`, `CELESTELAMOUR`
+     and `Celeste L'Amour` all appear — so this was publishing three different
+     brands. It now points at the single `#brand` node declared on the
+     homepage, which makes every product resolve to one entity immediately,
+     before the vendor bulk-edit is finished.
+
+  4. PRODUCT SCHEMA: ADDED itemCondition, priceValidUntil, shippingDetails,
+     hasMerchantReturnPolicy, multi-image array and @id.
+     These are the properties behind the "Free delivery", "Free returns" and
+     price annotations that merchant listings show. Values come from the
+     store's own published Shipping and Refund policies, not from guesses.
+
+  5. AGGREGATERATING IS NOW GUARDED HARDER — see the long comment at that block.
+
+  6. SKU IS NOW SUPPRESSED WHEN IT IS A SUPPLIER STRING.
+     Many variants carry SKUs like `191288010:-1#Pink;191288664:28313#Xs`.
+     That is a supplier-side identifier, not a retail SKU; publishing it in
+     structured data tells anyone reading the markup exactly which dropship
+     catalogue the product came from. An absent sku is better than that one.
+
+  UNCHANGED: the title/description/OG/Twitter logic, and the current_tags
+  handling with its comment about not piping a filter onto a translation
+  argument — that was already correct.
+{%- endcomment -%}
+
+{%- liquid
+  assign share_title = page_title
+  assign share_kind = 'website'
+  assign share_url = canonical_url
+  assign share_summary = page_description | default: shop.description | default: shop.name
+  assign share_media = blank
+
+  case request.page_type
+    when 'product'
+      assign share_kind = 'product'
+      if product.featured_media
+        assign share_media = product.featured_media.preview_image
+      endif
+    when 'article'
+      assign share_kind = 'article'
+      if article.image
+        assign share_media = article.image
+      endif
+    when 'collection'
+      if collection.image
+        assign share_media = collection.image
+      endif
+    when 'password'
+      assign share_url = shop.url
+  endcase
+
+  if share_media == blank and settings.share_image
+    assign share_media = settings.share_image
+  endif
+-%}
+
+{%- comment -%}
+  current_tags is joined into its own variable before it ever reaches a `t:`
+  call. Piping a filter directly onto a translation argument
+  (`t: tags: current_tags | join: ', '`) filters the translated string
+  instead of the argument that was meant to feed it — exactly the kind of
+  construct a strict Liquid parser flags on upload.
+{%- endcomment -%}
+{%- if current_tags -%}
+  {%- assign tag_summary = current_tags | join: ', ' -%}
+{%- endif -%}
+
+<title>
+  {{- page_title -}}
+  {%- if current_tags %} | {{ 'general.meta.tags' | t: tags: tag_summary }}{% endif -%}
+  {%- if current_page != 1 %} | {{ 'general.meta.page' | t: page: current_page }}{% endif -%}
+  {%- unless page_title contains shop.name %} | {{ shop.name }}{% endunless -%}
+</title>
+
+{%- comment -%}
+  Meta description now falls back to the store-level description instead of
+  emitting nothing. Set that value at Online Store → Preferences; it is
+  currently null, which is why the homepage has no controlled snippet.
+{%- endcomment -%}
+{%- assign meta_description = page_description | default: shop.description -%}
+{%- if meta_description != blank -%}
+  <meta name="description" content="{{ meta_description | escape }}">
+{%- endif -%}
+
+<meta property="og:site_name" content="{{ shop.name }}">
+<meta property="og:type" content="{{ share_kind }}">
+<meta property="og:url" content="{{ share_url }}">
+<meta property="og:title" content="{{ share_title | escape }}">
+<meta property="og:description" content="{{ share_summary | escape }}">
+
+{%- if share_media != blank -%}
+  <meta property="og:image" content="https:{{ share_media | image_url: width: 1200 }}">
+  <meta property="og:image:secure_url" content="https:{{ share_media | image_url: width: 1200 }}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="{{ 1200 | divided_by: share_media.aspect_ratio | round }}">
+  <meta property="og:image:alt" content="{{ share_media.alt | escape }}">
+{%- endif -%}
+
+{%- if request.page_type == 'product' -%}
+  <meta property="og:price:amount" content="{{ product.price | divided_by: 100.0 }}">
+  <meta property="og:price:currency" content="{{ cart.currency.iso_code }}">
+{%- endif -%}
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ share_title | escape }}">
+<meta name="twitter:description" content="{{ share_summary | escape }}">
+
+{%- comment -%} ---------- Structured data ---------- {%- endcomment -%}
+
+{%- if request.page_type == 'index' -%}
+  {%- comment -%}
+    Organization + WebSite live in their own snippet now. Declared once, on the
+    homepage only — Google expects a single Organization entity per site.
+  {%- endcomment -%}
+  {% render 'brand-organization' %}
+{%- endif -%}
+
+{%- if request.page_type == 'product' -%}
+  {%- liquid
+    assign org_id = shop.url | append: '/#organization'
+    assign brand_id = shop.url | append: '/#brand'
+    assign return_id = shop.url | append: '/#returnpolicy'
+    assign product_abs_url = shop.url | append: product.url
+
+    assign rating_value = product.metafields.reviews.rating.value.rating
+    assign rating_count = product.metafields.reviews.rating_count.value | plus: 0
+
+    # A supplier SKU looks like `191288010:-1#Pink;191288664:28313#Xs`.
+    # Treat anything containing a colon or a hash as not a retail identifier.
+    assign raw_sku = product.selected_or_first_available_variant.sku
+    assign sku_is_clean = true
+    if raw_sku == blank
+      assign sku_is_clean = false
+    elsif raw_sku contains ':' or raw_sku contains '#'
+      assign sku_is_clean = false
+    endif
+
+    # priceValidUntil is required for some merchant-listing treatments. One
+    # year out is the conventional value for an always-on catalogue price.
+    assign price_valid_until = 'now' | date: '%Y' | plus: 1
+    assign price_valid_until = price_valid_until | append: '-12-31'
+
+    assign single_price = false
+    if product.price_min == product.price_max
+      assign single_price = true
+    endif
+  -%}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org/",
+      "@type": "Product",
+      "@id": {{ product_abs_url | append: '#product' | json }},
+      "name": {{ product.title | strip_html | json }},
+      "url": {{ product_abs_url | json }},
+      "description": {{ product.description | strip_html | strip_newlines | truncate: 5000 | json }},
+      {%- if product.media.size > 0 -%}
+      "image": [
+        {%- for m in product.media limit: 6 -%}
+          {{ m | image_url: width: 1920 | prepend: 'https:' | json }}{%- unless forloop.last -%},{%- endunless -%}
+        {%- endfor -%}
+      ],
+      {%- endif -%}
+      {%- if sku_is_clean -%}
+      "sku": {{ raw_sku | json }},
+      {%- endif -%}
+      {%- if product.type != blank -%}
+      "category": {{ product.type | json }},
+      {%- endif -%}
+      "brand": { "@id": {{ brand_id | json }} },
+
+      {%- comment -%}
+        AGGREGATERATING — READ BEFORE ENABLING.
+
+        This reads `product.metafields.reviews.rating`, the Shopify-native
+        review namespace. It deliberately does NOT read `judgeme.*`.
+
+        Judge.me currently reports 142 reviews store-wide at 4.69, and at least
+        one product (7830848110643) carries a Judge.me badge advertising 100
+        reviews at 4.60 whose bodies read, verbatim:
+          "DEMO / TEST REVIEW — NOT FOR PUBLICATION. Layout test scenario 100…"
+        under reviewer names like "DEMO S.B." and "DEMO A.P.", all with
+        verified_buyer: false.
+
+        Publishing those as a rating rich result would be a fabricated review
+        snippet. That is a structured-data manual action under Google's spam
+        policies, and for a US seller it is also exposure under the FTC Rule on
+        Consumer Reviews and Testimonials (16 CFR Part 465), which took effect
+        in October 2024 and reaches fake and unsubstantiated consumer reviews.
+
+        Before wiring any review app into this block: delete every DEMO row in
+        Judge.me, confirm the remaining count is real, and confirm the reviews
+        are actually visible on the product page — Google requires that the
+        marked-up rating be present in the page's visible content.
+
+        Also check Judge.me's own settings. It can inject its own rich-snippet
+        markup independently of the theme, which would bypass this guard
+        entirely. Judge.me → Settings → SEO / Rich snippets.
+      {%- endcomment -%}
+      {%- if rating_value != blank and rating_count > 0 -%}
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": {{ rating_value | json }},
+        "bestRating": 5,
+        "worstRating": 1,
+        "reviewCount": {{ rating_count }}
+      },
+      {%- endif -%}
+
+      {%- comment -%}
+        Offers. Single Offer when every variant is the same price, which is the
+        common case in this catalogue; AggregateOffer otherwise. The previous
+        version emitted one Offer per variant capped at 50, which silently
+        truncated products carrying 102 and 168 variants.
+      {%- endcomment -%}
+      "offers": {
+        {%- if single_price -%}
+        "@type": "Offer",
+        "price": {{ product.price_min | divided_by: 100.0 }},
+        {%- else -%}
+        "@type": "AggregateOffer",
+        "lowPrice": {{ product.price_min | divided_by: 100.0 }},
+        "highPrice": {{ product.price_max | divided_by: 100.0 }},
+        "offerCount": {{ product.variants.size }},
+        {%- endif -%}
+        "priceCurrency": {{ cart.currency.iso_code | json }},
+        "priceValidUntil": {{ price_valid_until | json }},
+        "itemCondition": "https://schema.org/NewCondition",
+        "availability": {% if product.available %}"https://schema.org/InStock"{% else %}"https://schema.org/OutOfStock"{% endif %},
+        "url": {{ product_abs_url | json }},
+        "seller": { "@id": {{ org_id | json }} },
+        "hasMerchantReturnPolicy": { "@id": {{ return_id | json }} },
+
+        {%- comment -%}
+          Shipping figures are taken from the store's published Shipping policy:
+          1–3 business days handling, Standard 3–5 business days at $7.99, free
+          Standard on orders of $75 or more. If the policy changes, change this
+          too — shipping markup that contradicts the policy page is worse than
+          none, because Google cross-checks it and can suppress the annotation
+          for the whole domain.
+        {%- endcomment -%}
+        "shippingDetails": {
+          "@type": "OfferShippingDetails",
+          "shippingRate": {
+            "@type": "MonetaryAmount",
+            "value": 7.99,
+            "currency": "USD"
+          },
+          "shippingDestination": {
+            "@type": "DefinedRegion",
+            "addressCountry": "US"
+          },
+          "deliveryTime": {
+            "@type": "ShippingDeliveryTime",
+            "handlingTime": {
+              "@type": "QuantitativeValue",
+              "minValue": 1,
+              "maxValue": 3,
+              "unitCode": "DAY"
+            },
+            "transitTime": {
+              "@type": "QuantitativeValue",
+              "minValue": 3,
+              "maxValue": 5,
+              "unitCode": "DAY"
+            }
+          }
+        }
+      }
+    }
+  </script>
+{%- endif -%}
+
+{%- if request.page_type == 'article' -%}
+  {%- comment -%}
+    Article markup is retained, but note what it is currently doing: the blog
+    at /blogs/verbs-list holds 57 scraped third-party articles (PrepScholar,
+    Ivy Coach, College Transitions and similar), and this block stamps every
+    one of them with `"publisher": Celeste L'Amour`. That is the brand
+    formally claiming authorship of plagiarised content, to Google, in
+    machine-readable form.
+
+    Removing this markup does not fix that. Removing the articles does.
+    See ../../google/worklist-blog-cleanup.md.
+  {%- endcomment -%}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "@id": {{ shop.url | append: article.url | append: '#article' | json }},
+      "headline": {{ article.title | json }},
+      "articleBody": {{ article.content | strip_html | json }},
+      {% if article.image -%}
+        "image": [{{ article.image | image_url: width: 1920 | prepend: "https:" | json }}],
+      {%- endif %}
+      "datePublished": {{ article.published_at | date: '%Y-%m-%dT%H:%M:%SZ' | json }},
+      "dateModified": {{ article.updated_at | default: article.published_at | date: '%Y-%m-%dT%H:%M:%SZ' | json }},
+      "author": { "@type": "Person", "name": {{ article.author | json }} },
+      "publisher": { "@id": {{ shop.url | append: '/#organization' | json }} },
+      "isPartOf": { "@id": {{ shop.url | append: '/#website' | json }} },
+      "mainEntityOfPage": { "@type": "WebPage", "@id": {{ shop.url | append: article.url | json }} }
+    }
+  </script>
+{%- endif -%}
+
+{%- if request.page_type == 'collection' -%}
+  {%- comment -%}
+    NEW. Collection pages previously emitted only a BreadcrumbList. A
+    CollectionPage node with an ItemList gives Google an explicit, named,
+    navigational entity for each category — which is the raw material it draws
+    on when choosing sitelinks. This is the markup side of the sitelinks work;
+    the other half is main-nav placement and real collection descriptions.
+  {%- endcomment -%}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "@id": {{ shop.url | append: collection.url | append: '#collection' | json }},
+      "url": {{ shop.url | append: collection.url | json }},
+      "name": {{ collection.title | json }},
+      {%- if collection.description != blank -%}
+      "description": {{ collection.description | strip_html | strip_newlines | truncate: 500 | json }},
+      {%- endif -%}
+      "isPartOf": { "@id": {{ shop.url | append: '/#website' | json }} },
+      "about": { "@id": {{ shop.url | append: '/#brand' | json }} },
+      "mainEntity": {
+        "@type": "ItemList",
+        "numberOfItems": {{ collection.products_count }},
+        "itemListElement": [
+          {%- for p in collection.products limit: 12 -%}
+          {
+            "@type": "ListItem",
+            "position": {{ forloop.index }},
+            "url": {{ shop.url | append: p.url | json }},
+            "name": {{ p.title | strip_html | json }}
+          }{%- unless forloop.last -%},{%- endunless -%}
+          {%- endfor -%}
+        ]
+      }
+    }
+  </script>
+{%- endif -%}
+
+{%- if request.page_type == 'product' or request.page_type == 'collection' or request.page_type == 'article' -%}
+  {%- comment -%}
+    BreadcrumbList. Unchanged in shape, but products now route through their
+    primary collection so the trail is Home → Category → Product rather than
+    Home → Product. A two-step breadcrumb tells Google nothing about site
+    structure; a three-step one is part of how it infers the category pages
+    that deserve to be sitelinks.
+  {%- endcomment -%}
+  {%- liquid
+    assign crumb_collection = blank
+    if request.page_type == 'product'
+      assign crumb_collection = product.metafields.custom.category_collection.value
+      if crumb_collection == blank
+        assign crumb_collection = collection
+      endif
+      if crumb_collection == blank
+        assign crumb_collection = product.collections.first
+      endif
+    endif
+  -%}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": {{ 'general.breadcrumbs.home' | t | json }},
+          "item": {{ shop.url | json }}
+        }
+        {%- if request.page_type == 'product' -%}
+          {%- if crumb_collection != blank -%},
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": {{ crumb_collection.title | json }},
+            "item": {{ shop.url | append: crumb_collection.url | json }}
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": {{ product.title | json }},
+            "item": {{ shop.url | append: product.url | json }}
+          }
+          {%- else -%},
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": {{ product.title | json }},
+            "item": {{ shop.url | append: product.url | json }}
+          }
+          {%- endif -%}
+        {%- elsif request.page_type == 'collection' -%},
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": {{ collection.title | json }},
+            "item": {{ shop.url | append: collection.url | json }}
+          }
+        {%- elsif request.page_type == 'article' -%},
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": {{ blog.title | json }},
+            "item": {{ shop.url | append: blog.url | json }}
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": {{ article.title | json }},
+            "item": {{ shop.url | append: article.url | json }}
+          }
+        {%- endif -%}
+      ]
+    }
+  </script>
+{%- endif -%}

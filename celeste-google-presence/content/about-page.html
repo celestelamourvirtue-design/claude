@@ -1,0 +1,167 @@
+<!--
+  about-page.html
+  ---------------------------------------------------------------------------
+  Body HTML for a new Shopify page at /pages/about.
+  Create it at: Online Store → Pages → Add page. Title: "About Celeste L'Amour".
+  Handle must be: about
+
+  WHY THIS PAGE IS THE POINT OF THE WHOLE EXERCISE
+
+  Google's AI Overview writes Halara's brand sentence as: "Halara is a popular
+  online direct-to-consumer women's athleisure and casual apparel brand.
+  Founded in 2020 and headquartered in Hong Kong…" It can write that because
+  those facts — what the company is, when it started, where it is based — exist
+  in a stable, corroborated form that a machine can read.
+
+  For "celeste lamour" Google currently returns L'amour Nails & Spa, a nail
+  salon in the Bronx. That is not a ranking failure, it is an entity failure:
+  Google has no confident answer to "what is Celeste L'Amour", so it picks the
+  nearest entity it does have confidence in.
+
+  This page is the primary source for those facts. Structured data asserts
+  them; this page is where they are stated in visible prose so the assertion
+  is corroborated. Google weights a schema claim far more heavily when the
+  same fact appears in readable page text.
+
+  HOW IT IS WRITTEN
+
+  The opening sentence is deliberately shaped to be liftable: entity name,
+  copula, category, location. "Celeste L'Amour is a United States
+  direct-to-consumer activewear brand…" That is the sentence you are asking
+  Google to reuse, so it leads, and nothing decorative sits in front of it.
+
+  EVERY [TODO] BELOW IS A FACT I COULD NOT VERIFY FROM THE STORE DATA.
+  Fill each one in or delete the sentence containing it. Do not ship a
+  placeholder — a wrong founding year in a corroborating source is worse than
+  no founding year, because it will propagate and then contradict you.
+-->
+
+<div class="cl-about">
+
+  <h1>About Celeste L'Amour</h1>
+
+  <p>
+    <strong>Celeste L'Amour is a United States direct-to-consumer activewear
+    brand that makes sculpting leggings, shorts and supportive bras engineered
+    for tummy control, lift and all-day comfort.</strong> The company was
+    founded in [TODO: founding year] and is based in Chicago, Illinois. Celeste
+    L'Amour is a trading name of VIRTULIFT LLC and sells directly to customers
+    through celestelamour.com.
+  </p>
+
+  <h2>The name</h2>
+
+  <p>
+    <em>Celeste</em> means of the sky — the hour after a practice ends.
+    <em>L'Amour</em> means love. The name is the whole brief: something you
+    love enough to keep wearing after class.
+  </p>
+
+  <h2>What we make</h2>
+
+  <p>
+    Every Celeste L'Amour style starts from the same problem. Most sculpting
+    leggings solve for one thing and sacrifice another — they hold you in but
+    dig at the waist, or they feel soft but go sheer the moment you squat. We
+    build for both at once.
+  </p>
+
+  <ul>
+    <li>
+      <strong>Sculpting leggings.</strong> High-waisted, scrunch-back, with
+      four-way stretch and a squat-proof knit. Tummy control that smooths
+      without pinching.
+    </li>
+    <li>
+      <strong>Shorts.</strong> The same waistband and knit in a shorter length,
+      for warm weather and higher-intensity training.
+    </li>
+    <li>
+      <strong>Bras.</strong> Seamless, wireless, light support, cut to layer
+      under everything else in the range.
+    </li>
+  </ul>
+
+  <p>
+    [TODO: one paragraph on the fabric. You already have this written — the
+    page at /pages/celeste-lamour ("Fabric Engineer Exposes the Legging Flaw")
+    contains the argument. Condense it to three or four sentences here and
+    link to the full piece. Name the actual fibre composition and the knit if
+    you have it; a specific "78% nylon, 22% elastane, 280gsm" is worth more to
+    both a customer and a search engine than any adjective.]
+  </p>
+
+  <h2>Sizing and fit</h2>
+
+  <p>
+    Celeste L'Amour is sized XS through XXL. Full body measurements for every
+    size are on the <a href="/pages/size-chart">size chart</a>. If you are
+    between sizes, size down for a compressive fit and up for an easy one.
+  </p>
+
+  <h2>Shipping and returns</h2>
+
+  <p>
+    Orders are processed in one to three business days. Standard shipping
+    within the United States takes three to five business days and is
+    complimentary on orders of $75 or more. We accept returns for 30 days from
+    delivery on unworn items with tags attached, and we provide the return
+    shipping label. Full terms are in our
+    <a href="/policies/shipping-policy">shipping policy</a> and
+    <a href="/policies/refund-policy">refund policy</a>.
+  </p>
+
+  <h2>Contact</h2>
+
+  <p>
+    Customer care: <a href="mailto:support@celestelamour.com">support@celestelamour.com</a><br>
+    Phone: <a href="tel:+16468066060">+1 (646) 806-6060</a><br>
+    VIRTULIFT LLC, 2605 S Indiana Ave, Unit 201, Chicago, IL 60616, United States
+  </p>
+
+  <!--
+    NOTE ON THE EMAIL ADDRESS ABOVE: it is written as support@celestelamour.com
+    because that is the address recommended in ../shopify/store-identity-values.md.
+    The store currently publishes three different addresses across its policy
+    pages, one of them misspelled ("adminstrator@") and two of them a Gmail
+    account. Create the branded address, then make this page and all four
+    policy pages agree. Consistent contact details across a domain are a
+    documented input to entity confidence — inconsistent ones are a documented
+    spam signal.
+  -->
+
+  <h2>Follow</h2>
+
+  <p>
+    [TODO: list only profiles you actually control, and make each one's
+    display name exactly "Celeste L'Amour". Note that the Facebook page is
+    currently at the handle @celestelamourr — two r's — while the domain is
+    celestelamour.com. That mismatch makes it harder for Google to tie the
+    profile to the site. If the handle can be changed to @celestelamour, change
+    it; if it cannot, make sure the page's About section states the website URL
+    explicitly, which is the fallback way that link gets made.]
+  </p>
+
+</div>
+
+<!--
+  ===========================================================================
+  AFTER PUBLISHING THIS PAGE
+
+  1. Add it to the main navigation footer menu (Online Store → Navigation).
+     A page no internal link points to is a page Google treats as peripheral.
+
+  2. Set its SEO fields (bottom of the page editor):
+       Page title:       About Celeste L'Amour | Sculpting Activewear Brand
+       Meta description: Celeste L'Amour is a US direct-to-consumer activewear
+                         brand making sculpting leggings, shorts and bras.
+                         Based in Chicago. Free US shipping over $75.
+
+  3. Make the same facts true in the same words everywhere else: the
+     Organization schema in theme/snippets/brand-organization.liquid, the
+     Instagram and TikTok bios, the Facebook page About section, and a
+     LinkedIn company page if you create one. Google builds entity confidence
+     from agreement across independent sources. Three sources saying the same
+     sentence is worth more than one source saying it beautifully.
+  ===========================================================================
+-->
