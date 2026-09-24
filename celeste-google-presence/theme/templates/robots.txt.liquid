@@ -38,25 +38,50 @@
 {%- if group.user_agent.value == '*' -%}
 
 {%- comment -%}
-  Faceted-filter parameter URLs from Boost PFS / bc-sf-filter.
-  Every combination of colour, size and price is a distinct crawlable URL that
-  returns a near-duplicate of the parent collection. Left alone on a 90-
-  collection catalogue this multiplies into far more URLs than the store has
-  real pages, and crawl effort spent there is crawl effort not spent on the
-  collection and product pages you actually want ranked and surfaced as
-  sitelinks.
+  Faceted-filter URLs.
 
-  These rules are deliberately parameter-scoped: the clean collection URL
-  stays fully crawlable, only the filtered variants are excluded.
+  IMPORTANT: the live theme uses NATIVE Shopify filtering, not Boost PFS.
+  Boost (bc-sf-filter) is installed at the shop level — its settings are in the
+  shop metafields — but the live theme does not render it. What the live theme
+  actually renders is `snippets/gs-plp-filter.liquid`, which iterates
+  `filter.values` and emits `<input type="checkbox" name="{{ v.param_name }}">`,
+  producing native parameters: `filter.v.option.*`, `filter.p.tag` and
+  `filter.v.price.gte` / `.lte`. And `snippets/collection-filters-facets.liquid`
+  emits real crawlable anchors (`<a href="{{ value.url_to_remove }}">`), so
+  these are not JS-only states — Google can and does follow them.
+
+  Every combination of colour, size and price is therefore a distinct crawlable
+  URL returning a near-duplicate of the parent collection. Across 90
+  collections that multiplies into far more URLs than the store has real pages,
+  and crawl effort spent there is effort not spent on the collection pages you
+  want surfaced as sitelinks.
+
+  The `pf_*` lines are kept as a defensive measure only, in case Boost is ever
+  switched on in the live theme.
 {%- endcomment -%}
-Disallow: /*?pf_*
-Disallow: /*&pf_*
-Disallow: /*?filter.*
-Disallow: /*&filter.*
-Disallow: /*?sort_by*
-Disallow: /*&sort_by*
-Disallow: /*?pf_st*
-Disallow: /*?_=pf*
+Disallow: /*?filter.
+Disallow: /*&filter.
+Disallow: /*?sort_by
+Disallow: /*&sort_by
+Disallow: /*?pf_
+Disallow: /*&pf_
+
+{%- comment -%}
+  Tag-path URLs. `snippets/filter-by-tags.liquid` and
+  `snippets/selected-tags-filter.liquid` generate paths of the form
+  /collections/leggings/black — a separate URL per tag, per collection, each a
+  thin subset of its parent.
+
+  The Allow line below matters and must stay. Shopify also serves products at
+  /collections/{collection}/products/{product}, which matches the same pattern.
+  Those are duplicates of /products/{handle} and Shopify canonicals them
+  correctly — but only if Google can still fetch them to read the canonical
+  tag. Blocking them would strand the canonical signal. Google honours the more
+  specific rule, so the Allow wins for product paths and the Disallow applies
+  to tag paths.
+{%- endcomment -%}
+Allow: /collections/*/products/
+Disallow: /collections/*/*
 
 {%- comment -%}
   Session, tracking and referral parameters. Judge.me appends
