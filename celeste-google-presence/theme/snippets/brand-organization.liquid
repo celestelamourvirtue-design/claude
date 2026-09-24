@@ -1,0 +1,321 @@
+{%- comment -%}
+  brand-organization.liquid
+  ---------------------------------------------------------------------------
+  Canonical brand-entity structured data for Celeste L'Amour.
+
+  WHAT THIS IS FOR
+  This is the single block of markup that tells Google "Celeste L'Amour is a
+  real company, here is its legal name, address, phone, return policy and
+  verified social profiles." It is one input Google uses when deciding which
+  entity a brand query refers to.
+
+  The current live theme (gid://shopify/OnlineStoreTheme/145901649971,
+  "GS-style PDP + gallery/swatch fix Sep 24") emits a four-property
+  Organization node: name, logo (conditional), sameAs (conditional), url. No
+  @id, legalName, description, address, telephone, email, contactPoint or
+  brand. This adds them.
+
+  CALIBRATION — do not oversell this to yourself. Google's Organization
+  documentation states there are no required properties, this markup produces
+  no rich result, and it does not guarantee a knowledge panel. It is a cheap,
+  high-value input to entity disambiguation, not a switch that turns one on.
+  It will not, by itself, displace the wrong entity from the AI Overview.
+  The work that moves that needle is in ../../google/worklist-competitor-products.md
+  (170 active products whose vendor is "Gymshark") and in getting the brand's
+  facts corroborated off-site. Deploy this because it is correct and costs an
+  hour — not because it is the lever.
+
+  WHERE IT GOES
+  snippets/brand-organization.liquid in the live theme, rendered from
+  snippets/meta-tags.liquid inside the `request.page_type == 'index'` branch,
+  REPLACING the existing Organization and WebSite script tags there. Do not
+  render it on every page: Google wants one Organization entity, declared on
+  the site's homepage.
+
+      {%- if request.page_type == 'index' -%}
+        {% render 'brand-organization' %}
+      {%- endif -%}
+
+  BEFORE YOU PUBLISH
+  Every value in the CONFIG block below is real data pulled from this store's
+  Shopify admin on 2026-09-24, except the four marked TODO. Fill those four in
+  or delete the lines — a property with a placeholder value is worse than an
+  absent property, because Google will index the placeholder.
+
+  Validate after publishing with https://search.google.com/test/rich-results
+  and Schema.org's validator at https://validator.schema.org/.
+{%- endcomment -%}
+
+{%- liquid
+  # ===================== CONFIG =====================
+  # Canonical brand name. ONE form, used everywhere: the Shopify store name,
+  # every product's Vendor field, every social profile, the Merchant Center
+  # account.
+  #
+  # STRAIGHT apostrophe (U+0027), not the typographic one. The vendor counts
+  # settle it: 185 of the 186 own-brand active products already use the
+  # straight form, against 1 using U+2019. It is also the more robust
+  # character — it survives CSV round-trips, feed exports and URL encoding
+  # without turning into "â€™", which U+2019 regularly does.
+  #
+  # `shop.name` is currently the typographic form, so change it at
+  # Settings > General > Store name to match. One field beats 185 edits.
+  assign brand_name = 'Celeste L''Amour'
+
+  # Every other spelling in the wild. alternateName is how you tell Google
+  # these strings are one entity, which is what stops a search for
+  # "celeste lamour" resolving to an unrelated business.
+  assign alt_name_1 = 'Celeste L’Amour'
+  assign alt_name_2 = 'Celeste LAmour'
+  assign alt_name_3 = 'celestelamour'
+
+  assign legal_name = 'VIRTULIFT LLC'
+
+  # One-sentence description. This is the sentence you are asking Google to
+  # reuse. Keep it factual, no marketing superlatives, no keyword stuffing.
+  assign brand_description = 'Celeste L’Amour is a United States direct-to-consumer activewear brand making sculpting leggings, shorts and supportive bras engineered for tummy control and all-day comfort.'
+
+  assign founding_date = '2025'
+
+  # Contact. NOTE: the store currently publishes three different addresses
+  # across its policy pages - administrator@celestelamour.com (Shopify
+  # contact field), adminstrator@celestelamour.com (misspelled, in the Contact
+  # and Privacy policies) and celestelamourvirtue@gmail.com (Refund and
+  # Shipping policies). Pick ONE, fix the policy pages, then set it here.
+  # A free Gmail address as the published support contact is a trust signal
+  # Google and customers both read, so prefer the branded domain.
+  assign brand_email = 'support@celestelamour.com'
+  assign brand_phone = '+1-646-806-6060'
+
+  assign street_address = '2605 S Indiana Ave, Unit 201'
+  assign address_locality = 'Chicago'
+  assign address_region = 'IL'
+  assign postal_code = '60616'
+  assign address_country = 'US'
+
+  # Verified profiles you actually control. sameAs is the strongest entity
+  # reconciliation signal you can emit. Only list URLs that resolve and that
+  # visibly carry the brand name - a dead or mismatched link weakens the set.
+  #
+  # CURRENT STATE (config/settings_data.json on the live theme): only two of
+  # the six are filled in -
+  #   social_instagram_link = "https://www.instagram.com/celestelamourr/"
+  #   social_facebook_link  = "https://www.facebook.com/celestelamourr"
+  # tiktok, youtube, x and pinterest are all "". The live theme already
+  # suppresses the blanks correctly, so the emitted markup is valid - it is
+  # just a thin graph. The fix is filling profiles in, not changing code.
+  #
+  # NOTE THE DOUBLE R. Both handles are "celestelamourr" while the domain is
+  # celestelamour.com. That mismatch makes the site-to-profile link harder for
+  # Google to make. If the handles can be changed to "celestelamour", change
+  # them; if they cannot, make sure each profile's bio/About states the
+  # website URL explicitly - that is the fallback way the link gets made.
+  assign url_instagram = settings.social_instagram_link
+  assign url_tiktok = settings.social_tiktok_link
+  assign url_facebook = settings.social_facebook_link
+  assign url_youtube = settings.social_youtube_link
+  assign url_pinterest = settings.social_pinterest_link
+  assign url_x = settings.social_x_link
+  # TODO: add these once created. A LinkedIn company page is the single
+  # cheapest, highest-value addition here - it is a source Google's entity
+  # graph reads directly for "founded" and "headquartered" facts. You also
+  # have live TikTok and Amazon sales channels whose storefronts are not
+  # represented here at all.
+  assign url_linkedin = ''
+  assign url_crunchbase = ''
+
+  # Return policy - real values from the store's published Refund policy
+  # (30-day window, prepaid return label supplied, US).
+  assign return_days = 30
+  assign return_country = 'US'
+  # ===================== END CONFIG =====================
+
+  assign shop_root = shop.url
+
+  # Logo: Google requires a crawlable image, at least 112x112px, and prefers
+  # a square or near-square mark on a plain background.
+  assign logo_source = settings.brand_logo | default: settings.logo
+  if logo_source != blank
+    assign logo_url = logo_source | image_url: width: 512 | prepend: 'https:'
+  endif
+
+  # Build sameAs without empty members.
+  #
+  # An earlier draft of this file claimed the live theme had a defect here.
+  # It does not - the current MAIN theme guards each social setting with
+  # `!= blank` and assembles the array with capture + remove_last. That was
+  # a real defect in theme 145734172723, which has since been unpublished.
+  # The filtering below is kept because this snippet adds two more sources
+  # (LinkedIn, Crunchbase) that also need blank-guarding, not because the
+  # theme is broken.
+  #
+  # Worth recording, since it is a common myth: empty strings in a sameAs
+  # array are valid JSON-LD and Google simply ignores them. They are ugly,
+  # not a negative ranking signal.
+  assign social_raw = ''
+  assign social_raw = social_raw | append: url_instagram | append: '|'
+  assign social_raw = social_raw | append: url_tiktok | append: '|'
+  assign social_raw = social_raw | append: url_facebook | append: '|'
+  assign social_raw = social_raw | append: url_youtube | append: '|'
+  assign social_raw = social_raw | append: url_pinterest | append: '|'
+  assign social_raw = social_raw | append: url_x | append: '|'
+  assign social_raw = social_raw | append: url_linkedin | append: '|'
+  assign social_raw = social_raw | append: url_crunchbase
+
+  assign social_clean = ''
+  assign social_candidates = social_raw | split: '|'
+  for candidate in social_candidates
+    assign trimmed = candidate | strip
+    if trimmed != blank
+      if social_clean == blank
+        assign social_clean = trimmed
+      else
+        assign social_clean = social_clean | append: '|' | append: trimmed
+      endif
+    endif
+  endfor
+  assign social_urls = social_clean | split: '|'
+-%}
+
+<script type="application/ld+json" data-brand-entity="organization">
+{
+  "@context": "https://schema.org",
+  "@type": ["Organization", "OnlineStore"],
+  "@id": {{ shop_root | append: '/#organization' | json }},
+  "name": {{ brand_name | json }},
+  "alternateName": [
+    {{ alt_name_1 | json }},
+    {{ alt_name_2 | json }},
+    {{ alt_name_3 | json }}
+  ],
+  "legalName": {{ legal_name | json }},
+  "url": {{ shop_root | json }},
+  "description": {{ brand_description | json }},
+  "foundingDate": {{ founding_date | json }}
+  {%- if logo_url != blank -%},
+  "logo": {
+    "@type": "ImageObject",
+    "@id": {{ shop_root | append: '/#logo' | json }},
+    "url": {{ logo_url | json }},
+    "caption": {{ brand_name | json }}
+  },
+  "image": { "@id": {{ shop_root | append: '/#logo' | json }} }
+  {%- endif -%}
+  {%- if brand_email != blank -%},
+  "email": {{ brand_email | json }}
+  {%- endif -%}
+  {%- if brand_phone != blank -%},
+  "telephone": {{ brand_phone | json }}
+  {%- endif -%},
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": {{ street_address | json }},
+    "addressLocality": {{ address_locality | json }},
+    "addressRegion": {{ address_region | json }},
+    "postalCode": {{ postal_code | json }},
+    "addressCountry": {{ address_country | json }}
+  },
+  "contactPoint": [
+    {
+      "@type": "ContactPoint",
+      "contactType": "customer support",
+      "availableLanguage": ["English"]
+      {%- if brand_email != blank -%},
+      "email": {{ brand_email | json }}
+      {%- endif -%}
+      {%- if brand_phone != blank -%},
+      "telephone": {{ brand_phone | json }}
+      {%- endif -%},
+      "areaServed": "US"
+    }
+  ],
+  "brand": {
+    "@type": "Brand",
+    "@id": {{ shop_root | append: '/#brand' | json }},
+    "name": {{ brand_name | json }},
+    "logo": {{ logo_url | default: '' | json }}
+  },
+  "hasMerchantReturnPolicy": {
+    "@type": "MerchantReturnPolicy",
+    "@id": {{ shop_root | append: '/#returnpolicy' | json }},
+    "applicableCountry": {{ return_country | json }},
+    "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+    "merchantReturnDays": {{ return_days }},
+    "returnMethod": "https://schema.org/ReturnByMail",
+    "returnFees": "https://schema.org/FreeReturn",
+    "merchantReturnLink": {{ shop_root | append: '/policies/refund-policy' | json }}
+  }
+  {%- if social_urls.size > 0 -%},
+  "sameAs": [
+    {%- for social_url in social_urls -%}
+      {{ social_url | json }}{%- unless forloop.last -%},{%- endunless -%}
+    {%- endfor -%}
+  ]
+  {%- endif -%}
+
+  {%- comment -%}
+    DELIBERATELY OMITTED: "aggregateRating".
+
+    Google supports aggregateRating on Organization, but it must describe
+    reviews of the BUSINESS, not of its products, and it must be backed by
+    genuine reviews that are visible on the page.
+
+    This store's Judge.me shop_reviews_count is 0 - there are no business-level
+    reviews. The 142 product reviews include rows whose body text reads
+    "DEMO / TEST REVIEW - NOT FOR PUBLICATION" under reviewer names like
+    "DEMO S.B.". Emitting a rating built on those would be a fabricated review
+    snippet: a Google structured-data manual action under the spam policies,
+    and, for a US seller, exposure under the FTC Rule on Consumer Reviews and
+    Testimonials (16 CFR Part 465).
+
+    Delete the demo rows first, collect real reviews, and only then add this
+    block. Getting it wrong costs more than leaving it out.
+  {%- endcomment -%}
+}
+</script>
+
+{%- comment -%}
+  WebSite node.
+
+  NOTE ON WHAT IS DELIBERATELY *NOT* HERE: `potentialAction` / `SearchAction`.
+
+  The live theme still carries that sub-object, and so did an earlier draft of
+  this file. Google announced "Farewell, Sitelinks Search Box"
+  (developers.google.com/search/blog/2024/10/sitelinks-search-box) and dropped
+  the feature starting 2024-11-21, globally, in all languages and countries,
+  because usage had fallen. The markup is inert.
+
+  Google also said leaving it in place causes no harm — "unsupported structured
+  data won't cause issues in Search" — so removing it is housekeeping, not a
+  fix. It is removed here because dead markup in a graph you are asking Google
+  to read carefully is noise, and because someone will otherwise spend an
+  afternoon wondering why the search box never appears.
+
+  What the WebSite node still does matter for is the SITE NAME. Google's
+  site-names documentation says it "uses a variation of WebSite structured
+  data, which continues to be supported", and that `alternateName` "allows
+  Google to consider other options if your preferred choice isn't selected".
+  That is why `name` and `alternateName` are below and the SearchAction is not.
+{%- endcomment -%}
+<script type="application/ld+json" data-brand-entity="website">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": {{ shop_root | append: '/#website' | json }},
+  "url": {{ shop_root | json }},
+  "name": {{ brand_name | json }},
+  {%- comment -%}
+    These are the forms people actually type. Google picks one as the displayed
+    site name; alternateName gives it sanctioned fallbacks rather than letting
+    it guess from the <title> tag.
+  {%- endcomment -%}
+  "alternateName": [
+    {{ alt_name_1 | json }},
+    {{ alt_name_2 | json }},
+    {{ alt_name_3 | json }}
+  ],
+  "description": {{ brand_description | json }},
+  "publisher": { "@id": {{ shop_root | append: '/#organization' | json }} },
+  "inLanguage": "en-US"
+}
+</script>

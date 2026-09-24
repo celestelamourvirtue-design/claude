@@ -1,0 +1,131 @@
+{%- comment -%}
+  robots.txt.liquid
+  ---------------------------------------------------------------------------
+  The live theme has NO robots.txt.liquid, so celestelamour.com currently
+  serves Shopify's stock robots.txt. That default is sensible but knows
+  nothing about the two things this store actually does: Boost PFS faceted
+  filtering, which can generate a very large number of parameterised
+  collection URLs, and a set of utility pages that exist for customers but
+  have no business in the index.
+
+  WHERE IT GOES
+  templates/robots.txt.liquid in the live theme. Shopify renders this in
+  place of the default. Adding the file at all is low risk as long as the
+  `robots.default_groups` loop below is preserved: that loop reproduces
+  Shopify's own rules, so this file only ever ADDS to them.
+
+  READ THIS BEFORE USING IT TO REMOVE ANYTHING
+  robots.txt controls CRAWLING, not INDEXING. A URL that is already indexed
+  and then gets disallowed here does not drop out of Google - it can stay in
+  the index, typically as a bare URL with no snippet, because Google can no
+  longer fetch it to see the noindex. So:
+
+    - To keep Google OUT of a section that is not yet indexed -> robots.txt.
+    - To REMOVE something already indexed -> let it stay crawlable and serve
+      either a `noindex` meta tag (for pages you are keeping) or HTTP 410
+      (for pages you are deleting). Only add a robots.txt rule afterwards,
+      once the URLs have actually dropped out.
+
+  That distinction matters specifically for the 57 scraped blog articles. Do
+  NOT disallow /blogs/verbs-list/ here as a first move: delete the articles so
+  the URLs return 410, let Google recrawl and drop them, and only then
+  consider a rule.
+{%- endcomment -%}
+{% for group in robots.default_groups %}
+{{- group.user_agent }}
+{% for rule in group.rules %}{{ rule }}
+{% endfor %}
+{%- if group.user_agent.value == '*' -%}
+
+{%- comment -%}
+  Faceted-filter URLs.
+
+  IMPORTANT: the live theme uses NATIVE Shopify filtering, not Boost PFS.
+  Boost (bc-sf-filter) is installed at the shop level — its settings are in the
+  shop metafields — but the live theme does not render it. What the live theme
+  actually renders is `snippets/gs-plp-filter.liquid`, which iterates
+  `filter.values` and emits `<input type="checkbox" name="{{ v.param_name }}">`,
+  producing native parameters: `filter.v.option.*`, `filter.p.tag` and
+  `filter.v.price.gte` / `.lte`. And `snippets/collection-filters-facets.liquid`
+  emits real crawlable anchors (`<a href="{{ value.url_to_remove }}">`), so
+  these are not JS-only states — Google can and does follow them.
+
+  Every combination of colour, size and price is therefore a distinct crawlable
+  URL returning a near-duplicate of the parent collection. Across 90
+  collections that multiplies into far more URLs than the store has real pages,
+  and crawl effort spent there is effort not spent on the collection pages you
+  want surfaced as sitelinks.
+
+  The `pf_*` lines are kept as a defensive measure only, in case Boost is ever
+  switched on in the live theme.
+{%- endcomment -%}
+Disallow: /*?filter.
+Disallow: /*&filter.
+Disallow: /*?sort_by
+Disallow: /*&sort_by
+Disallow: /*?pf_
+Disallow: /*&pf_
+
+{%- comment -%}
+  Tag-path URLs. `snippets/filter-by-tags.liquid` and
+  `snippets/selected-tags-filter.liquid` generate paths of the form
+  /collections/leggings/black — a separate URL per tag, per collection, each a
+  thin subset of its parent.
+
+  The Allow line below matters and must stay. Shopify also serves products at
+  /collections/{collection}/products/{product}, which matches the same pattern.
+  Those are duplicates of /products/{handle} and Shopify canonicals them
+  correctly — but only if Google can still fetch them to read the canonical
+  tag. Blocking them would strand the canonical signal. Google honours the more
+  specific rule, so the Allow wins for product paths and the Disallow applies
+  to tag paths.
+{%- endcomment -%}
+Allow: /collections/*/products/
+Disallow: /collections/*/*
+
+{%- comment -%}
+  Session, tracking and referral parameters. Judge.me appends
+  ?jdgm_referral_location=...&utm_source=judgeme to product links, which
+  creates a duplicate of every product URL it touches.
+{%- endcomment -%}
+Disallow: /*?jdgm_referral_location*
+Disallow: /*&jdgm_referral_location*
+Disallow: /*?variant=*
+Disallow: /*&variant=*
+
+{%- comment -%}
+  Utility pages. These are real pages customers use, but they carry no
+  information a searcher wants and they dilute the set of pages Google can
+  choose from when it builds a sitelinks block.
+
+  NOTE: if any of these is already indexed, add a noindex meta tag to its
+  template FIRST and wait for it to drop, then keep these lines. Adding the
+  rule alone will freeze it in the index.
+{%- endcomment -%}
+Disallow: /pages/survey
+Disallow: /pages/review-submission
+Disallow: /pages/account
+Disallow: /pages/track-order
+Disallow: /pages/data-sharing-opt-out
+Disallow: /pages/workflow-dashboard
+Disallow: /account
+Disallow: /cart
+Disallow: /checkouts
+Disallow: /tools/
+
+{%- comment -%}
+  Theme previews. This store has 19 themes, 18 of them unpublished. Preview
+  URLs of the form /?preview_theme_id=NNN or /t/NN/... render a full copy of
+  the storefront and are a classic accidental duplicate-content source if one
+  ever gets linked to externally.
+{%- endcomment -%}
+Disallow: /*?preview_theme_id*
+Disallow: /*&preview_theme_id*
+Disallow: /*?_ab=0*
+Disallow: /*?_fd=0*
+{%- endif -%}
+
+{%- if group.sitemap != blank -%}
+{{ group.sitemap }}
+{%- endif -%}
+{% endfor %}

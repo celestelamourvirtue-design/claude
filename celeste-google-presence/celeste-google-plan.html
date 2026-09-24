@@ -1,0 +1,479 @@
+<title>Celeste Google Plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Inter:wght@400;500;600;700&display=swap">
+
+<style>
+  :root {
+    color-scheme: light;
+    --canvas:#F1EEF6; --card:#FFFFFF; --ink:#241430; --muted:#6E6480;
+    --line:#E7E1F0; --line-soft:#F0EBF6;
+    --plum:#2D1B3D; --plum-2:#4E2A6E; --violet:#6D4AA8; --rose:#E0567A;
+    --green:#15935E; --amber:#C77D11; --red:#C0392B;
+    --green-bg:#E4F3EC; --amber-bg:#FBF0DE; --red-bg:#F9E6E4; --violet-bg:#EFE9F8;
+    --shadow:0 2px 8px rgba(45,27,61,.06);
+    --shadow-lg:0 8px 28px rgba(45,27,61,.12);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --canvas:#161022; --card:#1F1730; --ink:#F2EDF8; --muted:#A79CBC;
+      --line:#332745; --line-soft:#2A2039;
+      --plum:#1A1026; --plum-2:#3C2156; --violet:#9E7BDD; --rose:#F1789A;
+      --green:#4FC48D; --amber:#E8AC52; --red:#EF7E70;
+      --green-bg:#16332690; --amber-bg:#3A2C1490; --red-bg:#3A1F1C90; --violet-bg:#2C2142;
+      --shadow:0 2px 8px rgba(0,0,0,.4);
+      --shadow-lg:0 8px 28px rgba(0,0,0,.5);
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --canvas:#161022; --card:#1F1730; --ink:#F2EDF8; --muted:#A79CBC;
+    --line:#332745; --line-soft:#2A2039;
+    --plum:#1A1026; --plum-2:#3C2156; --violet:#9E7BDD; --rose:#F1789A;
+    --green:#4FC48D; --amber:#E8AC52; --red:#EF7E70;
+    --green-bg:#16332690; --amber-bg:#3A2C1490; --red-bg:#3A1F1C90; --violet-bg:#2C2142;
+    --shadow:0 2px 8px rgba(0,0,0,.4);
+    --shadow-lg:0 8px 28px rgba(0,0,0,.5);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin:0; background:var(--canvas); color:var(--ink);
+    font-family:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+    font-size:16px; line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap { max-width:760px; margin:0 auto; padding-inline:16px; padding-block:0 64px; }
+  h1,h2,h3 { font-family:'Bricolage Grotesque','Inter',system-ui,sans-serif; text-wrap:balance; margin:0; }
+
+  /* hero */
+  .hero {
+    background:linear-gradient(150deg,var(--plum),var(--plum-2) 55%,var(--violet));
+    color:#fff; margin-inline:-16px; padding:32px 20px 28px;
+    position:relative; overflow:hidden;
+  }
+  .hero::after {
+    content:''; position:absolute; width:320px; height:320px; right:-120px; top:-140px;
+    background:radial-gradient(circle,rgba(224,86,122,.55),transparent 68%);
+    pointer-events:none;
+  }
+  .eyebrow {
+    font-size:11px; font-weight:700; letter-spacing:.14em; text-transform:uppercase;
+    color:rgba(255,255,255,.72); margin:0 0 8px;
+  }
+  .hero h1 { font-size:clamp(26px,7vw,36px); font-weight:800; line-height:1.1; letter-spacing:-.02em; }
+  .hero p.sub { margin:10px 0 0; color:rgba(255,255,255,.82); font-size:14.5px; max-width:52ch; }
+
+  .meter { display:flex; align-items:center; gap:16px; margin-top:22px; position:relative; z-index:1; flex-wrap:wrap; }
+  .ring { width:84px; height:84px; border-radius:50%; display:grid; place-items:center; flex:none;
+          background:conic-gradient(var(--rose) var(--pct), rgba(255,255,255,.18) 0); }
+  .ring-in { width:64px; height:64px; border-radius:50%; background:var(--plum);
+             display:grid; place-items:center; font-family:'Bricolage Grotesque',sans-serif;
+             font-weight:800; font-size:19px; font-variant-numeric:tabular-nums; }
+  .tallies { display:flex; gap:18px; flex-wrap:wrap; }
+  .tally .n { font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:22px;
+              font-variant-numeric:tabular-nums; line-height:1; }
+  .tally .l { font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:rgba(255,255,255,.7); margin-top:5px; }
+
+  /* filter chips */
+  .filters { display:flex; flex-wrap:wrap; gap:7px; margin:22px 0 6px; }
+  .chip {
+    font:inherit; font-size:12.5px; font-weight:600; cursor:pointer;
+    padding:8px 13px; min-height:38px; border-radius:999px;
+    border:1px solid var(--line); background:var(--card); color:var(--muted);
+    transition:background .14s,color .14s,border-color .14s;
+  }
+  .chip[aria-pressed="true"] { background:var(--plum-2); border-color:var(--plum-2); color:#fff; }
+  .chip:focus-visible, summary:focus-visible, .statusbtn:focus-visible { outline:2px solid var(--rose); outline-offset:2px; }
+  .filter-label { font-size:11px; font-weight:700; letter-spacing:.11em; text-transform:uppercase;
+                  color:var(--muted); width:100%; margin:12px 0 -2px; }
+
+  /* phase */
+  details.phase { background:var(--card); border:1px solid var(--line); border-radius:16px;
+                  box-shadow:var(--shadow); margin-top:14px; overflow:hidden; }
+  details.phase > summary { list-style:none; cursor:pointer; padding:16px 18px;
+                            display:flex; gap:12px; align-items:flex-start; min-height:44px; }
+  details.phase > summary::-webkit-details-marker { display:none; }
+  .ph-num { font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:12px;
+            background:var(--violet-bg); color:var(--violet); border-radius:8px;
+            padding:5px 9px; flex:none; letter-spacing:.04em; }
+  .ph-body { flex:1; min-width:0; }
+  .ph-title { font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:17px; line-height:1.25; }
+  .ph-when { font-size:12.5px; color:var(--muted); margin-top:3px; }
+  .ph-bar { height:5px; border-radius:3px; background:var(--line-soft); margin-top:10px; overflow:hidden; }
+  .ph-bar span { display:block; height:100%; background:var(--green); border-radius:3px; transition:width .3s; }
+  .ph-count { font-size:12px; font-weight:700; color:var(--muted); font-variant-numeric:tabular-nums; flex:none; padding-top:2px; }
+
+  /* item */
+  .item { border-top:1px solid var(--line-soft); padding:15px 18px 17px; display:flex; gap:12px; }
+  .stripe { width:3px; border-radius:2px; flex:none; margin-top:3px; }
+  .s-critical{background:var(--red);} .s-high{background:var(--amber);}
+  .s-medium{background:var(--violet);} .s-low{background:var(--muted);}
+  .it-body { flex:1; min-width:0; }
+  .it-title { font-weight:600; font-size:15.5px; line-height:1.4; }
+  .it-title.done { text-decoration:line-through; color:var(--muted); }
+  .it-why { font-size:13.5px; color:var(--muted); margin-top:6px; line-height:1.5; }
+  .pills { display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; }
+  .pill { font-size:10.5px; font-weight:700; letter-spacing:.06em; text-transform:uppercase;
+          padding:4px 9px; border-radius:999px; }
+  .p-critical{background:var(--red-bg);color:var(--red);}
+  .p-high{background:var(--amber-bg);color:var(--amber);}
+  .p-medium{background:var(--violet-bg);color:var(--violet);}
+  .p-low{background:var(--line-soft);color:var(--muted);}
+  .p-where{background:var(--line-soft);color:var(--muted);}
+
+  .statusrow { display:flex; gap:6px; margin-top:12px; }
+  .statusbtn { font:inherit; font-size:12px; font-weight:600; cursor:pointer; flex:1;
+               min-height:40px; padding:8px 4px; border-radius:10px;
+               border:1px solid var(--line); background:transparent; color:var(--muted);
+               transition:background .14s,color .14s,border-color .14s; }
+  .statusbtn[aria-pressed="true"][data-s="todo"] { background:var(--line-soft); color:var(--ink); border-color:var(--line); }
+  .statusbtn[aria-pressed="true"][data-s="doing"] { background:var(--amber-bg); color:var(--amber); border-color:transparent; }
+  .statusbtn[aria-pressed="true"][data-s="done"] { background:var(--green-bg); color:var(--green); border-color:transparent; }
+
+  .note { background:var(--card); border:1px solid var(--line); border-left:3px solid var(--rose);
+          border-radius:12px; padding:14px 16px; margin-top:14px; font-size:13.5px; color:var(--muted); }
+  .note strong { color:var(--ink); }
+  .empty { text-align:center; color:var(--muted); font-size:14px; padding:40px 16px; }
+  footer { margin-top:28px; font-size:12px; color:var(--muted); text-align:center; line-height:1.6; }
+  code { font-family:ui-monospace,'SF Mono',Menlo,monospace; font-size:.88em;
+         background:var(--line-soft); padding:1px 5px; border-radius:4px; }
+  @media (prefers-reduced-motion: reduce) { * { transition:none !important; animation:none !important; } }
+</style>
+
+<div id="root"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/htm/3.1.1/htm.js"></script>
+<script>
+(function () {
+  var h = React.createElement;
+  var html = htm.bind(h);
+  var useState = React.useState, useEffect = React.useEffect, useMemo = React.useMemo;
+
+  var PHASES = [
+    { id:'p1', num:'Phase 1', title:'Stop contradicting yourself', when:'Week 1 · deletions only',
+      blurb:'Every item is a removal. Nothing new gets written yet.' },
+    { id:'p0', num:'Phase 2', title:'Defuse the loaded guns', when:'Week 1–2 · deliberate, not urgent',
+      blurb:'Fabricated data with no render path today. One wiring change from being real.' },
+    { id:'p2', num:'Phase 3', title:'Say who you are', when:'Weeks 2–4',
+      blurb:'Now the true facts have nothing competing with them.' },
+    { id:'p3', num:'Phase 4', title:'Deploy the markup', when:'Week 4',
+      blurb:'Last, not first. Staged and ready in the PR.' },
+    { id:'p4', num:'Phase 5', title:'Get corroborated off-site', when:'Ongoing · months',
+      blurb:'What actually produces the Halara-style AI Overview sentence.' }
+  ];
+
+  var ITEMS = [
+    // Phase 0
+    { id:'a2', p:'p0', sev:'high', where:'Shopify', eff:'M',
+      t:'Delete the fabricated air_reviews_product metafields',
+      w:'About 178 active products carry invented aggregates — the flagship says 4.8 from 37,118 reviews while its own data field holds zero. Nothing renders them today. Delete them before something does.' },
+    { id:'a1', p:'p0', sev:'high', where:'Theme', eff:'S',
+      t:'Delete the orphan gs-buybox-rating.liquid snippet',
+      w:'It reads those fabricated values as a fallback and is named as though it belongs in the buy box — but nothing references it. That combination is exactly how this fires by accident.' },
+    { id:'a3', p:'p0', sev:'high', where:'App', eff:'S',
+      t:'Delete the 100 DEMO Judge.me rows',
+      w:'Bodies read "DEMO / TEST REVIEW — NOT FOR PUBLICATION" under reviewers named "DEMO S.B.". Delete, do not unpublish.' },
+    { id:'a4', p:'p0', sev:'high', where:'App', eff:'S',
+      t:'Turn Judge.me rich snippets OFF',
+      w:'It can emit its own structured data independently of your theme, bypassing every guard in the code.' },
+    { id:'a5', p:'p0', sev:'high', where:'Theme', eff:'S',
+      t:'Delete the invented testimonial sections',
+      w:'Two duplicate reviews-wall sections with six fabricated reviews marked "verified", headed "What 6,412 people said". Disabled today, genuinely one toggle from live.' },
+
+    // Phase 1
+    { id:'b0', p:'p1', sev:'critical', where:'Decision', eff:'S',
+      t:'Decide: do you actually sell the Gymshark products?',
+      w:'Everything below branches on this. Only you can answer it. If they are dropship listings you never meant to fulfil, they go.' },
+    { id:'b1', p:'p1', sev:'critical', where:'Shopify', eff:'M',
+      t:'Delete the 170 Gymshark-vendor products',
+      w:'48% of your live catalogue. Published, crawlable, "gymshark-" in the URL, and the theme writes vendor into JSON-LD as brand.name. Delete, do not unpublish.' },
+    { id:'b2', p:'p1', sev:'critical', where:'Shopify', eff:'M',
+      t:'Unpublish the 10 gymshark-demo collections',
+      w:'Nine carry Gymshark’s verbatim meta descriptions — and they are the only collections on your store with SEO copy at all. Clear the copy, then unpublish.' },
+    { id:'b3', p:'p1', sev:'critical', where:'Google', eff:'S',
+      t:'Check Search Console for a manual action',
+      w:'Do this before anything else. It decides your whole timeline: algorithmic recovery is weeks, a reconsideration request is weeks after review.' },
+    { id:'b4', p:'p1', sev:'high', where:'Google', eff:'S',
+      t:'Prefix-remove the dead URLs',
+      w:'/blogs/verbs-list/ and, after the deletion, /products/gymshark-. A bare 404 lingers in the index for months.' },
+    { id:'b5', p:'p1', sev:'high', where:'Shopify', eff:'S',
+      t:'Unpublish halara-leggings, 301 to /collections/leggings',
+      w:'Its description is a verbatim duplicate of /collections/leggings. Three published collections are titled "Leggings".' },
+    { id:'b6', p:'p1', sev:'high', where:'Shopify', eff:'L',
+      t:'Fix the 117 alt texts naming Halara sub-brands',
+      w:'UltraSculpt, SoftlyZero, Breezeful, Halara Flex, Patitoff, OneForm, HeatCore — all registered names, in your image alt text.' },
+    { id:'b7', p:'p1', sev:'high', where:'Shopify', eff:'M',
+      t:'Unpublish the empty, thin and catch-all collections',
+      w:'swim and plus-size hold zero products. all (403 products), avada-best-sellers, all-product, empty, optimize, shop-all are app scratch sets.' },
+    { id:'b8', p:'p1', sev:'medium', where:'Shopify', eff:'S',
+      t:'Delete the duplicate collections',
+      w:'denim / denim-style and work-commute / city-commute hold identical products in identical order. 301 each to its twin.' },
+    { id:'b9', p:'p1', sev:'medium', where:'Shopify', eff:'S',
+      t:'Rename the three ™ handles',
+      w:'halara-ultrasculpt™-leggings percent-encodes to %E2%84%A2 in the URL. Also replace the five collection images using Halara’s -342x CDN naming.' },
+    { id:'b10', p:'p1', sev:'medium', where:'Shopify', eff:'S',
+      t:'Delete the unrendered nav menus',
+      w:'Six menus the live theme never renders, including a full gymshark-leggings tree with eight competitor links.' },
+    { id:'b11', p:'p1', sev:'medium', where:'Shopify', eff:'S',
+      t:'Delete the two empty published articles',
+      w:'pagefly-blog and article-dec-14-2025 are published with titles and no body at all.' },
+    { id:'b12', p:'p1', sev:'medium', where:'Shopify', eff:'S',
+      t:'Fix the "5K20RB-1R" author bylines',
+      w:'Your myshopify subdomain is being published as a schema.org Person authoring articles. Another reads "PageFly".' },
+    { id:'b13', p:'p1', sev:'medium', where:'Shopify', eff:'M',
+      t:'Audit the 328 URL redirects',
+      w:'At least seven point at the bare homepage. Google treats an irrelevant redirect as a soft 404.' },
+
+    // Phase 2
+    { id:'c1', p:'p2', sev:'high', where:'Shopify', eff:'S',
+      t:'Set the store meta description',
+      w:'shop.description is null, so Google writes your snippet for you. Copy-paste text is in store-identity-values.md.' },
+    { id:'c2', p:'p2', sev:'high', where:'Shopify', eff:'S',
+      t:'Change the store name to a straight apostrophe',
+      w:'185 of 186 own-brand products already use Celeste L'Amour. Changing shop.name is one field; changing 185 products is not.' },
+    { id:'c3', p:'p2', sev:'high', where:'Shopify', eff:'S',
+      t:'Fix the three conflicting contact emails',
+      w:'administrator@, the misspelled adminstrator@ on two policy pages, and a Gmail address on two more. Pick one branded address.' },
+    { id:'c4', p:'p2', sev:'medium', where:'Shopify', eff:'S',
+      t:'Clean the Shopify scaffolding out of your Terms',
+      w:'Section 9 still opens with "[NOTE TO MERCHANT: …]" and several [LINK] placeholders are unreplaced, live on the site.' },
+    { id:'c5', p:'p2', sev:'high', where:'Shopify', eff:'S',
+      t:'Put your address on the Contact page',
+      w:'The page body is completely empty. Your NAP appears nowhere crawlable on the site.' },
+    { id:'c6', p:'p2', sev:'high', where:'Content', eff:'M',
+      t:'Publish the About page',
+      w:'Drafted in content/about-page.html, written so its first sentence is liftable by an AI Overview. Fill in the founding year and the fabric paragraph.' },
+    { id:'c7', p:'p2', sev:'critical', where:'Theme', eff:'M',
+      t:'Rebuild the homepage to link categories',
+      w:'It links exactly one collection and points ten separate CTAs at a single product. This is the main reason there is no sitelinks block.' },
+    { id:'c8', p:'p2', sev:'high', where:'Shopify', eff:'S',
+      t:'Fix the header menu',
+      w:'The live header renders halara-inspired-menu. "Pants" points at daily-casual and "Best Seller" at a different collection than best-sellers.' },
+    { id:'c9', p:'p2', sev:'high', where:'Shopify', eff:'M',
+      t:'Write SEO for the 8 sitelinks candidates',
+      w:'80 of 90 collections have no title or description. best-sellers is the only well-written one and nothing links to it.' },
+
+    // Phase 3
+    { id:'d1', p:'p3', sev:'medium', where:'Theme', eff:'M',
+      t:'Deploy brand-organization.liquid',
+      w:'Adds legalName, address, contactPoint, alternateName and a return policy. Worth doing because it is cheap and correct — not because it is the lever.' },
+    { id:'d2', p:'p3', sev:'medium', where:'Theme', eff:'M',
+      t:'Deploy the revised meta-tags.liquid',
+      w:'Stops offers truncating at 50 on 168-variant products, and points brand at one entity instead of three vendor strings.' },
+    { id:'d3', p:'p3', sev:'low', where:'Theme', eff:'S',
+      t:'Deploy robots.txt.liquid',
+      w:'You have none, so you serve Shopify’s default. Targets the native filter params your theme actually emits.' },
+    { id:'d4', p:'p3', sev:'medium', where:'Google', eff:'S',
+      t:'Validate with the Rich Results Test',
+      w:'Run it on the homepage and one PDP after deploying. Confirm one Organization entity and no duplicate Product nodes.' },
+
+    // Phase 4
+    { id:'e1', p:'p4', sev:'high', where:'Off-site', eff:'S',
+      t:'Create a LinkedIn company page',
+      w:'Highest value per minute on this list. Google’s entity graph reads it directly for "founded" and "headquartered".' },
+    { id:'e2', p:'p4', sev:'medium', where:'Off-site', eff:'S',
+      t:'Create a Crunchbase profile',
+      w:'Free contributor account. Founding date, location, website, category.' },
+    { id:'e3', p:'p4', sev:'medium', where:'Off-site', eff:'M',
+      t:'Get a D-U-N-S number',
+      w:'Free from Dun & Bradstreet. Populates the duns identifier and feeds the business databases Google reads.' },
+    { id:'e4', p:'p4', sev:'low', where:'Off-site', eff:'M',
+      t:'Create a Wikidata item — only after the three above',
+      w:'The bar is verifiable existence, not fame. But with no citable references it reads as promotional and gets deleted. Do not attempt Wikipedia at all.' },
+    { id:'e5', p:'p4', sev:'high', where:'App', eff:'S',
+      t:'Turn on Judge.me post-purchase review requests',
+      w:'14-day delay on the flagship. You need dozens of genuine reviews to earn stars, not Halara’s 482,000.' },
+    { id:'e6', p:'p4', sev:'medium', where:'Off-site', eff:'S',
+      t:'Fix the social handles, or state the URL in each bio',
+      w:'Instagram and Facebook are both @celestelamourr — double r — while the domain is celestelamour.com. TikTok, YouTube, X and Pinterest are unset.' }
+  ];
+
+  var STATUSES = [['todo','To do'],['doing','Doing'],['done','Done']];
+  var SEVS = ['critical','high','medium','low'];
+  var LS_KEY = 'celeste-google-plan-v1';
+
+  function loadLocal() {
+    try { return JSON.parse(localStorage.getItem(LS_KEY) || '{}'); } catch (e) { return {}; }
+  }
+  function saveLocal(v) {
+    try { localStorage.setItem(LS_KEY, JSON.stringify(v)); } catch (e) {}
+  }
+
+  function App() {
+    var s0 = useState(loadLocal()), state = s0[0], setState = s0[1];
+    var s1 = useState(null), db = s1[0], setDb = s1[1];
+    var s2 = useState('local'), mode = s2[0], setMode = s2[1];
+    var s3 = useState('all'), phaseF = s3[0], setPhaseF = s3[1];
+    var s4 = useState('all'), sevF = s4[0], setSevF = s4[1];
+    var s5 = useState(false), hideDone = s5[0], setHideDone = s5[1];
+
+    // Shared, durable state when the runtime grants it; per-browser otherwise.
+    useEffect(function () {
+      var live = true;
+      (async function () {
+        var d = null;
+        try { d = await window.claude?.use?.('db'); } catch (e) { d = null; }
+        if (!live || !d) return;
+        setDb(d); setMode('shared');
+        try {
+          var ref = d.doc('progress/state');
+          var snap = await ref.get();
+          if (live && snap && snap.data && snap.data.items) setState(snap.data.items);
+          ref.onSnapshot(function (s) {
+            if (live && s && s.data && s.data.items) setState(s.data.items);
+          });
+        } catch (e) { /* stay on local */ }
+      })();
+      return function () { live = false; };
+    }, []);
+
+    function setStatus(id, st) {
+      setState(function (prev) {
+        var next = Object.assign({}, prev);
+        if (next[id] === st) { delete next[id]; } else { next[id] = st; }
+        saveLocal(next);
+        if (db) {
+          try { db.doc('progress/state').set({ items: next }); } catch (e) {}
+        }
+        return next;
+      });
+    }
+
+    var done = useMemo(function () {
+      return ITEMS.filter(function (i) { return state[i.id] === 'done'; }).length;
+    }, [state]);
+    var doing = useMemo(function () {
+      return ITEMS.filter(function (i) { return state[i.id] === 'doing'; }).length;
+    }, [state]);
+    var criticalLeft = useMemo(function () {
+      return ITEMS.filter(function (i) { return i.sev === 'critical' && state[i.id] !== 'done'; }).length;
+    }, [state]);
+
+    var pct = Math.round((done / ITEMS.length) * 100);
+
+    var visible = ITEMS.filter(function (i) {
+      if (phaseF !== 'all' && i.p !== phaseF) return false;
+      if (sevF !== 'all' && i.sev !== sevF) return false;
+      if (hideDone && state[i.id] === 'done') return false;
+      return true;
+    });
+
+    function Chip(props) {
+      return html`<button class="chip" aria-pressed=${props.on ? 'true' : 'false'}
+        onClick=${props.onClick}>${props.children}</button>`;
+    }
+
+    return html`
+      <div class="wrap">
+        <div class="hero">
+          <p class="eyebrow">Celeste L'Amour · brand presence</p>
+          <h1>Getting Google to know who you are</h1>
+          <p class="sub">
+            Google's AI Overview currently answers "celeste lamour" with a nail salon in the Bronx.
+            Not because your markup is thin — because 170 of your 356 live products say the brand is Gymshark.
+            Work these in order; the first phase is all deletions.
+          </p>
+          <div class="meter">
+            <div class="ring" style=${{ '--pct': pct + '%' }}>
+              <div class="ring-in">${pct}%</div>
+            </div>
+            <div class="tallies">
+              <div class="tally"><div class="n">${done}<span style="opacity:.55">/${ITEMS.length}</span></div><div class="l">Done</div></div>
+              <div class="tally"><div class="n">${doing}</div><div class="l">In progress</div></div>
+              <div class="tally"><div class="n">${criticalLeft}</div><div class="l">Critical left</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="filters">
+          <div class="filter-label">Phase</div>
+          <${Chip} on=${phaseF === 'all'} onClick=${() => setPhaseF('all')}>All<//>
+          ${PHASES.map(function (p) {
+            return html`<${Chip} key=${p.id} on=${phaseF === p.id} onClick=${() => setPhaseF(p.id)}>${p.num}<//>`;
+          })}
+          <div class="filter-label">Severity</div>
+          <${Chip} on=${sevF === 'all'} onClick=${() => setSevF('all')}>Any<//>
+          ${SEVS.map(function (s) {
+            return html`<${Chip} key=${s} on=${sevF === s} onClick=${() => setSevF(s)}>${s[0].toUpperCase() + s.slice(1)}<//>`;
+          })}
+          <div class="filter-label">View</div>
+          <${Chip} on=${hideDone} onClick=${() => setHideDone(!hideDone)}>Hide done<//>
+        </div>
+
+        ${PHASES.map(function (ph) {
+          var mine = visible.filter(function (i) { return i.p === ph.id; });
+          if (!mine.length) return null;
+          var all = ITEMS.filter(function (i) { return i.p === ph.id; });
+          var d = all.filter(function (i) { return state[i.id] === 'done'; }).length;
+          var w = Math.round((d / all.length) * 100);
+          return html`
+            <details class="phase" key=${ph.id} open=${phaseF !== 'all' || ph.id === 'p1' || ph.id === 'p0'}>
+              <summary>
+                <span class="ph-num">${ph.num}</span>
+                <span class="ph-body">
+                  <span class="ph-title">${ph.title}</span>
+                  <div class="ph-when">${ph.when} · ${ph.blurb}</div>
+                  <div class="ph-bar"><span style=${{ width: w + '%' }}></span></div>
+                </span>
+                <span class="ph-count">${d}/${all.length}</span>
+              </summary>
+              ${mine.map(function (it) {
+                var st = state[it.id] || 'todo';
+                return html`
+                  <div class="item" key=${it.id}>
+                    <div class=${'stripe s-' + it.sev}></div>
+                    <div class="it-body">
+                      <div class=${'it-title' + (st === 'done' ? ' done' : '')}>${it.t}</div>
+                      <div class="it-why">${it.w}</div>
+                      <div class="pills">
+                        <span class=${'pill p-' + it.sev}>${it.sev}</span>
+                        <span class="pill p-where">${it.where}</span>
+                        <span class="pill p-where">Effort ${it.eff}</span>
+                      </div>
+                      <div class="statusrow">
+                        ${STATUSES.map(function (pair) {
+                          return html`<button class="statusbtn" key=${pair[0]} data-s=${pair[0]}
+                            aria-pressed=${st === pair[0] ? 'true' : 'false'}
+                            onClick=${() => setStatus(it.id, pair[0])}>${pair[1]}</button>`;
+                        })}
+                      </div>
+                    </div>
+                  </div>`;
+              })}
+            </details>`;
+        })}
+
+        ${visible.length === 0 ? html`<div class="empty">Nothing matches those filters.</div>` : null}
+
+        <div class="note">
+          <strong>Two things you cannot buy or request.</strong> A knowledge panel and a sitelinks block are
+          both outputs, not products — there is no form for either, and the sitelinks demotion tool was
+          removed in 2016. Alo's map pack comes from having physical stores. Anyone selling you a knowledge
+          panel is selling you nothing.
+        </div>
+
+        <div class="note">
+          <strong>A correction I got wrong twice, now traced properly.</strong> I first called the fake reviews
+          latent, then found <code>air_reviews_product</code> and said they were rendering live on your flagship.
+          Neither was right. <code>main-product.liquid</code> renders <code>rating.liquid</code>, which reads only
+          <code>reviews.rating</code> — null on these products — so nothing displays the 37,118. The snippet I
+          traced, <code>gs-buybox-rating.liquid</code>, reads the fabricated values but is referenced nowhere.
+          The data is real and worth deleting; it is not on fire. Phase 2, not Phase 0.
+        </div>
+
+        <footer>
+          ${mode === 'shared'
+            ? 'Progress saves automatically and persists across devices.'
+            : 'Progress saves in this browser only.'}
+          <br/>Audited 2026-09-24 against the Shopify Admin API. Nothing on the live store has been changed.
+        </footer>
+      </div>`;
+  }
+
+  ReactDOM.createRoot(document.getElementById('root')).render(h(App));
+})();
+</script>
