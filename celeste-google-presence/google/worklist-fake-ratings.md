@@ -1,177 +1,158 @@
-# Fabricated star ratings — live on the storefront right now
+# Fabricated review data — a loaded gun, not a fired one
 
-**Correction.** Earlier in this audit I told you the fake-review problem was
-"a landmine, not a live violation." That was wrong, and I want to be precise
-about why, because the distinction changes what you do this week.
+**This file has been corrected twice. Read the correction; it is the useful part.**
 
-I checked the wrong metafield namespace. I scanned `reviews.*` and `judgeme.*`,
-found them empty on active products, and concluded nothing was rendering. The
-fabricated data lives in a third namespace — `air_reviews_product` — which I
-had not looked at. It is live.
+- **First version:** I said the fake-review problem was "latent, not live." I had
+  checked the `reviews.*` and `judgeme.*` metafield namespaces and missed a
+  third, `air_reviews_product`.
+- **Second version:** I found that third namespace, found a theme snippet that
+  reads it, and rewrote this file to say fabricated ratings were **rendering
+  live on your flagship product**. I said that emphatically.
+- **That was wrong too.** Adversarial verification of my own finding challenged
+  the render path, and on tracing it properly the challenge was right.
+
+Here is what is actually true.
 
 **Nothing in this file has been executed.**
 
 ---
 
-## What is actually rendering
+## What is true
 
-Sampled 20 live, published, active products. **Every single one** carries
-fabricated review aggregates:
+**The fabricated data exists.** Of the active catalogue, roughly 178 products
+carry `air_reviews_product.review_avg` and `review_count` metafields with
+invented values. Verified examples:
 
 | Product | `review_avg` | `review_count` |
 |---|---:|---:|
-| `lamour-ultrasculpt-...-training-leggings` *(flagship)* | 4.8 | **37,118** |
+| `lamour-ultrasculpt-...-training-leggings` *(flagship)* | 4.8 | 37,118 |
+| `celeste-high-waisted-button-...-casual-pants` | 4.7 | 53,632 |
 | `celeste-body-shaping-crossover-pocket-leggings-7-8` | 4.7 | 30,076 |
-| `celeste-high-waisted-back-side-pocket-denim-casual-leggings` | 4.7 | 26,911 |
-| `celeste-high-waisted-drawstring-...-wide-leg-casual-pants` | 4.7 | 21,863 |
-| `flex-straight-jean` | 4.8 | 19,697 |
-| `celeste-super-high-waisted-...-yoga-shorts` | 4.7 | 19,396 |
-| …and 14 more, all 4.3–4.8, counts from 222 to 30,076 | | |
+| `celeste-mid-rise-drawstring-...-joggers` | 4.6 | 25,670 |
 
-For scale: **Judge.me reports 142 reviews across the entire store**, and the
-flagship's own Judge.me badge reads `data-number-of-reviews='0'` — "No reviews".
+The flagship's own `air_reviews_product.data` metafield holds `{"reviews":[]}`
+with all five star buckets at zero. The app's own summary does not back its own
+headline number. Judge.me, separately, reports 142 reviews store-wide.
 
-So one product page claims 37,118 reviews on a store with 142.
+**Nothing renders it.** This is the part I got wrong, and the trace matters:
 
-## It reaches the page. Here is the exact path.
+- `sections/main-product.liquid` line 160 handles the `rating` block, and it
+  renders **`snippets/rating.liquid`** — passing `block.settings.manual_rating`
+  and `manual_count`, both of which are blank on the live product template.
+- `snippets/rating.liquid` reads **only** `product.metafields.reviews.rating`
+  and `reviews.rating_count`. It contains no reference to `air_reviews`. It is
+  gated `{%- if rating and settings.reviews_source != 'off' -%}`, so a nil
+  rating emits nothing at all — not even an empty widget.
+- Active products have **no `reviews.rating` metafield** (verified across 50).
+- `config/settings_data.json` has `reviews_source = 'metafield'` and
+  `reviews_fallback_count = ''`.
+- There is **no Air Reviews app embed** in the live theme.
+- `meta-tags.liquid` sources `aggregateRating` from `reviews.rating`, which is
+  null — so no rating reaches the JSON-LD either.
 
-The live product template (`templates/product.json`) has a `rating` block in
-`block_order`, and it is enabled. That block renders
-`snippets/gs-buybox-rating.liquid`, which resolves a rating in this order:
+**My error was specific and worth naming.** I searched the theme by filename,
+found `snippets/gs-buybox-rating.liquid` — which *does* read
+`air_reviews_product.review_avg` as a third fallback — and assumed it was what
+the enabled `rating` block renders. It is not. `gs-buybox-rating.liquid` is
+referenced **nowhere** in `main-product.liquid`; it is an orphan left over from
+an earlier "GS buybox" build. I inferred a render path from a filename instead
+of reading the 137 KB section file that would have settled it.
 
-```liquid
-1. product.metafields.gymshark.star_rating        (scraped Gymshark ratings)
-2. product.metafields.reviews.rating              (native — absent on these products)
-3. product.metafields.air_reviews_product.review_avg  ← falls through to here
-```
+So: no shopper sees 4.8 / 37,118. No crawler sees it. Nothing is being
+disseminated.
 
-Then renders whenever the count is above zero:
+## What this means for priority
 
-```liquid
-{%- if rating_value != blank and rating_count_display > 0 -%}
-  <span class="gs-rating__value">{{ rating_display }}</span>
-  <span class="gs-rating__count">({{ rating_count_display }})</span>
-```
+**This is not Phase 0 and the Gymshark products go back to number one.**
 
-Celeste products have no `gymshark.star_rating` and no `reviews.rating`, so the
-fallback fires every time. **The buy box on your flagship PDP is displaying
-"4.8 (37118)" to every visitor.**
+It is the same category as the Judge.me DEMO rows: fabricated data sitting in
+the store with no current render path, one wiring change away from being real.
+That is worth cleaning up deliberately, not worth dropping everything for.
 
-## Someone already spotted this and built the fix — it just is not wired up
+What would make it fire:
 
-`snippets/tc-rating-data.liquid` exists in the same theme and its own
-documentation says, verbatim:
+- Someone wires the `rating` block to `gs-buybox-rating.liquid` instead of
+  `rating.liquid` — a plausible thing to do, since the orphan snippet is
+  *named* like the buy-box renderer and was clearly built for it.
+- Any review app writes `reviews.rating` from the Air Reviews figures.
+- Judge.me's own rich-snippet feature is switched on.
+- The Air Reviews app embed is added back to the theme.
 
-> The air_reviews_product.review_avg / review_count metafields are deliberately
-> NOT used: on this store they hold figures the app's own summary does not back
-> (for example 37,118 reviews against 0 published).
+## What to do — deliberately, not urgently
 
-That snippet computes a rating from Air Reviews' *published star buckets*
-instead — the real ones, which sum to zero. It is correct. It is simply not
-what the buy-box rating block calls.
+### 1. Delete the fabricated metafields
 
-That is good news: the judgement call has already been made correctly by
-whoever wrote `tc-rating-data.liquid`. This is a wiring job, not a debate.
+Remove `air_reviews_product.review_avg` and `review_count` from the ~178
+products carrying them. Either through the Air Reviews app, or via
+`metafieldsDelete` on the Admin API. **I have run no writes against your store
+in this session and will not without you asking** — say the word and I will
+stage that mutation for review.
 
----
+### 2. Delete the orphan snippet
 
-## What to do
+Remove `snippets/gs-buybox-rating.liquid` from the theme, or strip its
+`air_reviews_product` fallback. Leaving a snippet that reads fabricated data,
+named as though it belongs in the buy box, is the trap that fires this.
 
-### 1. Right now — stop it rendering
+### 3. Delete the Judge.me DEMO rows
 
-Two options. Take the first.
+Judge.me → Manage Reviews → filter for bodies containing `DEMO` → delete the
+100 rows on product 7830848110643. Bodies read *"DEMO / TEST REVIEW — NOT FOR
+PUBLICATION. Layout test scenario 100…"* under reviewers named "DEMO S.B.".
+Delete rather than unpublish.
 
-**Option A (safest, no code):** Online Store → Themes → Customize → Product
-template → remove the **rating** block from the buy box. One click. It stops
-displaying immediately and nothing else changes.
+### 4. Confirm Judge.me rich snippets are OFF
 
-**Option B (correct, small code change):** in
-`snippets/gs-buybox-rating.liquid`, delete the third fallback — the
-`air_reviews_product.review_avg` / `review_count` branch — so the block renders
-only from `reviews.rating` or the Gymshark import. Better still, change it to
-call `tc-rating-data.liquid`, which already does the right thing.
+Judge.me → Settings → Rich snippets. It can emit structured data independently
+of your theme, bypassing every guard above.
 
-Do not "fix" this by editing the numbers down to something believable. A
-smaller invented number is the same violation.
+### 5. Deal with the disabled template sections
 
-### 2. Delete the source data
+`templates/product.json` contains, at `"disabled": true`:
 
-The metafields themselves should go, or they will resurface the next time any
-theme or app reads them.
-
-Air Reviews app → the product review data. If the app cannot clear the
-aggregates, the metafields can be deleted via the Admin API
-(`metafieldsDelete` on `air_reviews_product.review_avg` and `review_count`).
-Ask me and I will stage that mutation for review — I have not run any writes
-against your store in this session and will not without you saying so.
-
-Also: Judge.me → Manage Reviews → filter for bodies containing `DEMO` → delete
-the 100 rows on product 7830848110643. Those are still the separate, latent
-problem I described before, and deleting them is still worth doing.
-
-And check **Judge.me → Settings → Rich snippets** is OFF. Judge.me can emit its
-own structured data independently of your theme, which would bypass everything
-above.
-
-### 3. Check what else is one toggle away
-
-The product template also contains, currently `"disabled": true`:
-
-- A **`reviews-wall`** section — twice, duplicated — with six invented
-  testimonials ("Nadia K., Brooklyn, NY", "Priya M., Austin, TX"), each marked
-  `"verified": true`, under the heading **"What 6,412 people said"** and
+- **Two duplicate `reviews-wall` sections** with six invented testimonials
+  ("Nadia K., Brooklyn, NY", "Priya M., Austin, TX"), each marked
+  `"verified": true`, headed **"What 6,412 people said"** with
   `aggregate_rating: 4.9, aggregate_count: 6412`, subtitled *"Verified at
   checkout. Nothing incentivised, nothing edited."*
-- A **`comparison-table`** section making competitive claims ("Wear tested to
-  200 sessions before release", "Opacity tested at full fold under studio
-  lighting") against unnamed competitors.
+- A **`comparison-table`** asserting "Wear tested to 200 sessions before
+  release" and "Opacity tested at full fold under studio lighting".
 - A **`fabric-technology`** section asserting "78% recycled nylon, 22%
   elastane" and "Lab tested to 200 wears and washes without loss of
   compression."
 
-They are disabled, so they are not live. Each is one toggle from being live,
-and each is written to read as verified fact. Delete the ones you cannot
-substantiate rather than leaving them one click away — including the duplicate
-`reviews_wall_7eGMyg` section.
+These are genuinely one click from live, and every one is written to read as
+verified fact. Delete what you cannot substantiate. If the fabric claims are
+true, keep them and hold the test report.
 
-The fabric claims may well be true; if they are, keep them and hold the lab
-report. If they are placeholder copy, they are a bigger liability than an empty
-section.
+## On the legal framing — also corrected
 
----
+My previous version said this was live FTC exposure under 16 CFR Part 465 with
+eight-figure penalties. Two problems with that, both fair hits:
 
-## Why this outranks the SEO work
+1. **The rule turns on dissemination.** 16 CFR 465.2 reaches a business that
+   writes, creates, sells, purchases or *disseminates* a fake review. Values
+   sitting in a metafield with no render path are not disseminated. No
+   violation is accruing.
+2. **I could not verify the rule text or the penalty figure from here** —
+   ecfr.gov is blocked by this environment's egress policy. And Part 465
+   governs consumer *reviews and testimonials*, meaning submitted evaluations;
+   a bare fabricated aggregate with no underlying reviews is a cleaner FTC Act
+   Section 5 / Endorsement Guides theory than a clean 465 hit.
 
-Everything else in this audit is about how Google perceives you. This one is
-about what US law says.
-
-The **FTC Rule on Consumer Reviews and Testimonials (16 CFR Part 465)** took
-effect in October 2024. It prohibits creating, selling or disseminating
-consumer reviews that misrepresent that they are by an actual purchaser, and it
-reaches *review indicators* — star ratings and review counts — not just review
-text. It carries civil penalties per violation. VIRTULIFT LLC is a US entity
-selling to US consumers.
-
-A displayed "4.8 from 37,118 reviews" on a product with zero reviews is
-squarely what that rule addresses.
-
-Separately, Google's review-snippet policies prohibit marked-up ratings that
-are not genuine. **You are not currently exposed there** — `meta-tags.liquid`
-reads only `reviews.rating`, which is absent, so no `aggregateRating` is being
-emitted. That is luck rather than design, and it is why the revised
-`meta-tags.liquid` in this PR keeps that guard and documents it.
+So: cleaning this up is the right call, on ordinary "don't keep fake numbers in
+your database" grounds and because the trap is easy to spring. It is not a fire
+and I should not have called it one. If you want a defensible read on the
+liability, that is a question for a lawyer with the actual rule text in front
+of them, not for an audit that cannot reach ecfr.gov.
 
 ---
 
-## Sequence
+## Where this sits
 
-This goes to the top, above the Gymshark products. The Gymshark problem costs
-you a brand entity. This one carries legal exposure, and the fix is a single
-click in the theme customiser.
-
-1. **This file, step 1** — stop the rating block rendering. Today.
-2. `worklist-competitor-products.md` — the 170 Gymshark products.
-3. `worklist-collections-sitelinks.md`
+1. `worklist-competitor-products.md` — the 170 Gymshark products. **Start here.**
+2. `worklist-collections-sitelinks.md`
+3. **This file** — clean the fabricated data before anything can wire it up
 4. `worklist-blog-cleanup.md`
 5. `../shopify/store-identity-values.md`
 6. `google-tools-setup.md`

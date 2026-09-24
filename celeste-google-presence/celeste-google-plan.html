@@ -154,26 +154,26 @@
   var useState = React.useState, useEffect = React.useEffect, useMemo = React.useMemo;
 
   var PHASES = [
-    { id:'p0', num:'Phase 0', title:'Stop the bleeding', when:'Today · ~15 minutes',
-      blurb:'Not SEO. Legal exposure with a one-click fix.' },
     { id:'p1', num:'Phase 1', title:'Stop contradicting yourself', when:'Week 1 · deletions only',
       blurb:'Every item is a removal. Nothing new gets written yet.' },
-    { id:'p2', num:'Phase 2', title:'Say who you are', when:'Weeks 2–4',
+    { id:'p0', num:'Phase 2', title:'Defuse the loaded guns', when:'Week 1–2 · deliberate, not urgent',
+      blurb:'Fabricated data with no render path today. One wiring change from being real.' },
+    { id:'p2', num:'Phase 3', title:'Say who you are', when:'Weeks 2–4',
       blurb:'Now the true facts have nothing competing with them.' },
-    { id:'p3', num:'Phase 3', title:'Deploy the markup', when:'Week 4',
+    { id:'p3', num:'Phase 4', title:'Deploy the markup', when:'Week 4',
       blurb:'Last, not first. Staged and ready in the PR.' },
-    { id:'p4', num:'Phase 4', title:'Get corroborated off-site', when:'Ongoing · months',
+    { id:'p4', num:'Phase 5', title:'Get corroborated off-site', when:'Ongoing · months',
       blurb:'What actually produces the Halara-style AI Overview sentence.' }
   ];
 
   var ITEMS = [
     // Phase 0
-    { id:'a1', p:'p0', sev:'critical', where:'Theme', eff:'S',
-      t:'Stop the fake star ratings rendering',
-      w:'Your buy box shows "4.8 (37118)" on a store with 142 real reviews. Remove the rating block in Customize, or delete the air_reviews_product fallback in gs-buybox-rating.liquid.' },
-    { id:'a2', p:'p0', sev:'critical', where:'Shopify', eff:'M',
-      t:'Delete the air_reviews_product aggregates',
-      w:'The metafields themselves, or they resurface the next time any app reads them. Every sampled live product has one.' },
+    { id:'a2', p:'p0', sev:'high', where:'Shopify', eff:'M',
+      t:'Delete the fabricated air_reviews_product metafields',
+      w:'About 178 active products carry invented aggregates — the flagship says 4.8 from 37,118 reviews while its own data field holds zero. Nothing renders them today. Delete them before something does.' },
+    { id:'a1', p:'p0', sev:'high', where:'Theme', eff:'S',
+      t:'Delete the orphan gs-buybox-rating.liquid snippet',
+      w:'It reads those fabricated values as a fallback and is named as though it belongs in the buy box — but nothing references it. That combination is exactly how this fires by accident.' },
     { id:'a3', p:'p0', sev:'high', where:'App', eff:'S',
       t:'Delete the 100 DEMO Judge.me rows',
       w:'Bodies read "DEMO / TEST REVIEW — NOT FOR PUBLICATION" under reviewers named "DEMO S.B.". Delete, do not unpublish.' },
@@ -182,7 +182,7 @@
       w:'It can emit its own structured data independently of your theme, bypassing every guard in the code.' },
     { id:'a5', p:'p0', sev:'high', where:'Theme', eff:'S',
       t:'Delete the invented testimonial sections',
-      w:'Two duplicate reviews-wall sections with six fabricated reviews marked "verified", headed "What 6,412 people said". Disabled today, one toggle from live.' },
+      w:'Two duplicate reviews-wall sections with six fabricated reviews marked "verified", headed "What 6,412 people said". Disabled today, genuinely one toggle from live.' },
 
     // Phase 1
     { id:'b0', p:'p1', sev:'critical', where:'Decision', eff:'S',
@@ -375,7 +375,7 @@
           <p class="sub">
             Google's AI Overview currently answers "celeste lamour" with a nail salon in the Bronx.
             Not because your markup is thin — because 170 of your 356 live products say the brand is Gymshark.
-            Work these in order.
+            Work these in order; the first phase is all deletions.
           </p>
           <div class="meter">
             <div class="ring" style=${{ '--pct': pct + '%' }}>
@@ -411,7 +411,7 @@
           var d = all.filter(function (i) { return state[i.id] === 'done'; }).length;
           var w = Math.round((d / all.length) * 100);
           return html`
-            <details class="phase" key=${ph.id} open=${phaseF !== 'all' || ph.id === 'p0' || ph.id === 'p1'}>
+            <details class="phase" key=${ph.id} open=${phaseF !== 'all' || ph.id === 'p1' || ph.id === 'p0'}>
               <summary>
                 <span class="ph-num">${ph.num}</span>
                 <span class="ph-body">
@@ -457,9 +457,12 @@
         </div>
 
         <div class="note">
-          <strong>One correction worth carrying.</strong> I first reported the fake reviews as latent. They
-          are live: I had checked <code>reviews.*</code> and <code>judgeme.*</code> and missed
-          <code>air_reviews_product</code>. Your flagship displays 37,118 reviews. Phase 0 exists because of it.
+          <strong>A correction I got wrong twice, now traced properly.</strong> I first called the fake reviews
+          latent, then found <code>air_reviews_product</code> and said they were rendering live on your flagship.
+          Neither was right. <code>main-product.liquid</code> renders <code>rating.liquid</code>, which reads only
+          <code>reviews.rating</code> — null on these products — so nothing displays the 37,118. The snippet I
+          traced, <code>gs-buybox-rating.liquid</code>, reads the fabricated values but is referenced nowhere.
+          The data is real and worth deleting; it is not on fire. Phase 2, not Phase 0.
         </div>
 
         <footer>

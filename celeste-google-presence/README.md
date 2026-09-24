@@ -43,8 +43,9 @@ what it costs you, not by how alarming it sounds.
 
 | # | Finding | Scale |
 |---|---|---|
-| 1 | **Fabricated star ratings rendering live** on every sampled product. Flagship displays "4.8 (37118)" with zero real reviews. | 20/20 sampled |
-| 2 | **Products branded Gymshark**, published, `gymshark-` in the URL, `"brand":"Gymshark"` in JSON-LD | 170 of 356 |
+| 1 | **Products branded Gymshark**, published, `gymshark-` in the URL, `"brand":"Gymshark"` in JSON-LD. Each carries a `gymshark.source_url` metafield pointing at the live Gymshark product page. | 170 of 356 |
+| 1b | **Halara's registered sub-brand names in image alt text** (UltraSculpt, SoftlyZero, Breezeful, HeatCore…) | 117 of 356 |
+| 1c | **Fabricated review aggregates in metafields.** Flagship holds 4.8 / 37,118 against zero real reviews. **Nothing renders them** — see the correction below — but they are one wiring change from being real. | ~178 products |
 | 3 | **Collections carrying Gymshark's verbatim SEO copy** — and the only collections with SEO copy at all | 9 of 90 |
 | 4 | **Collections with no internal links from any sitewide surface** | ~72–80 of 90 |
 | 5 | **Collections with no SEO title or description** | 80 of 90 |
@@ -57,29 +58,32 @@ what it costs you, not by how alarming it sounds.
 | 12 | **Blog author renders as a schema.org Person named "5K20RB-1R"** — your myshopify subdomain | 3 of 5 articles |
 | 13 | **URL redirects pointing at the bare homepage** — Google treats these as soft 404s | ≥7 of 328 |
 
-Two corrections I made to my own work during this audit, recorded because they
-matter more than being right first time:
+### Corrections I made to my own work
 
-- I called the fake-review problem "latent, not live." **It is live** — I had
-  checked the wrong metafield namespace. See `google/worklist-fake-ratings.md`.
-- I flagged a `sameAs` bug in the theme. **It was already fixed** in the theme
-  published mid-session. Withdrawn.
+Recorded because the reasoning is more useful than a clean first draft.
+
+- **The fake reviews, twice.** I first called them "latent, not live" — I had
+  checked `reviews.*` and `judgeme.*` and missed `air_reviews_product`. I then
+  found that namespace plus a snippet reading it, and said ratings were
+  rendering live on the flagship. **Also wrong.** `main-product.liquid` line 160
+  renders `rating.liquid`, which reads only `reviews.rating` (null here) and is
+  gated so a nil rating emits nothing. The snippet I traced,
+  `gs-buybox-rating.liquid`, does read the fabricated values — but is
+  referenced nowhere. I inferred a render path from a filename instead of
+  reading the 137 KB section file. Full trace in
+  `google/worklist-fake-ratings.md`.
+- **A `sameAs` bug.** Already fixed in the theme published mid-session, and my
+  framing of empty `sameAs` entries as harmful was folklore — Google ignores
+  them. Withdrawn.
+- **Scaled-content policy claims.** Several findings about the scraped blog
+  were refuted on re-query, because the articles had been deleted while the
+  audit ran. The underlying finding was real — I enumerated all 57 myself
+  beforehand — but the *policy violation* framing no longer describes a live
+  state. `google/worklist-blog-cleanup.md` was rewritten accordingly.
 
 ---
 
 ## The method
-
-### Phase 0 — Stop the bleeding (today, ~15 minutes)
-
-Not SEO. Legal exposure with a one-click fix.
-
-Remove the **rating** block from the product template, or unwire the
-`air_reviews_product` fallback in `snippets/gs-buybox-rating.liquid`. Your buy
-box is currently displaying invented review counts up to 37,118 on a store with
-142 real reviews. The FTC Rule on Consumer Reviews and Testimonials (16 CFR
-Part 465) reaches star ratings and review counts, not just review text.
-
-→ `google/worklist-fake-ratings.md`
 
 ### Phase 1 — Stop contradicting yourself (week 1, deletions only)
 
@@ -93,7 +97,22 @@ cannot establish an entity while the evidence points elsewhere.
 - Delete the two empty published blog articles; fix the `5K20RB-1R` bylines
 - Search Console → **check for a manual action first**, then prefix-remove the dead URLs → `google/google-tools-setup.md`
 
-### Phase 2 — Say who you are (weeks 2–4)
+### Phase 2 — Defuse the loaded guns (week 1–2, deliberate not urgent)
+
+Fabricated data sitting in the store with no render path today, one wiring
+change from being real. Worth clearing deliberately; not worth dropping
+everything for.
+
+- Delete the ~178 fabricated `air_reviews_product` aggregates
+- Delete the orphan `gs-buybox-rating.liquid`, which reads them and is named as
+  though it belongs in the buy box
+- Delete the 100 DEMO Judge.me rows; confirm Judge.me rich snippets are OFF
+- Delete the disabled template sections: two duplicate invented testimonial
+  walls, a comparison table, and unsubstantiated fabric claims
+
+→ `google/worklist-fake-ratings.md`
+
+### Phase 3 — Say who you are (weeks 2–4)
 
 Now the facts have nothing competing with them.
 
@@ -104,7 +123,7 @@ Now the facts have nothing competing with them.
 - Write real titles, descriptions and body copy for the 8 sitelinks-candidate collections
 - Rebuild the homepage and header to link categories rather than one product
 
-### Phase 3 — Deploy the markup (week 4)
+### Phase 4 — Deploy the markup (week 4)
 
 Last, not first. Declaring a rich Organization entity while the catalogue
 contradicts it asks Google to resolve a conflict it will resolve against you.
@@ -113,7 +132,7 @@ contradicts it asks Google to resolve a conflict it will resolve against you.
 - `theme/snippets/meta-tags.liquid` — revised drop-in replacement
 - `theme/templates/robots.txt.liquid` — new
 
-### Phase 4 — Get corroborated (ongoing, months)
+### Phase 5 — Get corroborated (ongoing, months)
 
 This is what actually produces the Halara-style AI Overview sentence, and it
 cannot be done inside Shopify.
@@ -137,9 +156,9 @@ consistency → Wikidata (only once the others exist) → trade coverage.
 | Correct title + description in results | Certain | Days |
 | Ranking #1 for "Celeste L'Amour" | Very likely | 2–6 weeks after Phase 1 |
 | Site name rendering as "Celeste L'Amour" | Likely | 2–8 weeks |
-| A sitelinks block | Plausible | 1–3 months after Phase 2 |
+| A sitelinks block | Plausible | 1–3 months after Phase 3 |
 | Product rich results (price, availability) | Yes | Weeks, once markup and feed agree |
-| AI Overview describing the brand correctly | Plausible | Follows Phase 4. Months. |
+| AI Overview describing the brand correctly | Plausible | Follows Phase 5. Months. |
 | A knowledge panel | **Not a deliverable** | Emergent. May never happen at this size. |
 | Review parity with Halara (~482k Trustpilot) | **No** | Not a goal worth having |
 
@@ -156,8 +175,8 @@ gap.
 celeste-google-presence/
 ├── README.md                                  this file
 ├── google/
-│   ├── worklist-fake-ratings.md               Phase 0 — do first
-│   ├── worklist-competitor-products.md        Phase 1 — the 170 Gymshark products
+│   ├── worklist-fake-ratings.md               Phase 2 — defuse before it fires
+│   ├── worklist-competitor-products.md        Phase 1 — start here: 170 Gymshark products
 │   ├── worklist-collections-sitelinks.md      Phase 1/2 — collections + navigation
 │   ├── worklist-blog-cleanup.md               Phase 1 — post-deletion tail
 │   └── google-tools-setup.md                  Phase 1/4 — Search Console, off-site
