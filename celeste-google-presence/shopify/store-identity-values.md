@@ -47,37 +47,50 @@ returns for the query.
 
 ---
 
-## 2. Vendor field — fragmented across the catalogue
+## 2. Vendor field — half the catalogue says "Gymshark"
 
 **Screen:** Products → (each product) → Product organization → Vendor
 **API field:** `product.vendor`
 
-Confirmed distinct values in use: `Celeste L’Amour` (typographic apostrophe,
-U+2019), `CELESTELAMOUR` (all caps, no spaces), and `Celeste L'Amour`
-(straight apostrophe, in the `custom.pdp_brand_name` metafield).
+Exact counts across the 356 active products:
+
+| Vendor value | Count |
+|---|---:|
+| `Gymshark` | **170** |
+| `Celeste L'Amour` (straight apostrophe, U+0027) | 185 |
+| `Celeste L’Amour` (typographic, U+2019) | 1 |
 
 This matters more than it looks. `product.vendor` is what the theme writes into
-Product JSON-LD as `brand.name`. Every distinct string is a separate brand to
-Google's entity graph, so the catalogue is currently split across three brands,
-none of which accumulates the full signal.
+Product JSON-LD as `brand.name`, so 170 live celestelamour.com product pages
+currently declare `"brand":{"@type":"Brand","name":"Gymshark"}`.
+
+**This is the biggest single item in the whole audit and it has its own file:
+`../google/worklist-competitor-products.md`. Read that first.**
 
 **Canonical form — use this exact string everywhere:**
 
 ```
-Celeste L’Amour
+Celeste L'Amour
 ```
 
-That is the typographic apostrophe U+2019, matching `shop.name`. Pick it and
-never deviate: Shopify store name, every product Vendor, Merchant Center brand
-attribute, every social profile display name.
+Straight apostrophe. This **reverses** what this file said before I had the
+counts, and the counts settle it: 185 products already use the straight form
+against 1 using U+2019, so the cheap direction is obvious. The straight
+apostrophe is also more robust — it survives CSV round-trips, feed exports and
+URL encoding without becoming `â€™`.
+
+That means `shop.name` is the thing to change, not the products. Settings →
+General → Store name: `Celeste L’Amour` → `Celeste L'Amour`. One field.
+
+Then use it without deviation: store name, every product Vendor, Merchant
+Center brand attribute, every social profile display name.
 
 Bulk-edit path: Products → filter by Vendor → select all → Bulk edit → Vendor.
-Do it one vendor value at a time.
 
-Note the alternate spellings are not wasted — they go in the `alternateName`
-array in `theme/snippets/brand-organization.liquid`, which is the correct way
-to tell Google "these strings are the same entity" without fragmenting the
-canonical one.
+The alternate spellings are not wasted — they go in the `alternateName` array
+in `../theme/snippets/brand-organization.liquid`, which is the correct way to
+tell Google "these strings are one entity" without fragmenting the canonical
+one.
 
 ---
 

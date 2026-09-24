@@ -1,54 +1,80 @@
 {%- comment -%}
   meta-tags.liquid  —  REVISED
   ---------------------------------------------------------------------------
-  Drop-in replacement for the live theme's snippets/meta-tags.liquid
-  (theme "Copy of GS-style PDP build - Used Sep 17 - 20th",
-   gid://shopify/OnlineStoreTheme/145734172723, 9336 bytes as pulled 2026-09-24).
+  Drop-in replacement for snippets/meta-tags.liquid on the CURRENT live theme:
+    gid://shopify/OnlineStoreTheme/145901649971
+    "GS-style PDP + gallery/swatch fix Sep 24"
+    role MAIN, 10649 bytes, updatedAt 2026-09-24T21:45:29Z
 
-  WHAT CHANGED, AND WHY — read this before diffing.
+  REBASE NOTE. An earlier draft of this file was written against theme
+  145734172723, which was MAIN when the audit started and has since been
+  unpublished. Two things changed in the new theme and this version accounts
+  for both:
 
-  1. HOMEPAGE ENTITY MARKUP MOVED OUT.
-     The inline Organization and WebSite blocks are gone; this now renders
-     `brand-organization`. The old Organization block carried four properties
-     (name, url, logo, sameAs) which is not enough for Google to resolve a
-     brand entity, and its sameAs array emitted every one of the six social
-     theme settings unconditionally — so any unset setting arrived at Google
-     as an empty string inside the array. The replacement filters blanks and
-     adds legalName, address, contactPoint, description, foundingDate,
-     alternateName and a return policy.
+    - The `sameAs` empty-string defect is FIXED. The old block emitted all six
+      social settings unconditionally; the new one guards each with
+      `!= blank`, assembles via `capture` + `remove_last: ','`, and only emits
+      the property when the result is non-blank. Nothing to fix there. The new
+      theme's own comment is also right that empty array entries were never a
+      negative ranking signal — Google ignores them. Credit where due.
+    - `config/settings_data.json` shows only two of the six links are set:
+      Instagram and Facebook, both `celestelamourr`. So `sameAs` renders two
+      URLs. That is a thin entity graph, not a broken one — the fix is to fill
+      in the other profiles, not to change code.
 
-  2. PRODUCT SCHEMA: OFFERS NO LONGER TRUNCATE.
-     The old block emitted one Offer per variant with `limit: 50`. Products in
-     this catalogue carry up to 168 variants, so offers were being silently cut
-     off. This version emits a single Offer when every variant shares one price
-     (the common case here) and an AggregateOffer with a real offerCount when
-     they differ. Nothing is dropped either way.
+  WHAT THIS VERSION CHANGES, AND WHY
 
-  3. PRODUCT SCHEMA: BRAND IS NOW A REFERENCE, NOT A RAW STRING.
-     Was `"brand": {"@type":"Brand","name": product.vendor}`. The vendor field
-     is fragmented across the catalogue — `Celeste L’Amour`, `CELESTELAMOUR`
-     and `Celeste L'Amour` all appear — so this was publishing three different
-     brands. It now points at the single `#brand` node declared on the
-     homepage, which makes every product resolve to one entity immediately,
-     before the vendor bulk-edit is finished.
+  1. HOMEPAGE ENTITY MARKUP MOVED OUT to `brand-organization`.
+     The live Organization node emits four properties — name, logo
+     (conditional), sameAs (conditional), url. No @id, legalName, description,
+     address, telephone, email, contactPoint or brand. Those are the values
+     Google's Organization documentation lists as recommended, and every one of
+     them already exists in your Shopify admin.
+     Calibration, because this matters: Organization markup produces no rich
+     result and does not guarantee a knowledge panel. Google's own docs say
+     "there are no required properties." It is a cheap, high-value input to
+     entity disambiguation — not a switch. Deploy it, but do not expect it to
+     move anything on its own while 170 product pages declare a rival brand.
 
-  4. PRODUCT SCHEMA: ADDED itemCondition, priceValidUntil, shippingDetails,
-     hasMerchantReturnPolicy, multi-image array and @id.
-     These are the properties behind the "Free delivery", "Free returns" and
-     price annotations that merchant listings show. Values come from the
-     store's own published Shipping and Refund policies, not from guesses.
+  2. PRODUCT `brand` BECOMES A REFERENCE, NOT `product.vendor`.
+     This is the important one. The live line is:
+         "brand": { "@type": "Brand", "name": {{ product.vendor | json }} }
+     and `vendor` is `Gymshark` on 170 of 356 active products. That renders
+     `"brand":{"@type":"Brand","name":"Gymshark"}` on 170 live, crawlable
+     celestelamour.com URLs.
+     Pointing at the single `#brand` node makes every product resolve to one
+     entity. But understand what this is: a containment measure, not a fix. It
+     stops the markup contradicting you while you do the real work in
+     ../../google/worklist-competitor-products.md, which is deciding what those
+     170 products are doing in the catalogue at all. Shipping this snippet and
+     leaving the products would be papering over the problem — the URLs and
+     titles still say Gymshark.
 
-  5. AGGREGATERATING IS NOW GUARDED HARDER — see the long comment at that block.
+  3. OFFERS NO LONGER TRUNCATE. The live block emits one Offer per variant with
+     `limit: 50`; products here carry up to 168 variants, so offers are being
+     silently cut off. This emits a single Offer when every variant shares one
+     price (the common case) and an AggregateOffer with a true offerCount when
+     they differ.
 
-  6. SKU IS NOW SUPPRESSED WHEN IT IS A SUPPLIER STRING.
-     Many variants carry SKUs like `191288010:-1#Pink;191288664:28313#Xs`.
-     That is a supplier-side identifier, not a retail SKU; publishing it in
-     structured data tells anyone reading the markup exactly which dropship
-     catalogue the product came from. An absent sku is better than that one.
+  4. ADDED itemCondition, priceValidUntil, shippingDetails,
+     hasMerchantReturnPolicy, a multi-image array, `category` and `@id`.
+     Values come from the store's own published Shipping and Refund policies.
 
-  UNCHANGED: the title/description/OG/Twitter logic, and the current_tags
-  handling with its comment about not piping a filter onto a translation
-  argument — that was already correct.
+  5. META DESCRIPTION FALLS BACK to `shop.description`. The live block emits
+     the tag only when `page_description` is non-blank. All 11 pages have no
+     SEO metafields and `shop.description` is null, so no page renders a meta
+     description at all. The fallback is worthless until that value is set —
+     see ../../shopify/store-identity-values.md.
+
+  6. og:image switched from `http:` to `https:`. The live block emits
+     `content="http:{{ ... }}"` for og:image while using `https:` for
+     og:image:secure_url. Minor, but it is a mixed-scheme reference.
+
+  7. ADDED CollectionPage + ItemList markup, and breadcrumbs now route products
+     through their collection so the trail is Home → Category → Product.
+
+  UNCHANGED: title/OG/Twitter logic, and the `current_tags` handling with its
+  comment about not piping a filter onto a translation argument — both correct.
 {%- endcomment -%}
 
 {%- liquid
@@ -100,11 +126,6 @@
   {%- unless page_title contains shop.name %} | {{ shop.name }}{% endunless -%}
 </title>
 
-{%- comment -%}
-  Meta description now falls back to the store-level description instead of
-  emitting nothing. Set that value at Online Store → Preferences; it is
-  currently null, which is why the homepage has no controlled snippet.
-{%- endcomment -%}
 {%- assign meta_description = page_description | default: shop.description -%}
 {%- if meta_description != blank -%}
   <meta name="description" content="{{ meta_description | escape }}">
@@ -163,8 +184,6 @@
       assign sku_is_clean = false
     endif
 
-    # priceValidUntil is required for some merchant-listing treatments. One
-    # year out is the conventional value for an always-on catalogue price.
     assign price_valid_until = 'now' | date: '%Y' | plus: 1
     assign price_valid_until = price_valid_until | append: '-12-31'
 
@@ -194,35 +213,41 @@
       {%- if product.type != blank -%}
       "category": {{ product.type | json }},
       {%- endif -%}
+
+      {%- comment -%}
+        See note 2 in the header. This points at the one brand node declared on
+        the homepage instead of echoing `product.vendor`, which is `Gymshark`
+        on 170 of 356 active products. Containment, not a cure — fix the
+        catalogue.
+      {%- endcomment -%}
       "brand": { "@id": {{ brand_id | json }} },
 
       {%- comment -%}
         AGGREGATERATING — READ BEFORE ENABLING.
 
         This reads `product.metafields.reviews.rating`, the Shopify-native
-        review namespace. It deliberately does NOT read `judgeme.*`.
+        namespace, and deliberately does NOT read `judgeme.*`.
 
-        Judge.me currently reports 142 reviews store-wide at 4.69, and at least
-        one product (7830848110643) carries a Judge.me badge advertising 100
-        reviews at 4.60 whose bodies read, verbatim:
+        Current state, verified 2026-09-24: across the first 50 active
+        products, NONE carries a `reviews.rating` metafield, and every
+        `judgeme.badge` reads `data-average-rating='0.00'
+        data-number-of-reviews='0'`. So this block does not fire today and no
+        rating markup is being emitted. Good.
+
+        The reason for the guard is what sits behind it. Judge.me reports 142
+        reviews store-wide at 4.69, and DRAFT product 7830848110643 carries a
+        badge advertising 100 reviews at 4.60 whose bodies read, verbatim:
           "DEMO / TEST REVIEW — NOT FOR PUBLICATION. Layout test scenario 100…"
-        under reviewer names like "DEMO S.B." and "DEMO A.P.", all with
-        verified_buyer: false.
+        under reviewer names like "DEMO S.B.", all verified_buyer: false.
 
-        Publishing those as a rating rich result would be a fabricated review
-        snippet. That is a structured-data manual action under Google's spam
-        policies, and for a US seller it is also exposure under the FTC Rule on
-        Consumer Reviews and Testimonials (16 CFR Part 465), which took effect
-        in October 2024 and reaches fake and unsubstantiated consumer reviews.
+        That is a landmine, not a live violation: it fires the moment those
+        drafts are published, or if Judge.me's own rich-snippet feature is
+        switched on independently of the theme (Judge.me → Settings → SEO).
 
-        Before wiring any review app into this block: delete every DEMO row in
-        Judge.me, confirm the remaining count is real, and confirm the reviews
-        are actually visible on the product page — Google requires that the
-        marked-up rating be present in the page's visible content.
-
-        Also check Judge.me's own settings. It can inject its own rich-snippet
-        markup independently of the theme, which would bypass this guard
-        entirely. Judge.me → Settings → SEO / Rich snippets.
+        Before wiring any review app in here: delete the DEMO rows, confirm the
+        remaining count is real, and confirm the reviews are visible on the
+        page — Google requires the marked-up rating to be present in visible
+        content.
       {%- endcomment -%}
       {%- if rating_value != blank and rating_count > 0 -%}
       "aggregateRating": {
@@ -234,12 +259,6 @@
       },
       {%- endif -%}
 
-      {%- comment -%}
-        Offers. Single Offer when every variant is the same price, which is the
-        common case in this catalogue; AggregateOffer otherwise. The previous
-        version emitted one Offer per variant capped at 50, which silently
-        truncated products carrying 102 and 168 variants.
-      {%- endcomment -%}
       "offers": {
         {%- if single_price -%}
         "@type": "Offer",
@@ -259,12 +278,11 @@
         "hasMerchantReturnPolicy": { "@id": {{ return_id | json }} },
 
         {%- comment -%}
-          Shipping figures are taken from the store's published Shipping policy:
-          1–3 business days handling, Standard 3–5 business days at $7.99, free
-          Standard on orders of $75 or more. If the policy changes, change this
-          too — shipping markup that contradicts the policy page is worse than
-          none, because Google cross-checks it and can suppress the annotation
-          for the whole domain.
+          Shipping figures come from the published Shipping policy: 1–3
+          business days handling, Standard 3–5 business days at $7.99, free
+          Standard at $75+. If the policy changes, change this too — shipping
+          markup that contradicts the policy page is worse than none, because
+          Google cross-checks it and can suppress the annotation domain-wide.
         {%- endcomment -%}
         "shippingDetails": {
           "@type": "OfferShippingDetails",
@@ -300,16 +318,31 @@
 
 {%- if request.page_type == 'article' -%}
   {%- comment -%}
-    Article markup is retained, but note what it is currently doing: the blog
-    at /blogs/verbs-list holds 57 scraped third-party articles (PrepScholar,
-    Ivy Coach, College Transitions and similar), and this block stamps every
-    one of them with `"publisher": Celeste L'Amour`. That is the brand
-    formally claiming authorship of plagiarised content, to Google, in
-    machine-readable form.
+    AUTHOR — this is currently emitting nonsense.
 
-    Removing this markup does not fix that. Removing the articles does.
-    See ../../google/worklist-blog-cleanup.md.
+    `article.author` on the live blog resolves to `5K20RB-1R` on three of the
+    five published articles, and to `PageFly` on another. `5K20RB-1R` is the
+    store's myshopify subdomain in capitals. So the live markup declares a
+    schema.org **Person named "5K20RB-1R"** authoring content for this brand.
+
+    The guard below falls back to the organization when the stored author is
+    obviously not a person — the myshopify handle, or an app name. That is a
+    patch over bad data, not a fix: set real authors in Online Store → Blog
+    posts → [article] → Author. See ../../google/worklist-blog-cleanup.md.
   {%- endcomment -%}
+  {%- liquid
+    assign author_raw = article.author | strip
+    assign author_upper = author_raw | upcase
+    assign shop_handle_upper = shop.permanent_domain | split: '.' | first | upcase
+    assign author_is_person = true
+    if author_raw == blank
+      assign author_is_person = false
+    elsif author_upper == shop_handle_upper
+      assign author_is_person = false
+    elsif author_upper == 'PAGEFLY'
+      assign author_is_person = false
+    endif
+  -%}
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -322,7 +355,11 @@
       {%- endif %}
       "datePublished": {{ article.published_at | date: '%Y-%m-%dT%H:%M:%SZ' | json }},
       "dateModified": {{ article.updated_at | default: article.published_at | date: '%Y-%m-%dT%H:%M:%SZ' | json }},
-      "author": { "@type": "Person", "name": {{ article.author | json }} },
+      {%- if author_is_person -%}
+      "author": { "@type": "Person", "name": {{ author_raw | json }} },
+      {%- else -%}
+      "author": { "@id": {{ shop.url | append: '/#organization' | json }} },
+      {%- endif -%}
       "publisher": { "@id": {{ shop.url | append: '/#organization' | json }} },
       "isPartOf": { "@id": {{ shop.url | append: '/#website' | json }} },
       "mainEntityOfPage": { "@type": "WebPage", "@id": {{ shop.url | append: article.url | json }} }
@@ -333,10 +370,16 @@
 {%- if request.page_type == 'collection' -%}
   {%- comment -%}
     NEW. Collection pages previously emitted only a BreadcrumbList. A
-    CollectionPage node with an ItemList gives Google an explicit, named,
-    navigational entity for each category — which is the raw material it draws
-    on when choosing sitelinks. This is the markup side of the sitelinks work;
-    the other half is main-nav placement and real collection descriptions.
+    CollectionPage with an ItemList gives Google an explicit, named,
+    navigational entity per category — raw material for sitelinks.
+
+    Worth being straight about the limits: Google's sitelinks documentation
+    names page titles and headings, a logical site structure with important
+    pages linked from relevant pages, and concise internal anchor text. It does
+    not name structured data. This markup helps Google understand the page; it
+    is the navigation and internal-linking work in
+    ../../google/worklist-collections-sitelinks.md that actually produces
+    sitelinks. Ship both, expect the results from that one.
   {%- endcomment -%}
   <script type="application/ld+json">
     {
@@ -369,13 +412,6 @@
 {%- endif -%}
 
 {%- if request.page_type == 'product' or request.page_type == 'collection' or request.page_type == 'article' -%}
-  {%- comment -%}
-    BreadcrumbList. Unchanged in shape, but products now route through their
-    primary collection so the trail is Home → Category → Product rather than
-    Home → Product. A two-step breadcrumb tells Google nothing about site
-    structure; a three-step one is part of how it infers the category pages
-    that deserve to be sitelinks.
-  {%- endcomment -%}
   {%- liquid
     assign crumb_collection = blank
     if request.page_type == 'product'

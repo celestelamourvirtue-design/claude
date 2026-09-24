@@ -6,11 +6,24 @@
   WHAT THIS IS FOR
   This is the single block of markup that tells Google "Celeste L'Amour is a
   real company, here is its legal name, address, phone, return policy and
-  verified social profiles." It is the raw material Google uses to build a
-  brand knowledge panel and to write the one-line brand summary that Halara
-  and Alo Yoga get in AI Overviews. The live theme currently emits a
-  four-property Organization block (name, url, logo, sameAs) which is not
-  enough to resolve the brand as an entity.
+  verified social profiles." It is one input Google uses when deciding which
+  entity a brand query refers to.
+
+  The current live theme (gid://shopify/OnlineStoreTheme/145901649971,
+  "GS-style PDP + gallery/swatch fix Sep 24") emits a four-property
+  Organization node: name, logo (conditional), sameAs (conditional), url. No
+  @id, legalName, description, address, telephone, email, contactPoint or
+  brand. This adds them.
+
+  CALIBRATION — do not oversell this to yourself. Google's Organization
+  documentation states there are no required properties, this markup produces
+  no rich result, and it does not guarantee a knowledge panel. It is a cheap,
+  high-value input to entity disambiguation, not a switch that turns one on.
+  It will not, by itself, displace the wrong entity from the AI Overview.
+  The work that moves that needle is in ../../google/worklist-competitor-products.md
+  (170 active products whose vendor is "Gymshark") and in getting the brand's
+  facts corroborated off-site. Deploy this because it is correct and costs an
+  hour — not because it is the lever.
 
   WHERE IT GOES
   snippets/brand-organization.liquid in the live theme, rendered from
@@ -37,13 +50,22 @@
   # ===================== CONFIG =====================
   # Canonical brand name. ONE form, used everywhere: the Shopify store name,
   # every product's Vendor field, every social profile, the Merchant Center
-  # account. Uses the typographic apostrophe (U+2019) to match shop.name.
-  assign brand_name = 'Celeste L’Amour'
+  # account.
+  #
+  # STRAIGHT apostrophe (U+0027), not the typographic one. The vendor counts
+  # settle it: 185 of the 186 own-brand active products already use the
+  # straight form, against 1 using U+2019. It is also the more robust
+  # character — it survives CSV round-trips, feed exports and URL encoding
+  # without turning into "â€™", which U+2019 regularly does.
+  #
+  # `shop.name` is currently the typographic form, so change it at
+  # Settings > General > Store name to match. One field beats 185 edits.
+  assign brand_name = 'Celeste L''Amour'
 
-  # Every other spelling that currently exists in the wild. alternateName is
-  # how you tell Google these strings are the same entity, which is what stops
-  # a search for "celeste lamour" resolving to an unrelated business.
-  assign alt_name_1 = 'Celeste L''Amour'
+  # Every other spelling in the wild. alternateName is how you tell Google
+  # these strings are one entity, which is what stops a search for
+  # "celeste lamour" resolving to an unrelated business.
+  assign alt_name_1 = 'Celeste L’Amour'
   assign alt_name_2 = 'Celeste LAmour'
   assign alt_name_3 = 'celestelamour'
 
@@ -74,7 +96,20 @@
   # Verified profiles you actually control. sameAs is the strongest entity
   # reconciliation signal you can emit. Only list URLs that resolve and that
   # visibly carry the brand name - a dead or mismatched link weakens the set.
-  # TODO: confirm each of these and delete any you do not own.
+  #
+  # CURRENT STATE (config/settings_data.json on the live theme): only two of
+  # the six are filled in -
+  #   social_instagram_link = "https://www.instagram.com/celestelamourr/"
+  #   social_facebook_link  = "https://www.facebook.com/celestelamourr"
+  # tiktok, youtube, x and pinterest are all "". The live theme already
+  # suppresses the blanks correctly, so the emitted markup is valid - it is
+  # just a thin graph. The fix is filling profiles in, not changing code.
+  #
+  # NOTE THE DOUBLE R. Both handles are "celestelamourr" while the domain is
+  # celestelamour.com. That mismatch makes the site-to-profile link harder for
+  # Google to make. If the handles can be changed to "celestelamour", change
+  # them; if they cannot, make sure each profile's bio/About states the
+  # website URL explicitly - that is the fallback way the link gets made.
   assign url_instagram = settings.social_instagram_link
   assign url_tiktok = settings.social_tiktok_link
   assign url_facebook = settings.social_facebook_link
@@ -83,7 +118,9 @@
   assign url_x = settings.social_x_link
   # TODO: add these once created. A LinkedIn company page is the single
   # cheapest, highest-value addition here - it is a source Google's entity
-  # graph reads directly for "founded" and "headquartered" facts.
+  # graph reads directly for "founded" and "headquartered" facts. You also
+  # have live TikTok and Amazon sales channels whose storefronts are not
+  # represented here at all.
   assign url_linkedin = ''
   assign url_crunchbase = ''
 
@@ -102,9 +139,19 @@
     assign logo_url = logo_source | image_url: width: 512 | prepend: 'https:'
   endif
 
-  # Build sameAs without empty members. The live theme emits all six social
-  # settings unconditionally, so any unset one renders as an empty string and
-  # the array arrives at Google as a list of "" values. This filters first.
+  # Build sameAs without empty members.
+  #
+  # An earlier draft of this file claimed the live theme had a defect here.
+  # It does not - the current MAIN theme guards each social setting with
+  # `!= blank` and assembles the array with capture + remove_last. That was
+  # a real defect in theme 145734172723, which has since been unpublished.
+  # The filtering below is kept because this snippet adds two more sources
+  # (LinkedIn, Crunchbase) that also need blank-guarding, not because the
+  # theme is broken.
+  #
+  # Worth recording, since it is a common myth: empty strings in a sameAs
+  # array are valid JSON-LD and Google simply ignores them. They are ugly,
+  # not a negative ranking signal.
   assign social_raw = ''
   assign social_raw = social_raw | append: url_instagram | append: '|'
   assign social_raw = social_raw | append: url_tiktok | append: '|'

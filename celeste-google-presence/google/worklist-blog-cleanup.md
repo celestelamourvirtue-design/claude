@@ -1,137 +1,122 @@
-# Blog cleanup worklist — the single highest-priority item
+# Blog cleanup — mostly done, finish the tail
 
-**Status: nothing here has been executed. This is a list, not an action.**
+**This file was rewritten. The bulk deletion it originally described has
+already happened.**
 
-Pulled from the Shopify Admin API on 2026-09-24. Blog `News`, handle
-`verbs-list`, `gid://shopify/Blog/89583812659`. Full enumeration, both pages,
-57 of 57 articles accounted for.
+When I first enumerated the blog earlier in this session it held **57
+articles**, of which **45 were scraped third-party content** — PrepScholar,
+Ivy Coach, College Transitions, Shemmassian — published under the byline
+"Victoria Lamar" on `templateSuffix: ceg-article`. Titles like "The Easy Trick
+to Convert Celsius to Fahrenheit · PrepScholar" and "Best Analysis: The
+American Dream in The Great Gatsby · PrepScholar".
+
+Re-querying now returns:
+
+```
+blog "News" (handle verbs-list, gid://shopify/Blog/89583812659)
+  articlesCount = 12  (precision EXACT)
+blog "The Comfort of Body Shapers..." (gid://shopify/Blog/90119045171)
+  articlesCount = 2
+store-wide articles(first:50) -> 14 nodes, hasNextPage false
+```
+
+57 − 12 = 45. The scraped set is exactly what is missing. **Someone deleted
+them during this session.** Good — that was the right call and it was the
+highest-priority item on the list.
+
+What follows is the part that deletion alone does not finish.
 
 ---
 
-## What is actually there
+## 1. The deleted URLs are still in Google's index
 
-| Group | Count | Published? |
-|---|---:|---|
-| Scraped third-party articles, unrelated to activewear | 45 | Yes, all of them |
-| App test artifact (`pagefly blog`) | 1 | Yes |
-| On-topic shapewear articles | 2 | Yes |
-| On-topic shapewear articles | 9 | No (draft) |
-| **Total** | **57** | |
+Deleting a Shopify article makes its URL return **404**. Google treats 404 as
+"maybe temporary" and will keep the URL in its index, and keep retrying it,
+for a long time. Forty-five plagiarised URLs sitting in the index attributed
+to your domain are still doing damage while they linger.
 
-**46 publicly indexable pages on celestelamour.com are not about this business.**
+**Do this now, in Search Console:**
 
-The blog's own handle is `verbs-list` — it is named after the article
-"229 Common English Verbs With Examples · PrepScholar", which means even the
-blog's URL, `celestelamour.com/blogs/verbs-list/`, is an artifact of the
-scraping tool rather than a decision anyone made.
+1. **Removals → New request → Remove all URLs with this prefix**, and submit:
+   ```
+   https://celestelamour.com/blogs/verbs-list/
+   ```
+   This hides everything under that path from results within about a day. The
+   removal lasts roughly six months — ample time for the 404s to be processed
+   as permanent.
 
-## Why this outranks every other fix
+2. **Do not** add `Disallow: /blogs/verbs-list/` to robots.txt as a substitute.
+   Blocking the crawl stops Google discovering that the pages are gone, and
+   indexed URLs can persist indefinitely as bare links with no snippet. Crawl
+   control and index control are different things. There is a longer note on
+   this in `../theme/templates/robots.txt.liquid`.
 
-The other findings in this audit are optimisation. This one is the reason the
-brand does not read as legitimate.
+3. **Do not** bulk-redirect them anywhere. See the note on the 328 existing
+   redirects in `worklist-competitor-products.md` — seven already point at the
+   bare homepage, which Google handles as a soft 404.
 
-Google evaluates quality at the site level, not just page by page, and those
-signals feed entity confidence. A domain publishing 45 plagiarised
-college-admissions and astrology articles under a byline ("Victoria Lamar")
-with keyword-stuffed tags is the textbook fingerprint of a content-farmed
-dropshipping site. No amount of Organization schema overrides that, because
-schema is a *claim* and site quality is *evidence*. You cannot assert your way
-past it.
+## 2. Check for a manual action — before anything else
 
-It is also worse than passive. The theme's `meta-tags.liquid` emits `Article`
-JSON-LD on every one of these pages with `"publisher": "Celeste L'Amour"` — the
-brand is formally claiming authorship of scraped content, in machine-readable
-form, to Google.
+**Search Console → Security & Manual Actions → Manual actions.**
 
-And it explains the symptom in the screenshots directly. Google's image block
-for "celeste lamour" returns a Brocéliande colouring book, a perfume bottle and
-a pair of sandals; its AI Overview returns a Bronx nail salon. Google has no
-confident model of what this domain is about, because 46 of its indexable
-content pages say it is about SAT scores and star signs.
+- If it lists **"Thin content with little or no added value"** or **"Pure
+  spam"**, deletion does not lift it. You must file a reconsideration request
+  describing what was removed and what changed. Recovery is then weeks *after*
+  a human reviews it.
+- If it says **"No issues detected"**, any effect was algorithmic and lifts on
+  its own as Google recrawls. Weeks, no request needed.
 
----
+This single check tells you which timeline you are on, so do it before
+investing in anything downstream.
 
-## Delete these 45 — scraped, off-topic, all currently published
+## 3. Rename the blog — its handle is still a leftover
 
-```
-convert-celsius-to-fahrenheit
-hazel-eyes-color
-gemini-traits
-cool-easy-drawing-ideas
-how-many-glasses-in-a-gallon-of-water
-capricorn-traits-personality
-virgo-traits-personality
-the-great-gatsby-american-dream
-highest-scoring-college-football-games
-cancer-traits-personality
-greater-than-sign-less-than-sign
-best-colleges
-list-of-extracurricular-activities-examples
-gemini-compatiblity-signs
-sasha-obama-transfers-to-usc
-how-many-teaspoons-in-a-tablespoon
-penn-state-admission-requirements
-how-many-millions-in-a-billion
-what-side-is-your-heart-on
-camel-spider-size-bite-pictures
-persuasive-speech-topics
-how-to-get-into-northwestern
-lsat-score-range
-ap-score-release-dates
-romeo-and-juliet-summary
-nyu-admission-requirements
-best-colleges-in-florida
-rainbow-color-order
-hbcu-colleges
-how-to-convert-your-gpa-to-a-4-0-scale-calculator
-how-to-get-into-stanford
-best-riddles-for-teens-and-adults
-30-60-90-triangle-ratio-formula
-libra-traits-personality
-cursive-s-capital-lowercase
-what-is-a-good-sat-score-a-bad-sat-score-an-excellent-sat-score
-disney-trivia-for-kids
-yin-yang-symbol
-virgo-compatibility-signs
-detective-riddles-for-kids
-university-of-florida-admission-requirements
-how-many-pints-in-a-gallon
-how-old-freshman-sophomore-junior-senior-age
-race-vs-ethnicity-vs-nationality
-verbs-list
+The blog is titled **News** but its handle is **`verbs-list`**, so it lives at
+`celestelamour.com/blogs/verbs-list/`.
+
+That handle came from the scraped article "229 Common English Verbs With
+Examples · PrepScholar" — PrepScholar publishes it at
+`blog.prepscholar.com/verbs-list`, the identical slug. The blog was named after
+an ingested article and the name outlived the articles.
+
+**Do:** Online Store → Blog posts → Manage blogs → News → change the handle to
+`journal`. Leave "Create a URL redirect" checked so `/blogs/verbs-list` →
+`/blogs/journal` is written automatically. This is the one redirect in this
+whole plan that is correct to create, because it is a genuine equivalent.
+
+## 4. Clean up the 5 published articles that remain
+
+| Handle | Author as stored | Problem |
+|---|---|---|
+| `pagefly-blog` | `PageFly` | Title is literally "pagefly blog". App test artifact. **Body is empty.** Delete. |
+| `article-dec-14-2025` | `Mory Keita` | Title is "Article Dec 14, 2025" — an untouched placeholder. **Body is empty.** Delete or write it. |
+| `expert-tips-for-selecting-shapewear-post-surgery` | `5K20RB-1R` | On-topic. Fix the author. Medical-adjacent — must not imply clinical benefit. |
+| `fleece-shapewear-a-winter-fashion-revolution` | `5K20RB-1R` | On-topic. Fix the author. |
+| `the-comfort-of-body-shapers-why-you-need-them-468` | `Celeste L'Amour` | On-topic, correct author. The handle has a stray `-468` suffix; tidy it. |
+
+Two of the five published articles have **completely empty bodies**. A
+published URL with a title and no content is a thin-content page in the most
+literal sense.
+
+### The author field is worse than it looks
+
+`5K20RB-1R` is your myshopify subdomain (`5k20rb-1r.myshopify.com`) in
+capitals. The live theme's `snippets/meta-tags.liquid` emits on every article
+page:
+
+```liquid
+"author": { "@type": "Person", "name": {{ article.author | json }} }
 ```
 
-Apparent sources, from the title suffixes still attached: PrepScholar,
-Ivy Coach, College Transitions, Shemmassian Academic Consulting. The suffixes
-were never stripped, which is why they are identifiable at a glance — and why
-anyone at Google, or any journalist, or any customer who clicks the blog, can
-identify them at a glance too.
+So Google is currently being told there is a **schema.org Person named
+"5K20RB-1R"** who writes for this brand. On another article the Person is named
+"PageFly", after the page-builder app.
 
-Separately, these articles are almost certainly being hosted without licence.
-Deleting them closes a copyright exposure as well as an SEO one.
+**Do:** set the author on all five to a real person's name, or to
+`Celeste L'Amour` where no named author applies. Online Store → Blog posts →
+[article] → Author.
 
-## Delete this 1 — app test artifact
-
-```
-pagefly-blog
-```
-
-## Keep and review these 2 — published, on-topic
-
-```
-expert-tips-for-selecting-shapewear-post-surgery
-fleece-shapewear-a-winter-fashion-revolution
-```
-
-Read both before keeping them. They are topically adjacent, but they came from
-the same blog as the other 45, so check whether they are original writing or
-spun from somewhere else. If you cannot establish they are original, treat
-them like the 45.
-
-Note also that "shapewear post-surgery" is a medical-adjacent claim. If it
-stays, it should not imply any clinical benefit.
-
-## Decide on these 9 — unpublished drafts, on-topic
+## 5. The 9 unpublished drafts — leave them unpublished
 
 ```
 upgrade-your-active-wear-with-a-lightweight-bra
@@ -145,69 +130,36 @@ stylish-compression-black-latex-waist-vest-explained
 seamless-tank-perfect-for-any-occasion
 ```
 
-These are drafts, so they are not indexable and pose no current risk. They
-read as generic AI-generated filler. Publishing thin content on a domain that
-is recovering from a scaled-content problem is the one thing that would make
-recovery slower, so leave them unpublished until the cleanup has settled.
+All authored `5K20RB-1R`. They read as generic AI filler. They are drafts, so
+they are not indexable and carry no current risk.
+
+Publishing thin content on a domain that is *recovering* from a scaled-content
+problem is the one thing that would slow the recovery. Leave them alone until
+the index has settled and the manual-action question is answered.
+
+## 6. What to publish instead
+
+Do not refill the blog to hit a number — that is the habit that produced the
+original problem.
+
+Three genuinely useful pieces written from what this business actually knows
+will outperform fifty imported ones:
+
+- How the scrunch knit is constructed, and why it does not go sheer under load.
+- How to choose between a compressive and an easy fit, mapped to real body
+  measurements.
+- What the fabric actually is, by composition and weight.
+
+You already have the raw material: `/pages/celeste-lamour` ("Fabric Engineer
+Exposes the Legging Flaw") is that argument in advertorial form. Its
+`bodySummary` currently begins with raw CSS (`.cl-sidebar-wrap { position:
+fixed; …`), which means the page is leading with stylesheet text — worth fixing
+on its own.
 
 ---
 
-## How to remove them — the part that matters
+## Where this sits in the sequence
 
-Deleting a Shopify article makes its URL return **404**. That works, but it is
-the slow path: Google will retry a 404 for a long time before dropping it,
-because 404 means "not here right now" and Google treats it as possibly
-temporary.
-
-**410 Gone** means "deleted deliberately, stop asking" and is processed
-noticeably faster. Shopify does not let you set a 410 on a deleted article
-natively, so there are two realistic routes:
-
-1. **Delete, then request removal in Search Console.** Delete all 46 articles,
-   then use Search Console → Removals → "Temporarily remove URL" for the
-   `/blogs/verbs-list/` prefix. That hides them from results within about a
-   day. The removal itself lasts roughly six months, which is ample time for
-   the 404s to be processed permanently. This is the route to take — it needs
-   no code and no app.
-
-2. **Redirect only where it is honest.** Do *not* 301 these to the homepage or
-   to a collection. A mass redirect of 46 unrelated URLs to commercial pages is
-   itself a pattern Google treats as manipulative, and irrelevant redirects are
-   handled as soft-404s anyway. Redirect only if a genuinely equivalent page
-   exists, which here it does not for any of the 45.
-
-**Do not** start by adding `Disallow: /blogs/verbs-list/` to robots.txt. That
-blocks crawling, which prevents Google from ever seeing that the pages are
-gone, and indexed URLs can persist as bare links with no snippet. Crawling and
-indexing are different controls; this is the classic way people make a removal
-permanent by accident. There is a longer note on this in
-`../theme/templates/robots.txt.liquid`.
-
-## Then check for a manual action
-
-Search Console → Security & Manual Actions → **Manual actions**.
-
-If there is a "Thin content with little or no added value" or "Pure spam"
-action listed, deletion alone will not lift it — you must file a
-reconsideration request after cleaning up, describing what was removed and
-what changed. If the panel says "No issues detected", the effect has been
-algorithmic, and it lifts on its own over subsequent recrawls with no request
-needed.
-
-Check this before doing anything else, because the answer changes the timeline
-you should expect: algorithmic recovery is weeks, a reconsideration request is
-weeks *after* review.
-
-## What replaces it
-
-Do not refill the blog to hit a number. Three genuinely useful pieces written
-from things this business actually knows — how the scrunch knit is
-constructed, how to choose between compressive and easy fit, how the sizing
-maps to real body measurements — will do more for the brand entity than fifty
-articles ever did. The `/pages/celeste-lamour` "Fabric Engineer Exposes the
-Legging Flaw" page suggests that writing already exists in some form.
-
-Also rename the blog. `News` at `/blogs/verbs-list` should become something
-like `Journal` at `/blogs/journal`. Changing the handle changes the URL, so do
-it at the same time as the deletion rather than afterwards, and let the single
-redirect for the blog index be the one redirect you do create.
+The blog was the worst thing on the domain. It is now largely handled, which
+promotes **`worklist-competitor-products.md`** — 170 live product pages
+declaring `"brand": "Gymshark"` — to the top of the list. Do that next.
