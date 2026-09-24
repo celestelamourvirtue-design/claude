@@ -274,6 +274,29 @@
 }
 </script>
 
+{%- comment -%}
+  WebSite node.
+
+  NOTE ON WHAT IS DELIBERATELY *NOT* HERE: `potentialAction` / `SearchAction`.
+
+  The live theme still carries that sub-object, and so did an earlier draft of
+  this file. Google announced "Farewell, Sitelinks Search Box"
+  (developers.google.com/search/blog/2024/10/sitelinks-search-box) and dropped
+  the feature starting 2024-11-21, globally, in all languages and countries,
+  because usage had fallen. The markup is inert.
+
+  Google also said leaving it in place causes no harm — "unsupported structured
+  data won't cause issues in Search" — so removing it is housekeeping, not a
+  fix. It is removed here because dead markup in a graph you are asking Google
+  to read carefully is noise, and because someone will otherwise spend an
+  afternoon wondering why the search box never appears.
+
+  What the WebSite node still does matter for is the SITE NAME. Google's
+  site-names documentation says it "uses a variation of WebSite structured
+  data, which continues to be supported", and that `alternateName` "allows
+  Google to consider other options if your preferred choice isn't selected".
+  That is why `name` and `alternateName` are below and the SearchAction is not.
+{%- endcomment -%}
 <script type="application/ld+json" data-brand-entity="website">
 {
   "@context": "https://schema.org",
@@ -281,25 +304,18 @@
   "@id": {{ shop_root | append: '/#website' | json }},
   "url": {{ shop_root | json }},
   "name": {{ brand_name | json }},
+  {%- comment -%}
+    These are the forms people actually type. Google picks one as the displayed
+    site name; alternateName gives it sanctioned fallbacks rather than letting
+    it guess from the <title> tag.
+  {%- endcomment -%}
+  "alternateName": [
+    {{ alt_name_1 | json }},
+    {{ alt_name_2 | json }},
+    {{ alt_name_3 | json }}
+  ],
   "description": {{ brand_description | json }},
   "publisher": { "@id": {{ shop_root | append: '/#organization' | json }} },
-  "inLanguage": "en-US",
-  {%- comment -%}
-    The braces in the schema.org search placeholder are concatenated rather
-    than written inline so that no Liquid string literal ever contains a brace
-    a strict parser could read as a tag delimiter. Carried over from the
-    existing meta-tags.liquid, which had this right.
-  {%- endcomment -%}
-  {%- assign brace_open = '{' -%}
-  {%- assign brace_close = '}' -%}
-  {%- assign search_target = shop_root | append: routes.search_url | append: '?q=' | append: brace_open | append: 'search_term_string' | append: brace_close -%}
-  "potentialAction": {
-    "@type": "SearchAction",
-    "target": {
-      "@type": "EntryPoint",
-      "urlTemplate": {{ search_target | json }}
-    },
-    "query-input": "required name=search_term_string"
-  }
+  "inLanguage": "en-US"
 }
 </script>
